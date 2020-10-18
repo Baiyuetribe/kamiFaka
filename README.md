@@ -8,7 +8,7 @@
 访客页面：
 ![](home.png)
 管理员界面：
-![](home.png)
+![](dashboard.png)
 
 
 ## 当前开发计划：
