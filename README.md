@@ -9,7 +9,7 @@
 # 启动
 docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:vue
 docker run --name kmfaka-flask -itd --restart=always -p 5000:5000 baiyuetribe/kamifaka:flask
-# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin 123456
+# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin@qq.com 123456
 ## 卸载
 docker rm -f kmfaka-vue kmfaka-flask
 ```
@@ -22,7 +22,7 @@ git clone https://github.com/Baiyuetribe/kamiFaka.git
 cd kamiFaka
 # 启动
 docker-compose up -d
-# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin 123456
+# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin@qq.com 123456
 
 ## 卸载
 docker-compose down
