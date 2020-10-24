@@ -3,18 +3,18 @@
 
 ## 部署方法
 
-#### 1. Docker直接启动：
+#### 方法1. Docker直接启动：
 前提是安装好docker环境，如果没安装，可以执行`echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)`自动安装好docker环境。
 ```bash
 # 启动
 docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:vue
 docker run --name kmfaka-flask -itd --restart=always -p 5000:5000 baiyuetribe/kamifaka:flask
-# 访问：https://您的IP地址:999  后台地址：/admin
+# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin 123456
 ## 卸载
 docker rm -f kmfaka-vue kmfaka-flask
 ```
 
-#### 2. Docker本地构建：
+#### 方法2. Docker本地构建（需要等待一会）：
 前提是安装好docker环境，如果没安装，可以执行`echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)`自动安装好docker环境。
 ```bash
 #下载源码到本地
@@ -22,7 +22,7 @@ git clone https://github.com/Baiyuetribe/kamiFaka.git
 cd kamiFaka
 # 启动
 docker-compose up -d
-# 访问：https://您的IP地址:999  后台地址：/admin
+# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin 123456
 
 ## 卸载
 docker-compose down
