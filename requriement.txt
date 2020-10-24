@@ -1,1 +1,0 @@
-pip install python-alipay-sdk --upgrade

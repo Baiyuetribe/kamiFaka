@@ -1,0 +1,7 @@
+flask
+flask_sqlalchemy
+flask_cors
+flask_jwt_extended
+python-alipay-sdk
+requests
+bcrypt
