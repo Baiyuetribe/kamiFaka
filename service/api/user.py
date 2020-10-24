@@ -28,7 +28,6 @@ base = Blueprint('base', __name__,url_prefix='/api/v2')
 def index():
     return 'base hello'
 
-CORS(app=base)
 @base.route('/home', methods=['get'])
 def home():
     # 系统信息
