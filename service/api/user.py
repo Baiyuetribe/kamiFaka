@@ -19,7 +19,7 @@ executor = ThreadPoolExecutor(2)
 
 #日志记录
 from service.util.log import log
-
+from flask_cors import CORS
 
 base = Blueprint('base', __name__,url_prefix='/api/v2')
 
@@ -28,7 +28,7 @@ base = Blueprint('base', __name__,url_prefix='/api/v2')
 def index():
     return 'base hello'
 
-
+CORS(app=base)
 @base.route('/home', methods=['get'])
 def home():
     # 系统信息
