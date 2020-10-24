@@ -19,11 +19,7 @@ executor = ThreadPoolExecutor(2)
 
 #日志记录
 from service.util.log import log
-import bcrypt
-from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
-    get_jwt_identity
-)
+
 
 base = Blueprint('base', __name__,url_prefix='/api/v2')
 
@@ -31,29 +27,6 @@ base = Blueprint('base', __name__,url_prefix='/api/v2')
 @base.route('/')
 def index():
     return 'base hello'
-
-
-@base.route('/login', methods=['POST'])
-def login():
-    try:
-        email = request.json.get('email', None)
-        password = request.json.get('password', None)
-        if not email:
-            return 'Missing email', 400
-        if not password:
-            return 'Missing password', 400
-        user = AdminUser.query.filter_by(email=email).first()
-        if not user:
-            return 'User Not Found!', 404
-        
-        # if bcrypt.checkpw(password.encode('utf-8'), user.hash):
-        if bcrypt.checkpw(password.encode('utf-8'), user.hash.encode('utf-8')):
-            access_token = create_access_token(identity={"email": email})
-            return {"access_token": access_token}, 200
-        else:
-            return 'Invalid Login Info!', 400
-    except AttributeError:
-        return 'Provide an Email and Password in JSON format in the request body', 400
 
 
 @base.route('/home', methods=['get'])

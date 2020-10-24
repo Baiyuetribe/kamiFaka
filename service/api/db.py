@@ -6,7 +6,7 @@ from requests.api import options
 
 #通用组件
 app = Flask(__name__)
-CORS(app)    #解决跨域问题
+CORS(app, supports_credentials=True)    #解决跨域问题
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'   #本地
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@127.0.0.1:336/KAFAKA?charset=utf8mb4'   #本地
