@@ -15,8 +15,8 @@ def Response_headers(content):
 #前端
 @common.route('/')
 def index():
-    # return 'vue静态文件存放'
-    return render_template('index.html',title='flask & vue')
+    return '恭喜，后端部署成功'
+    # return render_template('index.html',title='flask & vue')
 
 
 @common.route('/notify',methods=['POST','GET'])    #支付回调测试
