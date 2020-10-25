@@ -3,11 +3,13 @@
 
 ## 部署方法
 
+在线预览地址： http://107.148.243.178:998/#/
+
 #### 方法1. Docker直接启动：
 前提是安装好docker环境，如果没安装，可以执行`echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)`自动安装好docker环境。
 ```bash
 # 启动
-docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:vue
+docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:gzip
 docker run --name kmfaka-flask -itd --restart=always -p 5000:5000 baiyuetribe/kamifaka:flask
 # 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin@qq.com 123456
 ## 卸载
