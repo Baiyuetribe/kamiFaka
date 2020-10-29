@@ -9,7 +9,7 @@ RUN gzip -9 -k /html/*html
 RUN brotli -Z /html/*html
 
 
-FROM nginx:1.19.3-alpine AS builder
+FROM nginx:1.17.9-alpine AS builder
 
 ENV NGX_MODULE_COMMIT 0fdca2565dbedb88101ca19b1fb1511272f0821f
 ENV NGX_MODULE_PATH ngx_brotli
@@ -48,12 +48,12 @@ RUN CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
 # save /usr/lib/*so deps
 RUN mkdir /so-deps && cp -L $(ldd /usr/local/nginx/modules/ngx_http_brotli_filter_module.so 2>/dev/null | grep '/usr/lib/' | awk '{ print $3 }' | tr '\n' ' ') /so-deps
 
-FROM nginx:1.19.3-alpine
+FROM nginx:1.17.9-alpine
 
 COPY --from=builder  /so-deps /usr/lib
 COPY --from=builder  /usr/local/nginx/modules/ngx_http_brotli_filter_module.so /usr/local/nginx/modules/ngx_http_brotli_filter_module.so
 COPY --from=builder  /usr/local/nginx/modules/ngx_http_brotli_static_module.so /usr/local/nginx/modules/ngx_http_brotli_static_module.so
-COPY --from=html-builder --chown=nginx:nginx /html /usr/share/nginx/html
+COPY --chown=nginx:nginx dist /usr/share/nginx/html
 COPY nginx /etc/nginx
 
 # https://microbadger.com/images/lunaticcat/nginx-brotli

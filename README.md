@@ -6,29 +6,24 @@
 在线预览地址： http://107.148.243.178:998/#/
 
 #### 方法1. Docker直接启动：
-前提是安装好docker环境，如果没安装，可以执行`echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)`自动安装好docker环境。
+环境准备：
 ```bash
-# 启动
-docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:gzip
+# 程序需要Docker环境，如果不存在，则运行以下脚本。
+echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)
+```
+正式部署：
+```bash
+# 1.启动
+## 1.1前端安装
+docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:bro1
+## 1.2后端安装
 docker run --name kmfaka-flask -itd --restart=always -p 5000:5000 baiyuetribe/kamifaka:flask
-# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin@qq.com 123456
-## 卸载
+# 访问：https://您的IP地址:999  后台地址：#/admin    管理员账号：admin@qq.com 123456
+## 2.卸载
 docker rm -f kmfaka-vue kmfaka-flask
 ```
 
-#### 方法2. Docker本地构建（需要等待一会）：
-前提是安装好docker环境，如果没安装，可以执行`echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)`自动安装好docker环境。
-```bash
-#下载源码到本地
-git clone https://github.com/Baiyuetribe/kamiFaka.git
-cd kamiFaka
-# 启动
-docker-compose up -d
-# 访问：https://您的IP地址:999  后台地址：/admin    管理员账号：admin@qq.com 123456
 
-## 卸载
-docker-compose down
-```
 
 已完成数据库设计、后端api和前端UI设计，正在完成前后端对接和前端的相关业务逻辑。
 访客页面：
