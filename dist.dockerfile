@@ -1,5 +1,8 @@
-FROM nginx:stable-alpine
-COPY default.conf etc/nginx/conf.d/default.conf
-COPY dist /usr/share/nginx/html
+FROM baiyuetribe/kamifaka:bro_base
+
+COPY --chown=nginx:nginx dist /usr/share/nginx/html
+
 EXPOSE 80
+STOPSIGNAL SIGTERM
+
 CMD ["nginx", "-g", "daemon off;"]
