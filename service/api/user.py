@@ -319,4 +319,9 @@ def success():
         return '商品不存在或已过期', 404
     
 
+@base.route('/get_system', methods=['get'])
+def get_system():
+    res = Config.query.filter().all()
+    return jsonify([x.to_json() for x in res])
+
     

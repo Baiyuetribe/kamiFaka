@@ -2,6 +2,7 @@ from enum import unique
 from operator import truediv
 from os import name, terminal_size
 from sys import stdin
+from requests.models import default_hooks
 
 from sqlalchemy.sql.sqltypes import Float
 
@@ -290,18 +291,22 @@ class Config(db.Model):
     name = Column(String(100), nullable=False,unique=True)  #变量名
     info = Column(Text, nullable=True)  #值
     description = Column(Text, nullable=False)  #描述
+    isshow = Column(Boolean, nullable=False,default=False)  #描述
     updatetime = Column(DateTime, nullable=True,default=datetime.now())  #交易时间
 
     
-    def __init__(self, name, info,description):
+    def __init__(self, name, info,description,isshow):
         self.name = name
         self.info = info
         self.description = description
+        self.isshow = isshow
 
     def to_json(self):
         return {
+            'id': self.id,
             'name': self.name,
             'info': self.info,
+            'description': self.description,
         }        
 
 

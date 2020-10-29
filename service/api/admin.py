@@ -7,8 +7,7 @@ from service.api.db import db
 import bcrypt
 # 添加jwt
 from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
-    get_jwt_identity
+    JWTManager, jwt_required, create_access_token
 )
 
 #日志记录
@@ -21,6 +20,7 @@ admin = Blueprint('admin', __name__,url_prefix='/api/v4')
 @admin.route('/')
 def index():
     return 'admin hello'
+
 
 
 @admin.route('/login', methods=['POST'])
@@ -221,7 +221,6 @@ def update_shop():
     return '修改成功', 200
 
 @admin.route('/get_card', methods=['get']) #卡密查询
-@jwt_required
 def get_card():
     try:
         cards = Card.query.filter().all()
@@ -374,7 +373,25 @@ def update_admin_account():
     AdminUser.query.filter_by(id = 1).update({'hash':hashed})
     db.session.commit()
     return {"mgs": 'success'}, 200
- 
+
+
+@admin.route('/get_system', methods=['post']) #
+@jwt_required
+def get_system():
+    res = Config.query.filter().all()
+    return jsonify([x.to_json() for x in res])
+
+@admin.route('/update_system', methods=['post']) #管理员
+@jwt_required
+def update_system():
+    data = request.json.get('data', None)
+    if not data:
+        return '参数丢失', 400
+    Config.query.filter_by(id = data['id']).update({'info':data['info']})
+    db.session.commit()
+    return {"mgs": 'success'}, 200
+
+
 
 @admin.route('/demo', methods=['get']) #已售订单信息
 @jwt_required
