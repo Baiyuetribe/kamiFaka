@@ -18,29 +18,26 @@
 </p>
 
 
-## 预览地址：
+## 预览地址：0.2版
 
-最新版预览地址： http://107.148.243.178:994/#/
+最新版预览地址： http://107.148.243.178:8000
 内测BUG反馈QQ群：853791822
 
 ## 部署方法：
-环境准备：
+
+一键部署：
 ```bash
-# 程序需要Docker环境，如果不存在，则运行以下脚本。
+docker run --name kmfaka -itd --restart=always -p 8000:8000 baiyuetribe/kamifaka:0.2
+#如果提示docker命令未找找，请先安装好Docker后再来执行上面的脚本。
+# Docker环境安装脚本[如果上述脚本正常，下面的脚本可忽略不运行]
 echo y | bash <(curl -L -s https://raw.githubusercontent.com/Baiyuetribe/codes/master/docker.sh)
 ```
-正式部署：
-```bash
-# 1.启动
-## 1.1前端安装
-docker run --name kmfaka-vue -itd --restart=always -p 999:80 baiyuetribe/kamifaka:bro1
-## 1.2后端安装
-docker run --name kmfaka-flask -itd --restart=always -p 5000:5000 baiyuetribe/kamifaka:flask
-# 访问：https://您的IP地址:999  后台地址：#/admin    管理员账号：admin@qq.com 123456
-## 2.卸载
-docker rm -f kmfaka-vue kmfaka-flask
-```
+然后访问http://您的ip:8000即可访问，管理员加上/admin即可访问，默认管理员：admin@qq.com 密码：123456
 
+卸载命令：
+```bash
+docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:0.2
+```
 
 
 已完成数据库设计、后端api和前端UI设计，正在完成前后端对接和前端的相关业务逻辑。
@@ -51,12 +48,12 @@ docker rm -f kmfaka-vue kmfaka-flask
 
 
 ## 内测说明
-前端使用Ningx镜像，无特殊优化；后端使用Flask+sqlite做数据库。数据库可支持Mysql+Sqlite+postgresql等。为方便内测，数据暂未做本地缓存，卸载后一并删除。
+经过多轮优化，内测0.2版本已发布，相对原先的nginx+flask多镜像有了很大的部署便捷性。修复移动端UI、管理员登录异常等bug.
 
 功能概述:当前内测版已完成发卡系统的主要运行逻辑，前端的下单流程、后端的分类、商品、卡密、邮箱、通知信息等都非常完善。短信通知暂不可用外，其余都正常工作。
 
 ## 当前开发计划：
-完善后端wsgi服务=》添加Docker服务=》上线预览版数据库=》发布第一个正式版
+收集BUG反馈=》发布第一个正式版
 
 当前任务：征集内测bug
 

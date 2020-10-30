@@ -9,8 +9,8 @@ COPY . .
 
 RUN python db_init.py
 
-EXPOSE 5000
+EXPOSE 8000
 
 # CMD [ "python", "./app.py" ]
-
-ENTRYPOINT ["gunicorn", "-k", "gevent", "--bind", "0.0.0.0", "--workers", "8", "app:app"]
+#启动文件：文件内app
+ENTRYPOINT ["gunicorn","-k", "gevent", "--bind", "0.0.0.0:8000", "--workers", "8", "app:app"]
