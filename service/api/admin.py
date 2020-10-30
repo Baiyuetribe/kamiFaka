@@ -38,7 +38,6 @@ def timefn(fn):
 
 
 @admin.route('/login', methods=['POST'])
-@timefn
 def login():
     try:
         start_t = time.time()
@@ -53,11 +52,11 @@ def login():
             return 'User Not Found!', 404
         
         # if bcrypt.checkpw(password.encode('utf-8'), user.hash):
-        print(time.time() - start_t)
+        # print(time.time() - start_t)
         if bcrypt.checkpw(password.encode('utf-8'), user.hash.encode('utf-8')):
-            print(time.time() - start_t)
+            # print(time.time() - start_t)
             access_token = create_access_token(identity={"email": email})
-            print(time.time() - start_t)
+            # print(time.time() - start_t)
             return {"access_token": access_token}, 200
         else:
             return 'Invalid Login Info!', 400

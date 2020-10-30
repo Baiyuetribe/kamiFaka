@@ -5,4 +5,5 @@ flask_jwt_extended
 python-alipay-sdk
 requests
 bcrypt
-flask_socketio
+gunicorn
+gevent

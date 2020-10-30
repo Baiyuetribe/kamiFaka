@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.8-slim
 
 WORKDIR /usr/src/app
 
@@ -11,4 +11,6 @@ RUN python db_init.py
 
 EXPOSE 5000
 
-CMD [ "python", "./app.py" ]
+# CMD [ "python", "./app.py" ]
+
+ENTRYPOINT ["gunicorn", "-k", "gevent", "--bind", "0.0.0.0", "--workers", "8", "app:app"]
