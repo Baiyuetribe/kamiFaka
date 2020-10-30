@@ -62,7 +62,7 @@ def init_db(update=False):
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
-    db.session.add(Notice('微信通知',"{'token':'开发中'}",'xxxxxxxxxxxxxxxx',False,False))
+    db.session.add(Notice('微信通知',"{'token':'XXXXXXXXXXXXXXXX'}",'xxxxxxxxxxxxxxxx',False,False))
     db.session.add(Notice('TG通知',"{'TG_TOKEN':'1290570937:AAHaXA2uOvDoGKbGeY4xVIi5kR7K55saXhs'}",'472835979',True,False))
     db.session.add(Notice('短信通知',"{'appid':'XXXXXX','AppSecret':'YYYYY'}",'15347875415',False,False))
 

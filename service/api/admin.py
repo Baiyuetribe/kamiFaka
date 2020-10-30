@@ -62,10 +62,11 @@ def dashboard():
 def get_smtp():
     try:
         smtp = Notice.query.filter_by(id = 1).first()
+        return jsonify(smtp.to_json())
     except Exception as e:
         log(e)
         return '数据库异常', 500    
-    return jsonify(smtp.to_json())
+    
 
 @admin.route('/update_smtp', methods=['post'])
 @jwt_required
@@ -261,12 +262,13 @@ def update_card():
                 reuse = False
             db.session.add_all([Card(prod_name,card=x,isused=0,reuse=reuse) for x in tmp_cards])
         db.session.commit()
+        # 重定向登录界面
+        return '修改成功', 200          
     except Exception as e:
         log(e)
         return '数据库异常', 500       
 
-    # 重定向登录界面
-    return '修改成功', 200    
+  
 
 
 
