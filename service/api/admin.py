@@ -22,10 +22,26 @@ def index():
     return 'admin hello'
 
 
+import time
+from functools import wraps
+
+def timefn(fn):
+    """计算性能的修饰器"""
+    @wraps(fn)
+    def measure_time(*args, **kwargs):
+        t1 = time.time()
+        result = fn(*args, **kwargs)
+        t2 = time.time()
+        print(f"@timefn: {fn.__name__} took {t2 - t1: .5f} s")
+        return result
+    return measure_time
+
 
 @admin.route('/login', methods=['POST'])
+@timefn
 def login():
     try:
+        start_t = time.time()
         email = request.json.get('email', None)
         password = request.json.get('password', None)
         if not email:
@@ -37,8 +53,11 @@ def login():
             return 'User Not Found!', 404
         
         # if bcrypt.checkpw(password.encode('utf-8'), user.hash):
+        print(time.time() - start_t)
         if bcrypt.checkpw(password.encode('utf-8'), user.hash.encode('utf-8')):
+            print(time.time() - start_t)
             access_token = create_access_token(identity={"email": email})
+            print(time.time() - start_t)
             return {"access_token": access_token}, 200
         else:
             return 'Invalid Login Info!', 400

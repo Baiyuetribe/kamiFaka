@@ -1,9 +1,9 @@
 from flask import Blueprint, Response,request,jsonify
-from flask import render_template
-
+from flask import render_template,redirect,send_from_directory
 import time
+import os
 
-common = Blueprint('common', __name__,)
+common = Blueprint('common', __name__)
 
 
 def Response_headers(content):  
@@ -25,12 +25,26 @@ def timefn(fn):
         return result
     return measure_time
 
+@common.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(common.root_path, '../../dist'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 #前端
 @common.route('/')
 def index():
-    return '恭喜，后端部署成功'
-    # return render_template('index.html',title='flask & vue')
-
+    # return '恭喜，后端部署成功'
+    return render_template('index.html')
+    # return """<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor: 
+    # pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: 
+    # "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal; 
+    # margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"><p> 
+    #  <br/><span style="font-size:30px">恭喜您,后端正常运行。</span></p></div> """   
+#管理员---当前访客与管理员共用一套系统；后期可尝试分割管理员部分，更小的缩减前端体积
+@common.route('/admin')
+def admin():
+    # return '恭喜，后端部署成功'
+    return redirect('/#/admin')
 
 @common.route('/notify',methods=['POST','GET'])    #支付回调测试
 def notify():

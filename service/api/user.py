@@ -1,10 +1,9 @@
 from os import pardir
 from time import time
-from flask import Blueprint, request, jsonify, redirect, url_for
+from flask import Blueprint, request, jsonify
 from flask import config
 from flask import json
-from service.database.models import Payment, ProdInfo,Config,Order,Message,Config,AdminUser
-from service.api.db import db
+from service.database.models import Payment, ProdInfo,Config,Order,Config
 
 #调用支付接口
 from service.util.pay.alipay.alipayf2f import alipay    #支付宝接口
@@ -19,7 +18,6 @@ executor = ThreadPoolExecutor(2)
 
 #日志记录
 from service.util.log import log
-from flask_cors import CORS
 
 base = Blueprint('base', __name__,url_prefix='/api/v2')
 

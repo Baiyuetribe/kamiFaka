@@ -6,9 +6,15 @@ from requests.api import options
 
 # from flask_socketio import SocketIO
 #通用组件
-app = Flask(__name__)
-CORS(app)    #解决跨域问题
+app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
+# app = Flask(__name__,static_folder='../../dist',template_folder='../../dist')
+# r'/*' 是通配符，让本服务器所有的 URL 都允许跨域请求
+CORS(app, resources=r'/*')
 # cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+# #避免与vue冲突
+# app.jinja_env.variable_start_string = '{['
+# app.jinja_env.variable_end_string = ']}'
 
 # socketio = SocketIO(app, cors_allowed_origins='*')
 
