@@ -6,10 +6,10 @@ from flask import json
 from service.database.models import Payment, ProdInfo,Config,Order,Config
 
 #调用支付接口
-from service.util.pay.alipay.alipayf2f import alipay    #支付宝接口
+from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
 from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
 from service.util.pay.codepay.codepay import codepay    #码支付
-from service.util.pay.payjs.payjs import payjs  #payjs接口
+from service.util.pay.payjs.payjs import Payjs  #payjs接口
 
 from service.util.order.handle import make_order
 #异步操作
@@ -118,12 +118,7 @@ def get_pay_url():
         return '参数丢失', 404        
     if payment == '支付宝当面付':
         try:
-            ali_order = alipay.api_alipay_trade_precreate(
-                subject=name,
-                out_trade_no=out_order_id,
-                total_amount=total_price,
-                notify_url=None
-            )
+            ali_order = AlipayF2F().create_order(name,out_order_id,total_price)
         except Exception as e:
             log(e)
             return '支付宝处理失败', 504                
@@ -173,7 +168,7 @@ def get_pay_url():
     elif payment == 'PAYJS支付宝' or 'PAYJS微信':
         # 参数错误情况下，会失效
         try:
-            r = payjs.create_order(name,out_order_id,total_price)
+            r = Payjs().create_order(name,out_order_id,total_price)
         except Exception as e:
             log(e)
             return '数据库异常', 500                        
@@ -207,14 +202,14 @@ def check_pay():
     if payment == '支付宝当面付':
         if methord == 'check':
             try:
-                result = alipay.api_alipay_trade_query(out_trade_no=out_order_id)
+                res = AlipayF2F().check(out_order_id)
             except Exception as e:
                 log(e)
                 return '支付宝请求错误', 500                
             
             # print(result)
-            if result.get("trade_status", "") == "TRADE_SUCCESS":
-                start = time()
+            if res:
+                # start = time()
                 # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
                 # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
                 executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
@@ -223,7 +218,7 @@ def check_pay():
                 return jsonify({'msg':'success'})
             return jsonify({'msg':'not paid'})  #支付状态校验        
         else:   #取消订单
-            alipay.api_alipay_trade_cancel(out_trade_no=out_order_id)
+            AlipayF2F().cancle(out_order_id)
             return jsonify({'msg':'订单已取消'})
     elif payment == '虎皮椒支付宝' or '虎皮椒微信':
         if methord == 'check':

@@ -25,7 +25,6 @@ class Hupi(object):
         callback_url='http://7053a6c10b98.ngrok.io'
         if payment == 'wechat':
             config = get_config('虎皮椒微信')
-
         else:
             config = get_config('虎皮椒支付宝')
         self.appid = config['appid'] #数据库返回微信的APPID和SECRET

@@ -6,3 +6,4 @@
 nginx-brotil
 origin-dist
 *.log
+*.db

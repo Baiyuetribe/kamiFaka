@@ -54,4 +54,4 @@ class Payjs:
             return False
         return False
         
-payjs = Payjs()
+# payjs = Payjs()
