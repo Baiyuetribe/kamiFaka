@@ -15,4 +15,4 @@ done
 
 echo Serving application
 
-nginx -g 'daemon off
+nginx -g 'daemon off'
