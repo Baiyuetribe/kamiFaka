@@ -26,6 +26,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'   #本地
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Setup the Flask-JWT-Extended extension. Read more: https://flask-jwt-extended.readthedocs.io/en/stable/options/
 app.config['JWT_SECRET_KEY'] = 'a44545de51d5e4deaswdedcecvrcrfr5f454fd1cec415r4f'  # Change this!
+app.config['JWT_ACCESS_LIFESPAN'] = {'hours': 24}
+app.config['JWT_REFRESH_LIFESPAN'] = {'days': 30}
 jwt = JWTManager(app)
 
 # 解决与vue3模板冲突

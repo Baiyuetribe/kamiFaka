@@ -8,7 +8,7 @@ from service.database.models import Payment, ProdInfo,Config,Order,Config
 #调用支付接口
 from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
 from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
-from service.util.pay.codepay.codepay import codepay    #码支付
+from service.util.pay.codepay.codepay import CodePay    #码支付
 from service.util.pay.payjs.payjs import Payjs  #payjs接口
 
 from service.util.order.handle import make_order
@@ -160,7 +160,7 @@ def get_pay_url():
     elif payment == '码支付微信' or '码支付支付宝' or '码支付QQ':
         # 参数错误情况下，会失效
         try:
-            qr_url = codepay.create_order(payment,total_price,out_order_id)
+            qr_url = CodePay().create_order(payment,total_price,out_order_id)
         except Exception as e:
             log(e)
             return '数据库异常', 500                        
@@ -241,7 +241,7 @@ def check_pay():
             return jsonify({'msg':'订单已取消'})
     elif payment == '码支付微信' or '码支付支付宝' or '码支付QQ':
         if methord == 'check':
-            result = codepay.check(out_order_id)
+            result = CodePay().check(out_order_id)
             #失败订单
             try:
                 if result['msg'] == "success":  #OD(支付成功)，WP(待支付),CD(已取消)
@@ -256,7 +256,7 @@ def check_pay():
     elif payment == 'PAYJS支付宝' or 'PAYJS微信':
         if methord == 'check':
             payjs_order_id = request.json.get('payjs_order_id',None)
-            result = payjs.check(payjs_order_id)
+            result = Payjs().check(payjs_order_id)
             #失败订单
             try:
                 if result:

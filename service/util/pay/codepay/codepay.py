@@ -10,10 +10,10 @@ class CodePay:
     CODEPAY_TYPE_WECHAT = 3
 
     def __init__(self):
-        self.codepay_id = '58427'   #马支付ID
-        self.codepay_key = 'fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn'   #码支付密钥
+        # self.codepay_id = '58427'   #马支付ID
+        # self.codepay_key = 'fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn'   #码支付密钥
         self.api_host = 'https://api.xiuxiu888.com/'
-        self.token = 'jljCGU3pRviAW64LqaHPjHIvdm05b1iq'     #网页自己设置的token
+        # self.token = 'jljCGU3pRviAW64LqaHPjHIvdm05b1iq'     #网页自己设置的token
     #https://api.xiuxiu888.com/creat_order/?id=58427&token=fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn&price=1&order_id=admin&type=2&page=3&pay_id=5454545
     #https://api.xiuxiu888.com/creat_order/?id=58427&token=fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn&price=1&pay_id=admin&type=2&page=3
     def create_order(self, code_name, price, out_order_id, notify_url="", return_url="", param="",):
@@ -57,12 +57,10 @@ class CodePay:
 
     def check(self,out_order_id):
         config = get_config('码支付支付宝')
-        url = f"{self.api_host}ispay/?id={self.codepay_id}&order_id={out_order_id}&token={config['token']}"
+        url = f"{self.api_host}ispay/?id={config['codepay_id']}&order_id={out_order_id}&token={config['token']}"
         r = requests.get(url)
         #{'status': -1, 'msg': 'no'}    #{"status":-6,"msg":"token error"}
         if r.json()['msg'] == 'ok':
             return {'msg':'success'}
         else:
             return {'msg':'token错误或其他不明原因'} 
-
-codepay = CodePay()
