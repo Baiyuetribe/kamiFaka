@@ -9,7 +9,6 @@ class MailSender(object):
         self.__user = user
         # 提取出邮箱地址用于登录
         self.__login_mail = email.utils.getaddresses([user])[0][1]
-
         # 连接到smtp服务器，限制只允许使用25、465、587这三个端口
         if port == 25:
             self.__smtp_server = smtplib.SMTP(host=host, port=port)
@@ -53,7 +52,7 @@ class MailSender(object):
 
 def mail_to_user(config,data):
     # 收件人、主题、数据（）
-    mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=config['smtp_port'])
+    mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=int(config['smtp_port']))
     # data：对用户而言是prod_name,卡密信息+订单ID;；对管理员而言是contact购买prod_name成功！
     subject = '订单通知：'+data['name']
     content = f"<h5>您好{data['contact']}! 您购买的{data['name']}商品，卡密信息是：{data['card']}<h5>"    #模板后期待完善
@@ -62,7 +61,7 @@ def mail_to_user(config,data):
 
 def mail_to_admin(config,admin_account,data):
     # 收件人、主题、数据（）
-    mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=config['smtp_port'])
+    mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=int(config['smtp_port']))
     # data：对用户而言是prod_name,卡密信息+订单ID;；对管理员而言是contact购买prod_name成功！
     subject = '管理员通知：'
     content = f"<h5>{data['contact']}购买的{data['name']}卡密发送成功！<h5>"    #模板后期完成
@@ -71,10 +70,10 @@ def mail_to_admin(config,admin_account,data):
 
 def mail_test(config,message,email):
     try:
-        mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=config['smtp_port'])
-        subject = '测试邮件'
+        mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=int(config['smtp_port']))
+        subject = '管理员测试邮件'
         content = message
-        mail.send(to_user=email,subject=subject,content=content,subtype='html')
+        mail.send(to_user=email,subject=subject,content=content,subtype='plain')
         return True
     except:
         return False

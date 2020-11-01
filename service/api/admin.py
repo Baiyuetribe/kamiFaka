@@ -105,6 +105,7 @@ def update_smtp():
 @admin.route('/test_smtp', methods=['post'])
 @jwt_required
 def test_smtp():
+    # print(request.json)
     email = request.json.get('email', None)
     message = request.json.get('message', None)
     data = request.json.get('data', None)
@@ -116,10 +117,10 @@ def test_smtp():
         if mail_test(config=data['config'],message=message,email=email):
             return '邮件已发送', 200
         else:
-            return '邮件发送失败', 401
+            return '邮件发送失败', 400
     except Exception as e:
         log(e)
-        return '邮箱配置可能有错误', 500      
+        return '邮箱配置可能有错误', 400      
 
 
 # 分类增删改查

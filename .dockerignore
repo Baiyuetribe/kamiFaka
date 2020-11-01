@@ -7,3 +7,4 @@ nginx-brotil
 origin-dist
 *.log
 *.db
+vue3

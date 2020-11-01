@@ -17,3 +17,6 @@ __pycache__/
 
 # scaffold
 *.ipynb
+
+# vue-source
+vue3

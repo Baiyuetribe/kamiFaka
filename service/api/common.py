@@ -5,7 +5,6 @@ import os
 
 common = Blueprint('common', __name__)
 
-
 def Response_headers(content):  
     resp = Response(content)  
     resp.headers['Access-Control-Allow-Origin'] = '*'  
@@ -44,6 +43,10 @@ def index():
 @common.route('/admin')
 def admin():
     # return '恭喜，后端部署成功'
+    return redirect('/#/admin')
+
+@common.route('/login')
+def login():
     return redirect('/#/admin')
 
 @common.route('/notify',methods=['POST','GET'])    #支付回调测试

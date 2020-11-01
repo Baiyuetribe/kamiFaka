@@ -146,8 +146,9 @@ def get_pay_url():
             return jsonify({'qr_code':pay_order.json()['url']})
         return '调用支付接口失败', 400
     elif payment == '虎皮椒支付宝':
-        obj = Hupi(payment='alipay')
+        
         try:
+            obj = Hupi(payment='alipay')
             pay_order = obj.Pay(trade_order_id=out_order_id,total_fee=total_price,title=name)
         except Exception as e:
             log(e)
