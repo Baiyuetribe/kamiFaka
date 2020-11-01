@@ -30,7 +30,7 @@
 ```bash
 docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.2
 ```
-然后访问http://您的ip:8000即可访问，加上`/admin`跳转到管理员界面，默认账号：admin@qq.com 密码：123456
+然后访问http://您的ip:8000即可访问, 加上`/admin`跳转到管理员界面，默认账号：admin@qq.com 密码：123456
 
 如需通过域名访问，请参考[宝塔如何设置域名反代任意端口？](https://baiyue.one/archives/527.html)
 
