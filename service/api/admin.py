@@ -40,27 +40,34 @@ def timefn(fn):
 @admin.route('/login', methods=['POST'])
 def login():
     try:
-        start_t = time.time()
+        # start_t = time.time()
         email = request.json.get('email', None)
         password = request.json.get('password', None)
         if not email:
-            return 'Missing email', 400
+            return '邮箱参数丢失', 400
         if not password:
-            return 'Missing password', 400
+            return '密码参数丢失', 400
         user = AdminUser.query.filter_by(email=email).first()
         if not user:
-            return 'User Not Found!', 404
-        
-        # if bcrypt.checkpw(password.encode('utf-8'), user.hash):
+            return '账号不存在或密码不正确', 404
+        # 已知道mysql模式下使用utf8
+        #if bcrypt.checkpw(password.encode('utf-8'), user.hash.encode('utf-8')):
+        # sqlite模式下，起步没问题，后续需要移除hash的encode,因此采用下面的转换，可兼容mysql和sqlite
+        try:
+            user_defin = user.hash.encode('utf-8')
+        except:
+            user_defin = user.hash
+
         # print(time.time() - start_t)
-        if bcrypt.checkpw(password.encode('utf-8'), user.hash.encode('utf-8')):
+        if bcrypt.checkpw(password.encode('utf-8'), user_defin):
             # print(time.time() - start_t)
             access_token = create_access_token(identity={"email": email})
             # print(time.time() - start_t)
             return {"access_token": access_token}, 200
         else:
-            return 'Invalid Login Info!', 400
-    except AttributeError:
+            return '账号不存在或密码不正确2', 400
+    except AttributeError as e:
+        log(e)
         return 'Provide an Email and Password in JSON format in the request body', 400
 
 
@@ -391,7 +398,7 @@ def update_admin_account():
         return '参数丢失', 400
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    AdminUser.query.filter_by(id = 1).update({'hash':hashed})
+    AdminUser.query.filter_by(id = 1).update({'email':email,'hash':hashed})
     db.session.commit()
     return {"mgs": 'success'}, 200
 

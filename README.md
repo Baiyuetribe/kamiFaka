@@ -59,7 +59,7 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:0.2
 
 - Stisla UI：web界面很漂亮
 - 前端使用VUE3.0,页面响应迅速
-- 已支付宝当面付、码支付、Payjs、虎皮椒支付宝、虎皮椒微信
+- 已集成支付宝当面付、码支付、Payjs、虎皮椒支付宝、虎皮椒微信
 - 普通用户支持邮箱、短信接收消息
 - 管理员支持邮箱、短信、TG、微信通知
 - 支持批量导入卡密
