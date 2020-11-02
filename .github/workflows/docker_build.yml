@@ -38,3 +38,5 @@ jobs:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+        env:
+          username: ${{ secrets.ALIYUN_USERNAME }}
