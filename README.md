@@ -38,6 +38,14 @@ docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.2
 ```bash
 docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:0.2
 ```
+【国内环境】：阿里云镜像加速【适合国内服务器或本地使用】：
+```bash
+docker run --name kmfaka -itd -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.2
+```
+【国内环境】：卸载命令：
+```bash
+docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.2
+```
 
 
 访客页面：
