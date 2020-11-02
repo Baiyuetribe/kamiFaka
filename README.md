@@ -28,7 +28,7 @@
 
 一键部署：
 ```bash
-docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.2
+docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.3
 ```
 然后访问http://您的ip:8000即可访问, 加上`/admin`跳转到管理员界面，默认账号：admin@qq.com 密码：123456
 
@@ -36,15 +36,15 @@ docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.2
 
 卸载命令：
 ```bash
-docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:0.2
+docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:0.3
 ```
 【国内环境】：阿里云镜像加速【适合国内服务器或本地使用】：
 ```bash
-docker run --name kmfaka -itd -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.2
+docker run --name kmfaka -itd -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.3
 ```
 【国内环境】：卸载命令：
 ```bash
-docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.2
+docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.3
 ```
 
 
@@ -54,8 +54,8 @@ docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetri
 ![](dashboard.png)
 
 
-## 内测说明
-当前还未发布正式版，内测主要征集各种BUG中，第一轮结束后。将发布第一个正式版。请做好反馈BUG的心态后再尝试本程序，否则请选择已经成熟的发卡系统。
+## 0.3版本说明
+此版本已接近第一个正式版，完善了几乎面向正式环境的所有细节。修复了0.2版本遗留的访客界面编辑、管理员界面等等。
 
 
 ## 当前开发计划：

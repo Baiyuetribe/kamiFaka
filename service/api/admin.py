@@ -1,7 +1,7 @@
 from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for
 import requests
 from sqlalchemy.orm import query
-from sqlalchemy.sql.functions import user
+from sqlalchemy.sql import func
 from service.database.models import AdminUser,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
 from service.api.db import db
 import bcrypt
@@ -72,14 +72,20 @@ def login():
 
 
 @admin.route('/dashboard', methods=['get'])
-@jwt_required
+# @jwt_required
 def dashboard():
-    orders = Order.query.filter().all()
     info = {}
-    info['total_price'] = round(sum([float(x.total_price) for x in orders]),2)
-    info['history'] = [{'time':x.updatetime,'price':x.price} for x in orders]
+    info['cag_num'] = len(ProdCag.query.filter().all()) #总分类
+    info['shop_num'] = len(ProdInfo.query.filter().all())  #总商品
+    info['card_num'] = len(Card.query.filter().all())  #总卡密
+    info['order_num'] = len(Order.query.filter().all()) #总订单
+    info['total_income'] = round(Order.query.with_entities(func.sum(Order.total_price)).scalar(),2)    #总收入
+    info['total_num'] = Order.query.with_entities(func.sum(Order.num)).scalar()   #总销售数量
+    # 历史数据获取
+    orders = Order.query.filter().all()
+    info['history_date'] = [x.updatetime for x in orders]
+    info['history_price'] = [x.total_price for x in orders]
     # info['top'] = [{}] #名称，销量，价格
-    info['server'] = {} #内存、CPU、磁盘占用
     return jsonify(info)
 
 @admin.route('/get_smtp', methods=['get'])

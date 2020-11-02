@@ -1,3 +1,4 @@
+from logging import info
 from os import pardir
 from time import time
 from flask import Blueprint, request, jsonify
@@ -316,6 +317,9 @@ def success():
 @base.route('/get_system', methods=['get'])
 def get_system():
     res = Config.query.filter().all()
-    return jsonify([x.to_json() for x in res])
+    info = {}
+    for i in [x.to_json() for x in res]:
+        info[i['name']] = i
+    return jsonify(info)
 
     

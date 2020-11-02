@@ -45,6 +45,7 @@ def init_db(update=False):
     db.session.add(Config('web_url','https://baiyue.one','网站地址，支付回调时调用',True))
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
     db.session.add(Config('web_logo','./logo.png','logo',True))
+    db.session.add(Config('contact_us','<p>Lorem ipsum dolor sit amet, <code>consectetur</code> adipisicing. Ut enim ad minim veniam, quis nostrud<code>exercitation</code> ullamco laboris nisi ut aliquip ex ea</p>','首页-联系我们',True))
     db.session.add(Config('web_footer','','可填写备案或统计信息',True))
     db.session.add(Config('top_notice','首页公告栏信息','首页公告',True))
     db.session.add(Config('modal_notice','','全局弹窗信息',True))
@@ -52,8 +53,8 @@ def init_db(update=False):
     db.session.add(Config('login_captcha','false','登录验证码',True))
     db.session.add(Config('search_captcha','false','查询订单验证码',True))
     db.session.add(Config('theme','list_theme','主题',True))
-    db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',True))
-    db.session.add(Config('kamiFaka_v','1.0.0','Github项目地址，用于手动检测新版',True))
+    db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','0.3.0','Github项目地址，用于手动检测新版',False))
 
 
     # 通知栏
@@ -68,9 +69,10 @@ def init_db(update=False):
 
 
     # 订单信息【测试环境】
-    db.session.add(Order('baiyue4512454544','香港ID','支付宝当面付','1563254111','请求尽快发货',9.99,1,9.9,'账号：xxxxx；密码：xxxx'))
-    db.session.add(Order('baiyue4512454546','香港ID','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,29.97,None))    #卡密为None或‘’空都可以
-    db.session.add(Order('baiyue4512454548','香港ID','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,9.9,''))
+    db.session.add(Order('baiyue4512454544','香港ID','支付宝当面付','1563254111','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
+    db.session.add(Order('baiyue4512454546','香港ID','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None))    #卡密为None或‘’空都可以
+    db.session.add(Order('baiyue4512454548','香港ID','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,''))
+    db.session.add(Order('baiyue4512454549','香港ID','虎皮椒支付宝','demo2@gmail.com','不错',9.99,1,1.9,''))
     # 
     
     db.session.commit()
