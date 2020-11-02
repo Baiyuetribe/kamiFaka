@@ -19,7 +19,6 @@ jobs:
         with:
           image: baiyuetribe/kamifaka
           tag: 0.2
-          registry: registry-url.io
-          dockerfile: Dockerfile.ci
+          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
