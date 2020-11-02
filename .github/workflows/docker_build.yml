@@ -36,7 +36,5 @@ jobs:
           image: baiyuetribe/kamifaka
           tag: 0.2
           registry: registry.cn-hangzhou.aliyuncs.com
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-        env:
           username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
