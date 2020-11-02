@@ -1,8 +1,8 @@
-name: Docker Images CI
+name: 自动化构建Docker镜像
 
 on:
   push:
-    branches: [ master ]
+    branches: master
 
 jobs:
   push_to_registry:
