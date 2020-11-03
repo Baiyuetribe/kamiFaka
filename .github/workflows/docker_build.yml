@@ -34,7 +34,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: baiyuetribe/kamifaka
-          tag: 0.3
+          tag: latest
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.ALIYUN_USERNAME }}
           password: ${{ secrets.ALIYUN_PASSWORD }}

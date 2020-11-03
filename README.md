@@ -76,6 +76,7 @@ docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetri
 - 管理员支持邮箱、短信、TG、微信通知
 - 支持批量导入卡密
 - 商品可上下架
+- 支持自定义背景
 
 
 ### 项目依赖
