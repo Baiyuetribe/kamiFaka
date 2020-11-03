@@ -9,6 +9,11 @@
 <p align="center">
   基于VUE3.0+FLASK构建的全新卡密发卡系统
     <br>
+    <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/Baiyuetribe/kamiFaka/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BADocker%E9%95%9C%E5%83%8F/master?label=Docker&style=for-the-badge">
+    <img alt="Docker Image Size (latest semver)" src="https://img.shields.io/docker/image-size/baiyuetribe/kamifaka?style=for-the-badge">
+    <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/baiyuetribe/kamifaka?style=for-the-badge">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/baiyuetribe/kamifaka?style=for-the-badge">
+
   <br>
   <a href="https://jq.qq.com/?_wv=1027&k=1NdPevjF">反馈 bug</a>
   ·
@@ -17,8 +22,7 @@
   <a href="https://baiyue.one/">Blog</a>
 </p>
 
-
-## 预览地址：0.2版
+## 预览地址：0.3.0版
 
 最新版预览地址： http://107.148.243.178:8000
 
@@ -59,9 +63,9 @@ docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetri
 
 
 ## 当前开发计划：
-收集BUG反馈=》发布第一个正式版
+发布第一个正式版-->撰写帮助文档
 
-当前任务：征集内测bug
+当前任务：征集内测bug、写文档
 
 ## 功能特色：
 

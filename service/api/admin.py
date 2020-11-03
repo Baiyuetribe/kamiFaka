@@ -72,7 +72,7 @@ def login():
 
 
 @admin.route('/dashboard', methods=['get'])
-# @jwt_required
+@jwt_required
 def dashboard():
     info = {}
     info['cag_num'] = len(ProdCag.query.filter().all()) #总分类
