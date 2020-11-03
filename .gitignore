@@ -20,3 +20,7 @@ __pycache__/
 
 # vue-source
 vue3
+
+# My configurations:
+myconfig.py
+my_db_init.py
