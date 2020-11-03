@@ -22,17 +22,18 @@
   <a href="https://baiyue.one/">Blog</a>
 </p>
 
-## 预览地址：0.3.0版
-
 最新版预览地址： http://107.148.243.178:8000
 
 内测BUG反馈QQ群：853791822
 
 ## 部署方法：
 
+正式环境（线上环境）教程：[佰阅发卡KAMIFAKA：一款全新的基于VUE3.0+FLASK的卡密发卡系统](https://baiyue.one/archives/1700.html)
+
+
 一键部署：
 ```bash
-docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.3
+docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:latest
 ```
 然后访问http://您的ip:8000即可访问, 加上`/admin`跳转到管理员界面，默认账号：admin@qq.com 密码：123456
 
@@ -40,32 +41,27 @@ docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:0.3
 
 卸载命令：
 ```bash
-docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:0.3
+docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 ```
 【国内环境】：阿里云镜像加速【适合国内服务器或本地使用】：
 ```bash
-docker run --name kmfaka -itd -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.3
+docker run --name kmfaka -itd -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:latest
 ```
 【国内环境】：卸载命令：
 ```bash
-docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:0.3
+docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:latest
 ```
 
 
 访客页面：
-![](home.png)
+![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc端演示.gif)
 管理员界面：
-![](dashboard.png)
-
-
-## 0.3版本说明
-此版本已接近第一个正式版，完善了几乎面向正式环境的所有细节。修复了0.2版本遗留的访客界面编辑、管理员界面等等。
-
+![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc后台端演示.gif)
 
 ## 当前开发计划：
 发布第一个正式版-->撰写帮助文档
 
-当前任务：征集内测bug、写文档
+当前任务：征集内测bug、写操作文档
 
 ## 功能特色：
 
