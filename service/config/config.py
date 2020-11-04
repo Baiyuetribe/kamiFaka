@@ -54,7 +54,7 @@ def init_db(update=False):
     db.session.add(Config('search_captcha','false','查询订单验证码',True))
     db.session.add(Config('theme','list_theme','主题',True))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','0.3.0','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','0.3.2','Github项目地址，用于手动检测新版',False))
 
 
     # 通知栏
