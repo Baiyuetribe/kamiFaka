@@ -23,17 +23,17 @@ def init_db(update=False):
     db.session.add(ProdCag('激活码','单独激活类商品','1000'))
     db.session.add(ProdCag('第三分类','单独激活类商品','1000'))
     # 商品设置
-    db.session.add(ProdInfo('账户ID','香港ID','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','./upload/images/451244.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
+    db.session.add(ProdInfo('账户ID','香港ID','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
                                 9.99, True,0,0,True))
-    db.session.add(ProdInfo('账户ID','香港ID2','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','./upload/images/451244.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
+    db.session.add(ProdInfo('账户ID','香港ID2','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
                                 9.99, True,0,0,True))
-    db.session.add(ProdInfo('账户ID','香港ID3','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','./upload/images/451244.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
+    db.session.add(ProdInfo('账户ID','香港ID3','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
                                 9.99, False,0,0,False))                                
-    db.session.add(ProdInfo('激活码','香港ID4','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','./upload/images/451244.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
+    db.session.add(ProdInfo('激活码','香港ID4','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
                                 9.99, False,0,0,False))
-    db.session.add(ProdInfo('激活码','香港ID5','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','./upload/images/451244.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
+    db.session.add(ProdInfo('激活码','香港ID5','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
                                 9.99, True,0,0,True))
-    db.session.add(ProdInfo('激活码','香港ID6','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','./upload/images/451244.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
+    db.session.add(ProdInfo('激活码','香港ID6','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
                                 9.99, True,0,0,False))        
     # 卡密设置
     db.session.add(Card('香港ID','454545454454545454',False,False))
