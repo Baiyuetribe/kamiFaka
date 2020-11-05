@@ -29,6 +29,17 @@ def favicon():
     return send_from_directory(os.path.join(common.root_path, '../../dist'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+# 图片公共路径
+UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
+
+
+
+@common.route('/images/<filename>')
+def get_file(filename):
+    return send_from_directory(UPLOAD_PATH,filename)
+
+
+
 #前端
 @common.route('/')
 def index():

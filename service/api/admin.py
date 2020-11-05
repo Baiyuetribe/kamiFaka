@@ -9,6 +9,12 @@ import bcrypt
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token
 )
+import os
+# from werkzeug.utils import secure_filename  #主要作用，使文件上传更安全
+
+# 图片公共路径
+UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
+
 
 #日志记录
 from service.util.log import log
@@ -35,6 +41,7 @@ def timefn(fn):
         print(f"@timefn: {fn.__name__} took {t2 - t1: .5f} s")
         return result
     return measure_time
+
 
 
 @admin.route('/login', methods=['POST'])
@@ -69,6 +76,29 @@ def login():
     except AttributeError as e:
         log(e)
         return 'Provide an Email and Password in JSON format in the request body', 400
+
+# 图床参数
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','gif' }
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@admin.route('/upload',methods=['POST'])
+def upload():
+    file = request.files['file']
+    # file = request.json.get('file', None)
+    if not file:
+        return '参数丢失', 400
+    
+    if allowed_file(file.filename):
+        #secure_filename可以使上传文件的文件名更加安全，但是对中文的支持不是很好，如果想要使用secure_file()可以在使用之前将filename转换成英文或时间戳
+        # filename = secure_filename(file.filename)
+        filename = time.strftime('%Y-%m-%d_%H-%M-%S',time.localtime()) +'.' + file.filename.split('.')[-1]
+        file.save(os.path.join(UPLOAD_PATH,filename))
+        # print('上传成功'+filename)
+        return jsonify({'msg':'success','info':filename})
+    else:
+        # print('上传失败')
+        return 'faild'
 
 
 @admin.route('/dashboard', methods=['get'])

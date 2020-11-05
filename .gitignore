@@ -24,3 +24,7 @@ vue3
 # My configurations:
 myconfig.py
 my_db_init.py
+
+# system img
+public/images/*
+!alipay.png
