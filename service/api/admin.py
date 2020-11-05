@@ -83,6 +83,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @admin.route('/upload',methods=['POST'])
+@jwt_required
 def upload():
     file = request.files['file']
     # file = request.json.get('file', None)
