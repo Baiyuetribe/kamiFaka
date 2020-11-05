@@ -61,7 +61,7 @@ docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetri
 ## 当前开发计划：
 发布第一个正式版-->撰写帮助文档
 
-当前任务：征集内测bug、写操作文档
+当前任务：短信接口开发、邮箱模板、写操作文档
 
 ## 功能特色：
 
