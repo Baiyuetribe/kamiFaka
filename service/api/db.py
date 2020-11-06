@@ -23,7 +23,7 @@ CORS(app, resources=r'/*')
 SQL_PATH = os.path.join(os.path.dirname(__file__),'../../public/sql')
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'   #本地
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(SQL_PATH,'kamifaka.db')    #本地
+app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:///'+os.path.join(SQL_PATH,'kamifaka.db')   #默认数据库
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@127.0.0.1:336/KAFAKA?charset=utf8mb4'   #本地
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://docker_db_1:root@127.0.0.1:3306/KAFAKA?charset=utf8mb4'   #本地
 

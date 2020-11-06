@@ -14,6 +14,7 @@ __pycache__/
 *.log
 # test sql
 *.db
+*.txt
 
 # scaffold
 *.ipynb
@@ -29,3 +30,6 @@ my_db_init.py
 public/images/*
 !alipay.png
 !null.png
+
+# backup
+public/backups/*
