@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 # from requests.api import options
 import datetime
-
+import os
 # from flask_socketio import SocketIO
 #通用组件
 app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
@@ -19,7 +19,11 @@ CORS(app, resources=r'/*')
 
 # socketio = SocketIO(app, cors_allowed_origins='*')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'   #本地
+#路径设置
+SQL_PATH = os.path.join(os.path.dirname(__file__),'../../public/sql')
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'   #本地
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(SQL_PATH,'kamifaka.db')    #本地
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@127.0.0.1:336/KAFAKA?charset=utf8mb4'   #本地
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://docker_db_1:root@127.0.0.1:3306/KAFAKA?charset=utf8mb4'   #本地
 
