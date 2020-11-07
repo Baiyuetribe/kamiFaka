@@ -27,10 +27,10 @@ myconfig.py
 my_db_init.py
 
 # system img
-public/images/
-public/backups/
-public/sql/
-
+public/images/*
+public/backups/*
+public/sql/*
+# sql是必须要创建的
 # # !alipay.png
 # # !null.png
 
