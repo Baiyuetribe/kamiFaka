@@ -30,27 +30,10 @@
 
 正式环境（线上环境）教程：[佰阅发卡KAMIFAKA：一款全新的基于VUE3.0+FLASK的卡密发卡系统](https://baiyue.one/archives/1700.html)
 
+线上教程包括2种主要的方法：1.【宝塔+SQlite】 2.【宝塔+Mysql】
 
-一键部署：
-```bash
-docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:latest
-```
-然后访问http://您的ip:8000即可访问, 加上`/admin`跳转到管理员界面，默认账号：admin@qq.com 密码：123456
 
-如需通过域名访问，请参考[宝塔如何设置域名反代任意端口？](https://baiyue.one/archives/527.html)
-
-卸载命令：
-```bash
-docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
-```
-【国内环境】：阿里云镜像加速【适合国内服务器或本地使用】：
-```bash
-docker run --name kmfaka -itd -p 8000:8000 registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:latest
-```
-【国内环境】：卸载命令：
-```bash
-docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetribe/kamifaka:latest
-```
+开发环境：[开发环境安装教程](开发环境安装教程.md)
 
 
 访客页面：
@@ -73,6 +56,8 @@ docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetri
 - 支持批量导入卡密
 - 商品可上下架
 - 支持自定义背景
+- 支持网站配置备份、热更新
+- 数据库可分离，兼容Sqlite和Mysql
 
 
 ### 项目依赖
@@ -83,8 +68,9 @@ docker rm -f kmfaka && docker rmi -f registry.cn-hangzhou.aliyuncs.com/baiyuetri
 
 ## 如何参与该开源项目？
 
-我们欢迎任何人参进来，不论前端UI美化、细节讲究，还是代码BUG、功能异常等情况，欢迎积极反馈。内测BUG反馈QQ群：853791822
+[查看可参与的任务](查看可参与的任务.md)
+内测BUG反馈QQ群：853791822
 
 ## License
 
-MIT
+本程序使用MIT协议，您可以免费使用，复制或修改软件，但是请保留底部作者信息和License许可声明。

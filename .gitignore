@@ -28,8 +28,8 @@ my_db_init.py
 
 # system img
 public/images/*
-!alipay.png
-!null.png
+# !alipay.png
+# !null.png
 
 # backup
 public/backups/*
