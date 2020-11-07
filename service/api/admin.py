@@ -4,6 +4,8 @@ from sqlalchemy.orm import query
 from sqlalchemy.sql import func
 from service.database.models import AdminUser,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
 from service.api.db import db
+from service.util.backup.sql import main_back   #信息备份
+
 import bcrypt
 # 添加jwt
 from flask_jwt_extended import (
@@ -462,6 +464,13 @@ def update_system():
 @jwt_required
 def demo():
     return jsonify(round(sum([float(x.total_price) for x in Order.query.filter().all()]),2))   
+
+
+@admin.route('/backups',methods=['POST'])
+@jwt_required
+def backups():
+    main_back()
+    return {"mgs": 'success'}, 200
 
 
 # def login():
