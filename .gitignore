@@ -27,9 +27,13 @@ myconfig.py
 my_db_init.py
 
 # system img
-public/images/*
-# !alipay.png
-# !null.png
+public/images/
+public/backups/
+public/sql/
 
-# backup
-public/backups/*
+# # !alipay.png
+# # !null.png
+
+# # # backup
+# public/backups/*
+# public/sql/*

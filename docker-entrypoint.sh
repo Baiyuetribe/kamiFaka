@@ -15,7 +15,8 @@ fi
 # 然后初始化数据库
 python init_mysql.py
 
-echo '程序初始化完成'
 
+echo '程序初始化完成'
 # ["gunicorn","-k", "gevent", "--bind", "0.0.0.0:8000", "--workers", "8", "app:app"]
 gunicorn -k gevent --bind 0.0.0.0:8000 --workers 8 app:app
+
