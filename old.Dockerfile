@@ -1,5 +1,5 @@
 FROM python:3.8-slim
-
+# 适用于简易sqlite本地环境直接启用
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
