@@ -13,7 +13,7 @@ if [ ! -d '/usr/src/app/public/images' ]; then
 fi
 
 if [ ! -d '/usr/src/app/public/sql' ]; then
-   mkdir /usr/src/app/public/images
+   mkdir /usr/src/app/public/sql
 fi
 
 if [ ! -d '/usr/src/app/public/backups' ]; then
