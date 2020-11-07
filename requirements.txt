@@ -7,3 +7,4 @@ requests
 bcrypt
 gunicorn
 gevent
+pymysql
