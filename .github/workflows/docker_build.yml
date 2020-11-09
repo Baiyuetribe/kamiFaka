@@ -18,10 +18,22 @@ jobs:
         name: Build & push Docker image
         with:
           image: baiyuetribe/kamifaka
-          tag: 0.3
+          tag: latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: SSH Remote deploy
+        uses: docker://evaneos/ssh-action:0.1.0
+        with: 
+          hosts: 107.148.243.178
+          user: ${{ secrets.REMOTE_USERNAME }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          commands: |
+            docker rm -f kamifaka
+            rm -rf /opt/kamifaka
+            docker pull baiyuetribe/kamifaka
+            docker run -d --name=kamifaka -p 8000:8000 -v /opt/kamifaka:/usr/src/app/public baiyuetribe/kamifaka
 
   push_to_aliyun:
     name: Push Docker image to Aliyun Hub
