@@ -131,21 +131,23 @@ def get_pay_url():
         try:
             obj = Hupi()
             pay_order = obj.Pay(trade_order_id=out_order_id,total_fee=total_price,title=name)
+            if pay_order.json()['errmsg'] == 'success!':
+                """
+                {'openid': 20205992711,
+                'url_qrcode': 'https://api.xunhupay.com/payments/wechat/qrcode?id=20205992711&nonce_str=5073110106&time=1603170015&appid=201906121518&hash=2c079048857dde2da83c740d9dcf3ad0',
+                'url': 'https://api.xunhupay.com/payments/wechat/index?id=20205992711&nonce_str=7001051163&time=1603170015&appid=201906121518&hash=9a0192253f1f502e0bff6da77540c4ee',
+                'errcode': 0,
+                'errmsg': 'success!',
+                'hash': '2d63d86e7b405ab34ac28204ba77d6d6'}
+                """
+                return jsonify({'qr_code':pay_order.json()['url']})  
+            return '调用支付接口失败', 400              
         except Exception as e:
             log(e)
             return '数据库异常', 500                
         # print(ali_order)
-        if pay_order.json()['errmsg'] == 'success!':
-            """
-            {'openid': 20205992711,
-            'url_qrcode': 'https://api.xunhupay.com/payments/wechat/qrcode?id=20205992711&nonce_str=5073110106&time=1603170015&appid=201906121518&hash=2c079048857dde2da83c740d9dcf3ad0',
-            'url': 'https://api.xunhupay.com/payments/wechat/index?id=20205992711&nonce_str=7001051163&time=1603170015&appid=201906121518&hash=9a0192253f1f502e0bff6da77540c4ee',
-            'errcode': 0,
-            'errmsg': 'success!',
-            'hash': '2d63d86e7b405ab34ac28204ba77d6d6'}
-            """
-            return jsonify({'qr_code':pay_order.json()['url']})
-        return '调用支付接口失败', 400
+
+        
     elif payment == '虎皮椒支付宝':
         
         try:
