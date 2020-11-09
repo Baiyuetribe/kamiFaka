@@ -29,6 +29,7 @@ jobs:
           hosts: 107.148.243.178
           user: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
+          port: ${{ secrets.REMOTE_PORT }}
           commands: |
             docker rm -f kamifaka
             rm -rf /opt/kamifaka
