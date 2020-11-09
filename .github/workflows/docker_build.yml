@@ -24,13 +24,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: SSH Remote deploy
-        uses: docker://evaneos/ssh-action:0.1.0
+        uses: appleboy/ssh-action@master
         with: 
-          hosts: 107.148.243.178
-          user: ${{ secrets.REMOTE_USERNAME }}
+          host: 107.148.243.178
+          username: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
-          commands: |
+          script: |
             docker rm -f kamifaka
             rm -rf /opt/kamifaka
             docker pull baiyuetribe/kamifaka
