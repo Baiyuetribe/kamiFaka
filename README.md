@@ -28,7 +28,7 @@
 
 ## 部署方法：
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2FBaiyuetribe%2FkamiFaka)
+Heroku 一键部署：[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2FBaiyuetribe%2FkamiFaka)
 
 正式环境（线上环境）教程：[佰阅发卡KAMIFAKA：一款全新的基于VUE3.0+FLASK的卡密发卡系统](https://baiyue.one/archives/1700.html)
 
