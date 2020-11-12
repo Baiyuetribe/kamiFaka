@@ -28,14 +28,29 @@
 
 ## 部署方法：
 
-正式环境（线上环境）教程：[佰阅发卡KAMIFAKA：一款全新的基于VUE3.0+FLASK的卡密发卡系统](https://baiyue.one/archives/1700.html)
+### 1. 正式环境【线上部署】
+[如何使用宝塔面板Docker管理器一键部署佰阅发卡](https://baiyue.one/archives/1703.html)
 
-线上教程包括2种主要的方法：[1.【宝塔+SQlite】 2.【宝塔+Mysql】](正式环境搭建教程.md)
+[佰阅发卡KAMIFAKA：一款全新的基于VUE3.0+FLASK的卡密发卡系统](https://baiyue.one/archives/1700.html)
 
+Github本地查看：[1.【宝塔+SQlite】 2.【宝塔+Mysql】](正式环境搭建教程.md)
+
+### 2. 线上快速体验
 Heroku 一键部署：[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2FBaiyuetribe%2FkamiFaka)
 
 PWD 一键部署：[![Try in PWD](https://cdn.rawgit.com/play-with-docker/stacks/cff22438/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/Baiyuetribe/kamiFaka/master/pwd.yml)
 
+个人服务器快速安装：
+```bash
+# 安装命令
+docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:latest
+```
+```bash
+# 卸载命令
+docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
+```
+
+### 3. 开发环境
 
 开发环境：[开发环境安装教程](开发环境安装教程.md)
 
