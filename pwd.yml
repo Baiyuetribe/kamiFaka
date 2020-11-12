@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  kamifaka:
+    image: baiyuetribe/kamifaka
+    restart: always
+    environment:
+      DATABASE_TYPE: Sqlite
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: kamifaka
+    volumes:
+      - /opt/kamifaka:/usr/src/app/public
+    ports:
+      - 8000:8000
