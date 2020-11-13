@@ -11,7 +11,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: kamifaka
-    volumes:
-      - /opt/kamifaka:/usr/src/app/public
+    # volumes:
+    #   - /opt/kamifaka:/usr/src/app/public
     ports:
       - 8000:8000
