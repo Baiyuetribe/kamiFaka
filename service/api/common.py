@@ -79,4 +79,4 @@ def back():
 
 @common.route('/robots.txt')
 def robots():
-    return Response('User-agent: *\n' + 'Disallow: /', 200, headers={'Content-Type': 'text/plain'})
+    return Response('User-agent: *\n' + 'Disallow: /images/', 200, headers={'Content-Type': 'text/plain'})

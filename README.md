@@ -63,7 +63,7 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 ## 当前开发计划：
 发布第一个正式版-->撰写帮助文档
 
-当前任务：操作文档、富文本编辑器、
+当前任务：批发功能
 
 ## 功能特色：
 
@@ -77,6 +77,7 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 - 支持自定义背景
 - 支持网站配置备份、热更新
 - 数据库可分离，兼容Sqlite和Mysql
+- 支持移动端唤醒支付宝
 
 
 ### 项目依赖
