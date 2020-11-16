@@ -124,14 +124,14 @@ class ProdInfo(db.Model):
     sort = Column(Integer, nullable=True,default=1000)  #排序
     discription = Column(Text, nullable=True)  #完整描述
     price = Column(Float, nullable=False)  #价格
-    # price_wholesale = Column(Text, nullable=False)  #折扣
+    price_wholesale = Column(String(150), nullable=True)  #折扣
     # iswholesale = Column(Text, nullable=False,default=False)  #是否启用折扣
     auto = Column(Boolean, nullable=False,default=False)  #手工或自动发货
     sales = Column(Integer, nullable=True,default=0)  #销量
     tag = Column(String(50), nullable=True,default='优惠折扣')  #标签
     isactive = Column(Boolean, nullable=False,default=False)   #激活为1
 
-    def __init__(self, cag_name, name, info, img_url, sort, discription, price, auto, sales, tag, isactive):
+    def __init__(self, cag_name, name, info, img_url, sort, discription, price,price_wholesale, auto, sales, tag, isactive):
         self.cag_name = cag_name
         self.name = name
         self.info = info
@@ -139,6 +139,7 @@ class ProdInfo(db.Model):
         self.sort = sort
         self.discription = discription
         self.price = price
+        self.price_wholesale = price_wholesale
         self.auto = auto
         self.sales = sales
         self.tag = tag
@@ -156,7 +157,7 @@ class ProdInfo(db.Model):
             'stock': self.__count_card__(self.name),    #库存信息，此处函数处理
         }
     def __count_card__(self,prod_name):
-        count = Card.query.filter_by(prod_name = prod_name).count()
+        count = Card.query.filter_by(prod_name = prod_name,isused = False).count()
         if count > 10:
             return '充足'
         elif count == 0:
@@ -174,6 +175,7 @@ class ProdInfo(db.Model):
             'name': self.name,
             'prod_id': self.id,
             'price': self.price,
+            'price_wholesale': self.price_wholesale,
             'auto': self.auto,
             'tag': self.tag,
             'stock': self.__count_card__(self.name),
@@ -190,6 +192,7 @@ class ProdInfo(db.Model):
             'sort': self.sort,
             'discription': self.discription,
             'price': self.price,
+            'price_wholesale': self.price_wholesale,
             'auto': self.auto,
             'tag': self.tag,
             'sales': self.sales,
@@ -200,12 +203,21 @@ class ProdInfo(db.Model):
             'name': self.name,
             'prod_id': self.id,
             'price': self.price,
+            'price_wholesale': self.price_wholesale,
             'img_url': self.img_url,
             'auto': self.auto,
             'tag': self.tag,
             'discription': self.discription,
+        }     
+    # 批发价格设计
+    # 9，10；9.9，8.8
+    # 9，10-100，101；9.9，8.8，7.7 
+    # 9，10-100，101-500，501；9.9，8.8，7.7,6.6
+    
+    # 9#9.9，8.8
+    # 9，100#9.9，8.8，7.7 
+    # 9，100，500#9.9，8.8，7.7,6.6    
 
-        }        
 class Order(db.Model):
     __tablename__ = 'order'  # 订单信息
     id = Column(Integer, primary_key=True,autoincrement=True)

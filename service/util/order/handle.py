@@ -21,19 +21,50 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
     if not Order.query.filter_by(out_order_id = out_order_id).count():
         status = True   #订单状态
         # 生成订单 --除了上述内容外，还需要卡密。
-        result = Card.query.filter_by(prod_name = name,isused = False).first()  #此处可用用0，也可以用false
-        if result:
-            card = result.to_json()['card']
-            reuse = result.to_json()['reuse']   #返回True或False
-            if not reuse: #卡密状态修改
-                Card.query.filter_by(id = result.to_json()['id']).update({'isused':True})
+        nums = int(num)
+        if nums ==1:
+            result = Card.query.filter_by(prod_name = name,isused = False).first()  #此处可用用0，也可以用false
+            if result:
+                card = result.to_json()['card']
+                reuse = result.to_json()['reuse']   #返回True或False
+                if not reuse: #卡密状态修改
+                    Card.query.filter_by(id = result.to_json()['id']).update({'isused':True})
+            else:
+                card = None
+                status = False
+                # print('卡密为空')
+                log(f'{contact}购买的{name}缺货，卡密信息为空')
         else:
-            card = None
-            status = False
-            # print('卡密为空')
-            log(f'{contact}购买的{name}缺货，卡密信息为空')
+            # 处理数量订单- 卡密查询，数量大于1，重复卡密：-重复发送；不重复卡密：给出结果或空白
+            result = Card.query.filter_by(prod_name = name,isused = False).first()  #先查询一个，判定是否重复
+            if result:
+                if result.to_json()['reuse']: #判定是否重复使用
+                    # 重复使用卡密情况下
+                    pre_card = result.to_json()['card']
+                    card = str([pre_card for i in range(nums)])
+                    # 其余相同
+                else:
+                    # 不重复卡密情况 - 查询多个结果，给出卡密列表；更新这些卡密的使用状态
+                    result = Card.query.filter_by(prod_name = name,isused = False).limit(nums).all()
+                    pre_card = [i.to_json()['card'] for i in result]    #数量可能少于实际数量
+                    if len(pre_card) == nums:
+                        card = str(pre_card)
+                    else:
+                        card = str(pre_card + [None for x in range(nums-len(pre_card))])
+                        log(f'{name}已缺货')
+                    # 更新已用卡密状态
+                    for y in result:
+                        Card.query.filter_by(id = y.to_json()['id']).update({'isused':True})      
+
+            else:
+                card = None
+                status = False
+                # print('卡密为空')
+                log(f'{contact}购买的{name}缺货，卡密信息为空')
+
         #订单创建
         try:
+            # print(f'卡密信息{card}')
             new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card)
             db.session.add(new_order)
             db.session.commit()
@@ -58,8 +89,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
         try:
             task(data)  #为避免奔溃，特别设置
         except Exception as e:
-            log(e)  #代表通知序列任务失败
-              
+            log(e)  #代表通知序列任务失败                                
         
 
 
@@ -125,6 +155,7 @@ def send_admin(notice_name,config,admin_account,data):  #通知途径+管理员�
             log(e)  #通知失败              
     elif notice_name == '微信通知':
         try:
+            print('微信通知')
             wxpush(config,admin_account,data)      #该步骤需要处理下
         except Exception as e:
             log('微信通知失败 ')  #          

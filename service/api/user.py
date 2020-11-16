@@ -79,8 +79,35 @@ def detail(shop_id):
         prod = ProdInfo.query.filter_by(id = shop_id).first_or_404('Product not exist')
     except Exception as e:
         log(e)
-        return '数据库异常', 500       
-    return jsonify(prod.detail_json())
+        return '数据库异常', 500
+    res = prod.detail_json()
+    try:
+        if len(res['price_wholesale']) >5:
+            price = res['price_wholesale'].split('#')[1]
+            num = res['price_wholesale'].split('#')[0]
+            prices = price.split(',')
+            # 处理数量列表
+            nums = []
+            temp = num.split(',')
+            s = len(temp)
+            if s == 1:
+                nums.append('1~'+temp[0])
+                nums.append(str(int(temp[0])+1)+'~')
+            elif s == 2:
+                nums.append('1~'+temp[0])
+                nums.append(str(int(temp[0])+1)+'~'+temp[1])
+                nums.append(str(int(temp[1])+1)+'~')
+            elif s == 3:
+                nums.append('1~'+temp[0])
+                nums.append(str(int(temp[0])+1)+'~'+temp[1])
+                nums.append(str(int(temp[1])+1)+'~'+temp[2])
+                nums.append(str(int(temp[2])+1)+'~')
+            else:
+                pass
+            res['pifa'] = {'nums':nums,'prices':prices,'slice':temp}
+    except:
+        pass
+    return jsonify(res)
 
 @base.route('/get_order', methods=['post']) #已售订单信息
 def get_order():
@@ -161,7 +188,7 @@ def get_pay_url():
         if pay_order.json()['errmsg'] == 'success!':
             return jsonify({'qr_code':pay_order.json()['url']})
         return '调用支付接口失败', 400
-    elif payment == '码支付微信' or '码支付支付宝' or '码支付QQ':
+    elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
         # 参数错误情况下，会失效
         try:
             qr_url = CodePay().create_order(payment,total_price,out_order_id)
@@ -169,14 +196,18 @@ def get_pay_url():
             log(e)
             return '数据库异常', 500                        
         return jsonify({'qr_code':qr_url})
-    elif payment == 'PAYJS支付宝' or 'PAYJS微信':
+    elif payment in ['PAYJS支付宝','PAYJS微信']:
         # 参数错误情况下，会失效
         try:
             r = Payjs().create_order(name,out_order_id,total_price)
         except Exception as e:
             log(e)
-            return '数据库异常', 500                        
-        return jsonify({'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']})        
+            return '数据库异常', 500  
+        if r and r.json()['return_msg'] == 'SUCCESS':
+            return jsonify({'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']})   
+
+        return '调用支付接口失败', 400                    
+             
     else:
         return '开发中', 400
 
@@ -205,26 +236,28 @@ def check_pay():
     # 支付渠道校验
     if payment == '支付宝当面付':
         if methord == 'check':
-            try:
-                res = AlipayF2F().check(out_order_id)
-            except Exception as e:
-                log(e)
-                return '支付宝请求错误', 500                
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            return jsonify({'msg':'success'})
+            # try:
+            #     res = AlipayF2F().check(out_order_id)
+            # except Exception as e:
+            #     log(e)
+            #     return '支付宝请求错误', 500                
             
-            # print(result)
-            if res:
-                # start = time()
-                # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
-                # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
-                executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
-                # print('提交结果1')
-                # print(time()-start) 
-                return jsonify({'msg':'success'})
-            return jsonify({'msg':'not paid'})  #支付状态校验        
+            # # print(result)
+            # if res:
+            #     # start = time()
+            #     # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
+            #     # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            #     executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            #     # print('提交结果1')
+            #     # print(time()-start) 
+            #     return jsonify({'msg':'success'})
+            # return jsonify({'msg':'not paid'})  #支付状态校验        
         else:   #取消订单
             AlipayF2F().cancle(out_order_id)
             return jsonify({'msg':'订单已取消'})
-    elif payment == '虎皮椒支付宝' or '虎皮椒微信':
+    elif payment in ['虎皮椒支付宝','虎皮椒微信']:
         if methord == 'check':
             try:
                 obj = Hupi()
@@ -243,7 +276,7 @@ def check_pay():
             return jsonify({'msg':'not paid'})  #支付状态校验        
         else:   #取消订单
             return jsonify({'msg':'订单已取消'})
-    elif payment == '码支付微信' or '码支付支付宝' or '码支付QQ':
+    elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
         if methord == 'check':
             result = CodePay().check(out_order_id)
             #失败订单
@@ -257,7 +290,7 @@ def check_pay():
             return jsonify({'msg':'not paid'})  #支付状态校验        
         else:   #取消订单
             return jsonify({'msg':'订单已取消'})     
-    elif payment == 'PAYJS支付宝' or 'PAYJS微信':
+    elif payment in ['PAYJS支付宝','PAYJS微信']:
         if methord == 'check':
             payjs_order_id = request.json.get('payjs_order_id',None)
             result = Payjs().check(payjs_order_id)
@@ -287,7 +320,7 @@ def get_card():
         card = Order.query.filter_by(out_order_id = out_order_id).first_or_404()
     except Exception as e:
         log(e)            
-        return '虎皮椒请求错误', 502        
+        return '订单创建失败', 502        
     
     return jsonify(card.only_card())    #返回卡密和订单时间
 

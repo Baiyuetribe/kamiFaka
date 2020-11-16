@@ -1,3 +1,4 @@
+from sqlalchemy.sql.elements import Null
 from service.database.models import AdminUser,Config,Payment,ProdCag,ProdInfo,Order,Card,Notice
 from service.api.db import db
 
@@ -23,22 +24,23 @@ def init_db(update=False):
     db.session.add(ProdCag('激活码','单独激活类商品','1000'))
     db.session.add(ProdCag('第三分类','单独激活类商品','1000'))
     # 商品设置
-    db.session.add(ProdInfo('账户ID','香港ID','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
-                                9.99, True,0,0,True))
-    db.session.add(ProdInfo('账户ID','香港ID2','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
-                                9.99, True,0,0,True))
-    db.session.add(ProdInfo('账户ID','香港ID3','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
-                                9.99, False,0,0,False))                                
-    db.session.add(ProdInfo('激活码','香港ID4','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
-                                9.99, False,0,0,False))
-    db.session.add(ProdInfo('激活码','香港ID5','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
-                                9.99, True,0,0,True))
-    db.session.add(ProdInfo('激活码','香港ID6','示例：适用于苹果IOS设备登录app store下载港区特有游戏或软件','images/null.png','100','下单后获得港区账号密码，苹果手机端打开app store登录账号，即可下载港区软件，完成后注销并重新登录自己的账号，已安装的应用就就可以正常使用',\
-                                9.99, True,0,0,False))        
+    db.session.add(ProdInfo('账户ID','普通商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+                                9.99,None, True,0,0,True))
+    db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+                                9.99,'9#9.9,8.8', True,0,0,True))
+    db.session.add(ProdInfo('账户ID','普通商品DD','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+                                9.99,None, False,0,0,False))                                
+    db.session.add(ProdInfo('激活码','重复卡密演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+                                9.99,None, False,0,0,False))
+    db.session.add(ProdInfo('激活码','普通商品CC','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+                                9.99,None, True,0,0,True))
+    db.session.add(ProdInfo('激活码','普通商品BB','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+                                9.99,None,True,0,0,False))        
     # 卡密设置
-    db.session.add(Card('香港ID','454545454454545454',False,False))
-    db.session.add(Card('香港ID','555555555555555555',True,False))
-    db.session.add(Card('香港ID','666666666666666666',False,False))
+    db.session.add(Card('普通商品演示','454545454454545454',False,False))
+    db.session.add(Card('批发商品演示','555555555555555555',False,False))
+    db.session.add(Card('批发商品演示','666666666666666666',False,False))
+    db.session.add(Card('重复卡密演示','666666666666666666',True,False))
     # 系统配置
     db.session.add(Config('web_name','KAMIFAKA','网站名称',True))
     db.session.add(Config('web_keyword','关键词、收录词汇','网站关键词',True))
@@ -55,7 +57,7 @@ def init_db(update=False):
     db.session.add(Config('search_captcha','false【计划中】','查询订单验证码',True))
     db.session.add(Config('theme','list_theme【计划中】','主题',True))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','0.4.2','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','0.5.1','Github项目地址，用于手动检测新版',False))
 
     # 通知栏
     # db.session.add(Message(True,'示例：顶部消息栏通知','顶部公告'))
@@ -69,10 +71,10 @@ def init_db(update=False):
 
 
     # 订单信息【测试环境】
-    db.session.add(Order('baiyue4512454544','香港ID','支付宝当面付','1563254111','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
-    db.session.add(Order('baiyue4512454546','香港ID','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None))    #卡密为None或‘’空都可以
-    db.session.add(Order('baiyue4512454548','香港ID','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,''))
-    db.session.add(Order('baiyue4512454549','香港ID','虎皮椒支付宝','demo2@gmail.com','不错',9.99,1,1.9,''))
+    db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','1563254111','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
+    db.session.add(Order('演示订单4455','普通商品演示','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None))    #卡密为None或‘’空都可以
+    db.session.add(Order('演示订单4456','普通商品演示','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,''))
+    db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','demo2@gmail.com','不错',9.99,1,1.9,''))
     # 
     
     db.session.commit()

@@ -2,7 +2,7 @@ from flask import Blueprint, Response, render_template, request, jsonify, redire
 import requests
 from sqlalchemy.orm import query
 from sqlalchemy.sql import func
-from service.database.models import AdminUser,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
+from service.database.models import AdminUser,AdminLog,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
 from service.api.db import db
 from service.util.backup.sql import main_back   #信息备份
 
@@ -17,6 +17,10 @@ import os
 # 图片公共路径
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
 
+
+#异步操作
+from concurrent.futures import ThreadPoolExecutor
+executor = ThreadPoolExecutor(2)
 
 #日志记录
 from service.util.log import log
@@ -44,7 +48,9 @@ def timefn(fn):
         return result
     return measure_time
 
-
+def login_record():
+    new_loger = AdminLog(request.remote_addr)
+    db.session.add(new_loger)
 
 @admin.route('/login', methods=['POST'])
 def login():
@@ -69,6 +75,7 @@ def login():
 
         # print(time.time() - start_t)
         if bcrypt.checkpw(password.encode('utf-8'), user_defin):
+            executor.submit(login_record)
             # print(time.time() - start_t)
             access_token = create_access_token(identity={"email": email})
             # print(time.time() - start_t)
@@ -256,6 +263,7 @@ def update_shop():
     sort = request.json.get('sort', None)
     discription = request.json.get('discription', None)
     price = request.json.get('price', None)
+    price_wholesale = request.json.get('price_wholesale', None)
     auto = request.json.get('auto', None)
     sales = request.json.get('sales', None)
     tag = request.json.get('tag', None)
@@ -268,7 +276,7 @@ def update_shop():
         if methord == 'update':
             if not all([id,cag_name,name,img_url,sort,discription,price,tag]):   #因修改时auto和isactive报错缺失，移除
                 return 'Missing data2', 400
-            ProdInfo.query.filter_by(id = id).update({'cag_name':cag_name,'name':name,'info':info,'img_url':img_url,'sort':sort,'discription':discription,'price':price,'auto':auto,'tag':tag,'isactive':isactive})
+            ProdInfo.query.filter_by(id = id).update({'cag_name':cag_name,'name':name,'info':info,'img_url':img_url,'sort':sort,'discription':discription,'price':price,'price_wholesale':price_wholesale,'auto':auto,'tag':tag,'isactive':isactive})
         elif methord == 'delete':
             if not id:
                 return 'Missing data', 400
@@ -276,7 +284,7 @@ def update_shop():
         else:
             if not name or not info or not sort:
                 return 'Missing data', 400
-            new_prod = ProdInfo(cag_name,name,info,img_url,sort,discription,price,auto,sales,tag,isactive)
+            new_prod = ProdInfo(cag_name,name,info,img_url,sort,discription,price,price_wholesale,auto,sales,tag,isactive)
             db.session.add(new_prod)
         db.session.commit()        
     except Exception as e:
@@ -286,14 +294,35 @@ def update_shop():
     # 
     return '修改成功', 200
 
-@admin.route('/get_card', methods=['get']) #卡密查询
+@admin.route('/get_card', methods=['post']) #卡密查询
+@jwt_required
 def get_card():
+    # print(request.json)
+    page = request.json.get('page',None)
+    if not page:
+        return 'Missing data1', 400
     try:
-        cards = Card.query.filter().all()
+        cards = Card.query.filter().offset((page-1)*20).limit(20).all()
+        
     except Exception as e:
         log(e)
         return '数据库异常', 500      
     return jsonify([x.to_json() for x in cards])   
+
+@admin.route('/get_card_pages', methods=['get']) #卡密查询
+@jwt_required
+def get_card_pages():
+    try:
+        nums = Card.query.filter().count()
+        temp = nums//20
+        if nums%20:
+            pages = temp+1
+        else:
+            pages = temp    #整除
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500    
+    return str(pages), 200
 
 @admin.route('/update_card', methods=['post']) #卡密查询
 @jwt_required
@@ -348,16 +377,33 @@ def remove_cards():
     return '批量删除', 200    
 
 
-@admin.route('/get_orders', methods=['get']) #已售订单信息
+@admin.route('/get_orders', methods=['post']) #已售订单信息
 @jwt_required
 def get_orders():
+    page = request.json.get('page',None)
+    if not page:
+        return 'Missing data1', 400
     try:
-        orders = Order.query.filter().all()
+        orders = Order.query.filter().offset((page-1)*20).limit(20).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500      
     return jsonify([x.admin_json() for x in orders])   
 
+@admin.route('/get_orders_pages', methods=['get']) #卡密查询
+@jwt_required
+def get_orders_pages():
+    try:
+        nums = Order.query.filter().count()
+        temp = nums//20
+        if nums%20:
+            pages = temp+1
+        else:
+            pages = temp    #整除
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500    
+    return str(pages), 200
 
 @admin.route('/get_pays', methods=['get']) #支付接口
 @jwt_required
@@ -445,7 +491,7 @@ def update_admin_account():
 @admin.route('/get_system', methods=['post']) #
 @jwt_required
 def get_system():
-    res = Config.query.filter().all()
+    res = Config.query.filter_by(isshow = True).all()
     return jsonify([x.to_json() for x in res])
 
 @admin.route('/update_system', methods=['post']) #管理员
