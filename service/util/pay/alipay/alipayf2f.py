@@ -38,6 +38,7 @@ class AlipayF2F:
     def check(self,out_order_id):     #这里是上一步主动生成的订单，单独调用
         try:
             res = self.alipay.api_alipay_trade_query(out_trade_no=out_order_id)
+            # print(res)
             if res.get("trade_status", "") == "TRADE_SUCCESS":
                 return True
         except:
