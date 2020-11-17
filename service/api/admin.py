@@ -49,8 +49,9 @@ def timefn(fn):
     return measure_time
 
 def login_record():
-    new_loger = AdminLog(request.remote_addr)
-    db.session.add(new_loger)
+    db.session.add(AdminLog(ip=request.remote_addr))
+    db.session.commit()  
+
 
 @admin.route('/login', methods=['POST'])
 def login():
@@ -75,7 +76,7 @@ def login():
 
         # print(time.time() - start_t)
         if bcrypt.checkpw(password.encode('utf-8'), user_defin):
-            executor.submit(login_record)
+            # executor.submit(login_record) # 当前问题是此处的request.remote_addr为空,执行无效
             # print(time.time() - start_t)
             access_token = create_access_token(identity={"email": email})
             # print(time.time() - start_t)
