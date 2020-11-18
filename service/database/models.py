@@ -1,12 +1,4 @@
-from enum import unique
-from operator import truediv
-from os import name, terminal_size
-from sys import stdin
-from requests.models import default_hooks
-
 from sqlalchemy.sql.sqltypes import Float
-
-
 from service.api.db import db
 from datetime import datetime
 from sqlalchemy import Column,Integer,String,Boolean,Text,DateTime
@@ -35,33 +27,6 @@ class AdminLog(db.Model):
     def __init__(self, ip):
         self.ip = ip
 
-# class Smtp(db.Model):
-#     __tablename__ = 'smtp'  # 邮箱设置
-#     id = Column(Integer, primary_key=True,autoincrement=True)
-#     sendmail = Column(String(50), nullable=False)  #发件人邮箱地址
-#     sendname = Column(String(100), nullable=False)  #发件人昵称
-#     smtp_address = Column(String(50), nullable=False)  #发件人邮箱地址
-#     smtp_port = Column(Integer) #端口
-#     smtp_pwd = Column(String(100), nullable=False)  #邮箱密码
-#     smtp_ssl = Column(Boolean, nullable=False,default=True)  #ssl取值true
-
-#     def __init__(self, sendmail, sendname, smtp_address, smtp_port, smtp_pwd, smtp_ssl):
-#         self.sendmail = sendmail
-#         self.sendname = sendname
-#         self.smtp_address = smtp_address
-#         self.smtp_port = smtp_port
-#         self.smtp_pwd = smtp_pwd
-#         self.smtp_ssl = smtp_ssl
-#     def to_json(self):
-#         return {
-#             'id': self.id,
-#             'sendmail': self.sendmail,
-#             'sendname': self.sendname,
-#             'smtp_address': self.smtp_address,
-#             'smtp_port': self.smtp_port,
-#             'smtp_pwd': self.smtp_pwd,
-#             'smtp_ssl': self.smtp_ssl,
-#         }
 class Payment(db.Model):
     __tablename__ = 'payment'  # 支付
     id = Column(Integer, primary_key=True,autoincrement=True)
@@ -264,6 +229,7 @@ class Order(db.Model):
             'name': self.name,
             'payment': self.payment,
             'contact': self.contact,
+            'contact_txt': self.contact_txt,
             'num': self.num,
             'total_price': self.total_price,
             'card': self.card,

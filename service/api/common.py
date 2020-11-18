@@ -60,21 +60,21 @@ def admin():
 def login():
     return redirect('/#/admin')
 
-@common.route('/notify',methods=['POST','GET'])    #支付回调测试
-def notify():
-    print(request.form.to_dict()) #适用于post请求，但是回调时get请求
-    content = str(request.form.to_dict())
-    print(Response_headers(content))
-    with open('note.log','a',encoding='utf=8') as f:
-        f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(Response_headers(content)))
-    return Response_headers(content)
+# @common.route('/notify',methods=['POST','GET'])    #支付回调测试
+# def notify():
+#     print(request.form.to_dict()) #适用于post请求，但是回调时get请求
+#     content = str(request.form.to_dict())
+#     print(Response_headers(content))
+#     with open('note.log','a',encoding='utf=8') as f:
+#         f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(Response_headers(content)))
+#     return Response_headers(content)
 
-@common.route('/return',methods=['POST','GET'])    #支付回调测试
-def back():
-    print(request.json)
-    with open('return.log','a',encoding='utf=8') as f:
-        f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(request.json))
-    return jsonify(request.json)
+# @common.route('/return',methods=['POST','GET'])    #支付回调测试
+# def back():
+#     print(request.json)
+#     with open('return.log','a',encoding='utf=8') as f:
+#         f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(request.json))
+#     return jsonify(request.json)
 
 
 @common.route('/robots.txt')

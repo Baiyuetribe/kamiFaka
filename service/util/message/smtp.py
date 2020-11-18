@@ -76,7 +76,10 @@ def mail_to_admin(config,admin_account,data):
     mail = MailSender(user=config['sendmail'],password=config['smtp_pwd'],host=config['smtp_address'],port=int(config['smtp_port']))
     # data：对用户而言是prod_name,卡密信息+订单ID;；对管理员而言是contact购买prod_name成功！
     subject = '管理员通知：'
-    content = f"<h5>{data['contact']}购买的{data['name']}卡密发送成功！<h5>"    #模板后期完成
+    if data['contact_txt']:
+        content = f"<h5>{data['contact']}购买的{data['name']}卡密发送成功！备注信息：{data['contact_txt']}<h5>"    #模板后期完成
+    else:
+        content = f"<h5>{data['contact']}购买的{data['name']}卡密发送成功！<h5>"    #模板后期完成
     #定义邮件样式：
     mail.send(to_user=admin_account,subject=subject,content=content,subtype='html')
 

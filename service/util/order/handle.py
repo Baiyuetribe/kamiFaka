@@ -156,14 +156,14 @@ def send_admin(notice_name,config,admin_account,data):  #通知途径+管理员�
     elif notice_name == '微信通知':
         try:
             print('微信通知')
-            wxpush(config,admin_account,data)      #该步骤需要处理下
+            wxpush(config,admin_account,data)     
         except Exception as e:
             log('微信通知失败 ')  #          
             log(e)  #通知失败             
         
     elif notice_name == 'TG通知':
         try:
-            post_tg(config,admin_account,data)     #该步骤需要处理
+            post_tg(config,admin_account,data)    
         except Exception as e:
             log('TG通知失败 ')  #          
             log(e)  #通知失败             

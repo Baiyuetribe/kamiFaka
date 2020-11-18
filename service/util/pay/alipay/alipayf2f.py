@@ -4,8 +4,6 @@ from alipay.utils import AliPayConfig
 # app_private_key_string = open("/path/to/your/private/key.pem").read()
 # alipay_public_key_string = open("/path/to/alipay/public/key.pem").read()
 
-
-
 class AlipayF2F:
 
     def __init__(self):
@@ -18,7 +16,6 @@ class AlipayF2F:
             appid=self.APPID,
             app_notify_url=None,  # 默认回调url
             app_private_key_string=self.app_private_key_string,
-            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
             alipay_public_key_string=self.alipay_public_key_string,
             sign_type="RSA2", # RSA 或者 RSA2
             debug=False,  # True后为开发环境，所有走dev接口，正式环境用False

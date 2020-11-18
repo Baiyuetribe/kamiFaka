@@ -1,10 +1,8 @@
 from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for
-import requests
-from sqlalchemy.orm import query
 from sqlalchemy.sql import func
 from service.database.models import AdminUser,AdminLog,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
-from service.api.db import db
-from service.util.backup.sql import main_back   #信息备份
+from service.api.db import db,limiter
+from service.util.backup.sql import main_back,loc_sys_back,loc_shop_back,loc_order_back   #备份操作
 
 import bcrypt
 # 添加jwt
@@ -28,8 +26,8 @@ from service.util.log import log
 admin = Blueprint('admin', __name__,url_prefix='/api/v4')
 
 
-
 @admin.route('/')
+@limiter.limit("5 per minute", override_defaults=False)
 def index():
     return 'admin hello'
 
@@ -52,8 +50,8 @@ def login_record():
     db.session.add(AdminLog(ip=request.remote_addr))
     db.session.commit()  
 
-
 @admin.route('/login', methods=['POST'])
+@limiter.limit("5 per minute", override_defaults=False)
 def login():
     try:
         # start_t = time.time()
@@ -193,7 +191,7 @@ def update_class():
     # 调用smtp函数发送邮件
     try:
         if methord == 'update':
-            if not id or not name or not info or not sort:
+            if not all([id,name,info,sort]):
                 return 'Missing data', 400
             ProdCag.query.filter_by(id = id).update({'name':name,'info':info,'sort':sort})
         elif methord == 'delete':
@@ -283,7 +281,7 @@ def update_shop():
                 return 'Missing data', 400
             ProdInfo.query.filter_by(id = id).delete()
         else:
-            if not name or not info or not sort:
+            if not all([name,info,sort]):
                 return 'Missing data', 400
             new_prod = ProdInfo(cag_name,name,info,img_url,sort,discription,price,price_wholesale,auto,sales,tag,isactive)
             db.session.add(new_prod)
@@ -303,7 +301,7 @@ def get_card():
     if not page:
         return 'Missing data1', 400
     try:
-        cards = Card.query.filter().offset((page-1)*20).limit(20).all()
+        cards = Card.query.filter().offset((int(page)-1)*20).limit(20).all()
         
     except Exception as e:
         log(e)
@@ -340,7 +338,7 @@ def update_card():
     # 调用smtp函数发送邮件
     try:
         if methord == 'update':
-            if not id or not prod_name or not card:
+            if not all([id,prod_name,card]):
                 return 'Missing data 1', 400
             Card.query.filter_by(id = id).update({'prod_name':prod_name,'card':card,'isused':isused,'reuse':reuse})
         elif methord == 'delete':
@@ -385,7 +383,7 @@ def get_orders():
     if not page:
         return 'Missing data1', 400
     try:
-        orders = Order.query.filter().offset((page-1)*20).limit(20).all()
+        orders = Order.query.filter().offset((int(page)-1)*20).limit(20).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -507,7 +505,7 @@ def update_system():
 
 
 
-@admin.route('/demo', methods=['get']) #已售订单信息
+@admin.route('/demo', methods=['get']) #临时测试
 @jwt_required
 def demo():
     return jsonify(round(sum([float(x.total_price) for x in Order.query.filter().all()]),2))   
@@ -518,6 +516,31 @@ def demo():
 def backups():
     main_back()
     return {"mgs": 'success'}, 200
+
+@admin.route('/local_backup',methods=['POST'])
+@jwt_required
+def local_backup():
+    types = request.json.get('types', None)   #备份类型；支付邮箱等系统配置；商品分类及卡密备份；历史订单备份
+    print(type(types))
+    if not types or types not in [1,2,3]:
+        return '参数丢失', 400
+    try:
+        if types == 1:
+            # 支付邮箱系统配置
+            msg = loc_sys_back()
+        elif types == 2:
+            # 卡密备份
+            msg = loc_shop_back()
+        else:
+            # 历史订单备份
+            msg = loc_order_back()
+        return {"msg": msg}, 200
+    except Exception as e:
+        log(e)
+        return {"msg":'导出失败'}, 400
+
+
+
 
 
 # def login():

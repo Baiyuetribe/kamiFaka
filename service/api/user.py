@@ -1,9 +1,5 @@
-from logging import info
-from os import pardir
 from time import time
 from flask import Blueprint, request, jsonify
-from flask import config
-from flask import json
 from service.database.models import Payment, ProdInfo,Config,Order,Config
 
 #调用支付接口
@@ -19,6 +15,7 @@ executor = ThreadPoolExecutor(2)
 
 #日志记录
 from service.util.log import log
+from service.api.db import limiter
 
 base = Blueprint('base', __name__,url_prefix='/api/v2')
 
@@ -27,25 +24,10 @@ base = Blueprint('base', __name__,url_prefix='/api/v2')
 def index():
     return 'base hello'
 
-@base.route('/home', methods=['get'])
-def home():
-    # 系统信息
-    # 前端需求：logo地址；footer信息，顶部公告；全局弹窗公告；加载公告
-    try:
-        infos = Config.query.filter().all()
-    except Exception as e:
-        log(e)
-        return '数据库异常', 500
-    return jsonify([x.to_json() for x in infos])
-
 @base.route('/theme_list', methods=['get'])
 def theme_list():
     info= {}
     # 系统信息
-    # from service.database.models import Config
-    # # 商品列表
-    # 商品列表：【f按分类排除结果】
-    # from service.database.models import ProdInfo
     try:
         prods = ProdInfo.query.filter_by(isactive = 1).all()
     except Exception as e:
@@ -110,6 +92,7 @@ def detail(shop_id):
     return jsonify(res)
 
 @base.route('/get_order', methods=['post']) #已售订单信息
+@limiter.limit("5 per minute", override_defaults=False)
 def get_order():
     contact = request.json.get('contact',None)
     if not contact:
@@ -150,7 +133,6 @@ def get_pay_url():
         except Exception as e:
             log(e)
             return '支付宝处理失败', 504                
-        # print(ali_order)
         if ali_order['code'] == '10000' and ali_order['msg'] == 'Success':
             return jsonify(ali_order)   #默认自带qrcode
         return '调用支付接口失败', 400
@@ -183,7 +165,6 @@ def get_pay_url():
         except Exception as e:
             log(e)
             return '数据库异常', 500                        
-        
         # 参数错误情况下，会失效
         if pay_order.json()['errmsg'] == 'success!':
             return jsonify({'qr_code':pay_order.json()['url']})
@@ -205,7 +186,6 @@ def get_pay_url():
             return '数据库异常', 500  
         if r and r.json()['return_msg'] == 'SUCCESS':
             return jsonify({'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']})   
-
         return '调用支付接口失败', 400                    
              
     else:
@@ -213,7 +193,6 @@ def get_pay_url():
 
 
 ## 本地检测--》尝试改为服务器检测，避免用户支付过程退出页面
-
 @base.route('/check_pay', methods=['post']) #检测状态或取消订单
 def check_pay():
     # print(request.json)
@@ -322,29 +301,30 @@ def get_card():
     
     return jsonify(card.only_card())    #返回卡密和订单时间
 
-@base.route('/success', methods=['get'])
-def success():
-    order_id = request.json.get('order_id',None)
-    contact = request.json.get('contact',None)
-    if not order_id and not contact:
-        return '请输入订单或联系方式', 404
-    if order_id:
-        try:
-            result = Order.query.filter_by(serial_id = order_id).first_or_404()
-        except Exception as e:
-            log(e)            
-            return '订单请求失败', 502              
+# @base.route('/success', methods=['get'])    #订单查询接口
+# @limiter.limit("5 per minute", override_defaults=False)
+# def success():
+#     order_id = request.json.get('order_id',None)
+#     contact = request.json.get('contact',None)
+#     if not order_id and not contact:
+#         return '请输入订单或联系方式', 404
+#     if order_id:
+#         try:
+#             result = Order.query.filter_by(serial_id = order_id).first_or_404()
+#         except Exception as e:
+#             log(e)            
+#             return '订单请求失败', 502              
         
-        return jsonify([result.to_json()])
-    else:
-        try:
-            result = Order.query.filter_by(contact = contact).all()
-        except Exception as e:
-            log(e)            
-            return '订单请求失败', 502              
-        if result:
-            return jsonify([r.to_json() for r in result])
-        return '商品不存在或已过期', 404
+#         return jsonify([result.to_json()])
+#     else:
+#         try:
+#             result = Order.query.filter_by(contact = contact).all()
+#         except Exception as e:
+#             log(e)            
+#             return '订单请求失败', 502              
+#         if result:
+#             return jsonify([r.to_json() for r in result])
+#         return '商品不存在或已过期', 404
     
 
 @base.route('/get_system', methods=['get'])

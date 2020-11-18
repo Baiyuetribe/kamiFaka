@@ -1,10 +1,8 @@
-from sqlalchemy.sql.elements import Null
-from service.database.models import AdminUser,Config,Payment,ProdCag,ProdInfo,Order,Card,Notice
+from service.database.models import *
 from service.api.db import db
 
 # 经验：先用true或false
 def init_db(update=False):
-    # db.session.add(User('admin','123456'))
     # 管理员信息
     db.session.add(AdminUser('admin@qq.com','$2b$12$BKSXKYuCgeXjr8IEbK02re0VhkFoAz7f3aHF3kYAMLzYaEiObqPYm'))
     # 邮箱配置
@@ -12,7 +10,7 @@ def init_db(update=False):
     # 支付渠道
     db.session.add(Payment('支付宝当面付','支付宝',"{'APPID':'2016091800537528','alipay_public_key':'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4AHTfGleo8WI3qb+mSWOjJRyn6Vh8XvO6YsQmJjPnNKhvACHTHcU+PCUWUKZ54fSVhMkFZEQWMtAGeOt3lGy3pMBS96anh841gxJc2NUljU14ESXnDn4QdVe4bosmYvfko46wfA0fGClHdpO8UUiJGLj1W5alv10CwiCrYRDtx93SLIuQgwJn4yBC1/kE/KENOaWaA45dXIQvKh2P0lTbm0AvwYMVvYB+eB1GtOGQbuFJXUxWaMa0byTo9wSllhgyiIkOH+HJ9oOZIweGlsrezeUUdr3EEX97k25LdnUt/oQK8FIfthexfWZpTDDlHqmI7p6gCtRVDJenU4sxwpEyQIDAQAB','app_private_key':'MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqWmxsyPLwRmZHwoLYlUJXMF7PATKtvp7BrJfwLbxwrz6I48G11HpPPyAoNynwAMG7DCXjVX76NCbmfvvPqnbk09rNRULqGju8G6NkQTbLfDjhJs+CE8kdIs89btxqDG70ebePiZTGpQngPLfrziKDOhRfXkA5qRPImbC+PUXiXq9qvkp9Yu/8IYjyxUpNBNjZuTK+fTjSI0RCt7eE+wR0KqpNIzot1q/ds1KTIYmJQM5tEFie4BK0pDtGiIs/VrUG8PTPqLyzEyIMy1N75olUWAiGrk0USqiieP3TYj0PdlQDX2T14DOwMkl5Rjvt7Knc+WGdolPIBssUX1wTE+J7AgMBAAECggEAWpRP+Jv0yRu1wMxFRKJArxmSH+GUL9wej/6Un2nCO+yChMkNtAAxtLdtAtUqIGpWmH2CG9nW9XULhh3ZCPer1kprmiAMz2t5fbD4dRNT7miz2cwIJDMfCbX7mb+7xUutJ6Mcnl7aU7FnierfJKvrn/ke4gK8haxIT66g0tbDtPQhYnGPawyM+gqFulaMBcuqH0naAIq5ZBWHkKuuwJ1SD6yGrWgHdq3Kt2pE8b9yjfdUl15IeW0rszXG6fTika9WX6qaulyoGAAZdjiXED+mbRyqZA3jq7RI38qBP9+/jAb+fdwE8EwqnpPvfGHMBdkREOXK0kzRU8rpd9GbH7INaQKBgQDwpuW+bK/qxKx3BSAXL98f0J2I7YVuk0EFCStGoxnzWRv0yvL0QEDwN+QPiVMmcVQcr79mW5zTBkd4vmr3ud+v1f/X6UPI82kQhZlVWry8LEnisPlZuE0E/EaJrLgF7z4l3ItzCVi8IfpgizPcCYSz/vY49a5W34eKjXHWUB1jDwKBgQC1N8PgGKI2LRDaJeqt5Ef6yyYSMOgVe0WSqAlgyMECb1pjmMBjcNG1AFE/FfgNu4thOaXIogElGVoQFvA5GuJQY48HOJNgx3Ua2SxiowcXkAN0gIm4FY+ozkp7xhizvLVfsmX+MKqPtl6nggiWETJJyvMQnjMgKLmSvhsopMwZ1QKBgGV36az2BOK3VITGq3Y7YBf5DUN76uPpwOOPryiUgs+hhfEcVX55TSg8WLPYUjAGXtHNpKVTAXfU0PPvTgjv3Yo1cC+okkU7pNQrkLB1lti8z9Z+ilSzKf5tJIzOP7V437p1GHNDwJ9qsDhe2VnwxXxjh4wSwxSsIWlhJFuZ4hovAoGAFgm8Fmqof3InlH/79D3IyyUdciTkdIhTQ6yPx2dioYstMOOIsg8sUZjCSKvBSNo/7wj1slqRTROyMja37Bnq39/bqwMkWSaohSVYEn7FBAaNhQOEvBBTMjI0OK00n9cZL5QgdzMv6t5A0JottSJOPU8jFChJC2Yoe0IHR4ATGikCgYB2smi7/ptKiGdwmiuUHsF/U3jfjpHyHwLrXjoSU+mwV+GjqcdbtkSP1suGjN8tcdbFvLSCRX/IRdFHYJeuPUXQtZtiC431+upasbEiJ1xZ2KcK3lKf0mOn10kPD5QC7mmsfmjz4cw9cSrBjmcWGXeIwIXPLhOAAIzpHqy8oP/F/g=='}",'官方接口 稳定可靠',True))
     db.session.add(Payment('虎皮椒支付宝','支付宝',"{'appid':'XXXXXX','AppSecret':'YYYYY'}",'官方合作接口 个人账户到账',False))
-    db.session.add(Payment('虎皮椒微信','微信支付',"{'appid':'XXXXXX','AppSecret':'YYYYY'}",'官方合作接口 个人账户到账',True))
+    db.session.add(Payment('虎皮椒微信','微信支付',"{'appid':'XXXXXX','AppSecret':'YYYYY'}",'官方合作接口 个人账户到账',False))
     db.session.add(Payment('PAYJS支付宝','支付宝',"{'payjs_key':'XXXXXX','mchid':'YYYYY','mchid':'ZZZZZZZ'}",'官方合作接口 个人账户到账',False))
     db.session.add(Payment('PAYJS微信','微信支付',"{'payjs_key':'XXXXXX','mchid':'YYYYY','mchid':'ZZZZZZZ'}",'官方合作接口 个人账户到账',False))
     db.session.add(Payment('码支付支付宝','支付宝',"{'codepay_id':'58027','codepay_key':'fgl454542WSDJHEJHDJZpTRrmbn','token':'jljCGU3pRvXXXXXXXXXXXb1iq'}",'挂机宝 个人账户到账',False))
@@ -31,7 +29,7 @@ def init_db(update=False):
     db.session.add(ProdInfo('账户ID','普通商品DD','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
                                 9.99,None, False,0,0,False))                                
     db.session.add(ProdInfo('激活码','重复卡密演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,None, False,0,0,False))
+                                9.99,None, True,0,0,True))
     db.session.add(ProdInfo('激活码','普通商品CC','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
                                 9.99,None, True,0,0,True))
     db.session.add(ProdInfo('激活码','普通商品BB','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
@@ -45,23 +43,17 @@ def init_db(update=False):
     db.session.add(Config('web_name','KAMIFAKA','网站名称',True))
     db.session.add(Config('web_keyword','关键词、收录词汇','网站关键词',True))
     db.session.add(Config('description','网站描述信息。。。','网站描述',True))
-    db.session.add(Config('web_url','https://baiyue.one【计划中】','网站地址，支付回调时调用',True))
+    db.session.add(Config('web_url','【当前未开发】','网站地址，同步回调时调用',True))
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
-    db.session.add(Config('web_logo','./logo.png【计划中】','logo',True))
+    db.session.add(Config('web_logo','./logo.png【未开发】','logo',True))
     db.session.add(Config('contact_us','<p>Lorem ipsum dolor sit amet, <code>consectetur</code> adipisicing. Ut enim ad minim veniam, quis nostrud<code>exercitation</code> 示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
-    db.session.add(Config('web_footer','【计划中】','可填写备案信息',True))
+    db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
     db.session.add(Config('top_notice','首页公告栏信息,请在管理后台网站设置里修改，支持HTML格式','首页公告',True))
-    db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
-    db.session.add(Config('toast_notice','欢迎您访问本站！','加载后欢迎页消息',True))
-    db.session.add(Config('login_captcha','false【计划中】','登录验证码',True))
-    db.session.add(Config('search_captcha','false【计划中】','查询订单验证码',True))
-    db.session.add(Config('theme','list_theme【计划中】','主题',True))
+    # db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
+    db.session.add(Config('toast_notice','演示站随时更新，可优先体验新功能','首页滑动消息设置',True))
+    db.session.add(Config('theme','list_theme【未开发】','主题',True))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','0.5.2','Github项目地址，用于手动检测新版',False))
-
-    # 通知栏
-    # db.session.add(Message(True,'示例：顶部消息栏通知','顶部公告'))
-    # db.session.add(Message(False,'示例：弹窗消息','全局弹窗公告'))
+    db.session.add(Config('kamiFaka_v','0.5.4','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
@@ -69,13 +61,11 @@ def init_db(update=False):
     db.session.add(Notice('TG通知',"{'TG_TOKEN':'1290570937:AAHaXA2uOvDoGKbGeY4xVIi5kR7K55saXhs'}",'445545444',False,False))
     db.session.add(Notice('短信通知',"{'appid':'XXXXXX','AppSecret':'YYYYY'}",'15347875415',False,False))
 
-
     # 订单信息【测试环境】
     db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','1563254111','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
     db.session.add(Order('演示订单4455','普通商品演示','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None))    #卡密为None或‘’空都可以
     db.session.add(Order('演示订单4456','普通商品演示','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,''))
     db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','demo2@gmail.com','不错',9.99,1,1.9,''))
     # 
-    
     db.session.commit()
 

@@ -8,3 +8,4 @@ bcrypt
 gunicorn
 gevent
 pymysql
+flask_limiter

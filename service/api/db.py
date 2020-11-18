@@ -5,19 +5,25 @@ from flask_jwt_extended import JWTManager
 # from requests.api import options
 import datetime
 import os
-# from flask_socketio import SocketIO
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 #通用组件
 app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
 # app = Flask(__name__,static_folder='../../dist',template_folder='../../dist')
 # r'/*' 是通配符，让本服务器所有的 URL 都允许跨域请求
 CORS(app, resources=r'/*')
 # cors = CORS(app, resources={r"/*": {"origins": "*"}})
+# ip limit
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["800 per day", "200 per hour"]
+)
 
 # #避免与vue冲突
 # app.jinja_env.variable_start_string = '{['
 # app.jinja_env.variable_end_string = ']}'
-
-# socketio = SocketIO(app, cors_allowed_origins='*')
 
 #路径设置
 SQL_PATH = os.path.join(os.path.dirname(__file__),'../../public/sql')
@@ -34,17 +40,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'a44545de51d5e4deaswdedcecvrcrfr5f454fd1cec415r4f'  # Change this!
 app.config['JWT_ACCESS_TOKEN EXPIRES'] = datetime.timedelta(days=2)
 jwt = JWTManager(app)
-
-# 解决与vue3模板冲突
-# app.jinja_env.variable_start_string = '[['
-# app.jinja_env.variable_end_string = ']]'
-
-# options = {
-#     'variable_start_string':'(%',
-#     'variable_end_string':'%)',
-# }
-# app.jinja_options.update(options)
-# CORS(app, supports_credentials=True)    #解决跨域问题
 
 db = SQLAlchemy(app)
 

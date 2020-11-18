@@ -158,7 +158,16 @@ def sql_backup():
     if os.path.exists(src):
         copy(src,dst)
 
-def main_back():
+def loc_sys_back(): #系统信息备份
+    return payment_backup()+smtp_backup()+notice_backup()+system_backup()
+
+def loc_shop_back(): #商品卡密备份
+    return cag_backup()+shop_backup()+card_backup()
+
+def loc_order_back(): #订单备份
+    return order_backup()  
+
+def main_back():    # 服务器端备份
     #开始备份系统信息
     backup_time = get_time()
     with open(BACKUP_PATH+'/支付邮箱等系统备份'+backup_time+'.txt','w',encoding='utf-8') as f:
