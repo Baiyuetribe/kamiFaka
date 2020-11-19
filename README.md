@@ -22,9 +22,8 @@
   <a href="https://baiyue.one/">Blog</a>
 </p>
 
-最新版预览地址： http://107.148.243.178:8000
+正式版DEMO演示： http://107.148.243.178:8000
 
-内测BUG反馈QQ群：853791822
 ## 适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
 
@@ -48,7 +47,6 @@
 
 ## 部署方法：
 
-
 ### 1. 正式环境【线上部署】
 [如何使用宝塔面板Docker管理器一键部署佰阅发卡](https://baiyue.one/archives/1703.html)
 
@@ -71,7 +69,7 @@ docker run --name kmfaka -itd -p 8000:8000 baiyuetribe/kamifaka:latest
 docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 ```
 
-### 3. 开发环境
+### 3. 开发环境【如需修改或自定义，可查看该文档】
 
 开发环境：[开发环境安装教程](开发环境安装教程.md)
 
@@ -82,10 +80,9 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 ![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc后台端演示.gif)
 
 ## 当前开发计划：
-发布第一个正式版-->撰写帮助文档
+撰写帮助文档
 
 当前任务：写文档
-
 
 
 
@@ -98,7 +95,10 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 ## 如何参与该开源项目？
 
 [查看可参与的任务](查看可参与的任务.md)
+
 内测BUG反馈QQ群：853791822
+
+官方帮助文档：[https://kmfaka.baklib.com](https://kmfaka.baklib.com)
 
 ## License
 

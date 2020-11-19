@@ -16,7 +16,8 @@ def new_table():
 
 def init():
     try:
-        res = bool(AdminUser.query.filter_by(id = 1).first())
+        # res = bool(AdminUser.query.filter_by(id = 1).first())
+        res = AdminUser.query.get(1)    #主键查询
     except Exception as e:
         print(e)
         res = False
