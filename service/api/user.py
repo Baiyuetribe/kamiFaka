@@ -91,10 +91,13 @@ def detail(shop_id):
         pass
     return jsonify(res)
 
-@base.route('/get_order', methods=['post']) #已售订单信息
+@base.route('/get_order', methods=['POST']) #已售订单信息
 @limiter.limit("5 per minute", override_defaults=False)
 def get_order():
+    # print(request.json)
+    # print(request.args)
     contact = request.json.get('contact',None)
+    # contact = request.args.get('contact',None)
     if not contact:
         return '参数丢失', 404
     try:
@@ -136,6 +139,7 @@ def get_pay_url():
         if ali_order['code'] == '10000' and ali_order['msg'] == 'Success':
             return jsonify(ali_order)   #默认自带qrcode
         return '调用支付接口失败', 400
+        # return jsonify({'qr_code':'455555555454deffffffff'})
     elif payment == '虎皮椒微信':
         try:
             obj = Hupi()
@@ -220,7 +224,7 @@ def check_pay():
             except Exception as e:
                 log(e)
                 return '支付宝请求错误', 500                
-            
+            # res = True  #临时测试
             # print(result)
             if res:
                 # start = time()
@@ -288,16 +292,18 @@ def check_pay():
 
 
 
-@base.route('/get_card', methods=['post']) #已售订单信息
+@base.route('/get_card', methods=['post']) #已售订单信息--自动查询
 def get_card():
     out_order_id = request.json.get('out_order_id',None)
     if not out_order_id:
         return '参数丢失', 404
     try:
-        card = Order.query.filter_by(out_order_id = out_order_id).first_or_404()
+        card = Order.query.filter_by(out_order_id = out_order_id).first()
     except Exception as e:
-        log(e)            
-        return '订单创建失败', 502        
+        log(e)
+
+        # time.sleep()      
+        return '订单创建失败', 400        
     
     return jsonify(card.only_card())    #返回卡密和订单时间
 

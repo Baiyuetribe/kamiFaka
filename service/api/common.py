@@ -3,6 +3,8 @@ from flask import render_template,redirect,send_from_directory
 import time
 import os
 
+from flask.helpers import make_response
+
 common = Blueprint('common', __name__)
 
 def Response_headers(content):  
@@ -75,6 +77,13 @@ def login():
 #     with open('return.log','a',encoding='utf=8') as f:
 #         f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(request.json))
 #     return jsonify(request.json)
+
+# @common.route('/demo')
+# def demo():
+#     content = 'xxxxxxxxxxxx'
+#     res = make_response(content)
+#     res.headers["Content-Disposition"] = "p_w_upload; filename=myfilename.txt"
+#     return res
 
 
 @common.route('/robots.txt')

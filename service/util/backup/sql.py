@@ -1,3 +1,4 @@
+from flask import make_response
 from service.database.models import *
 import os
 from shutil import copy
@@ -158,14 +159,24 @@ def sql_backup():
     if os.path.exists(src):
         copy(src,dst)
 
+def make_file(content,filename):
+    res = make_response(content)
+    res.headers["Content-Disposition"] = f"p_w_upload; filename={filename}.txt"
+    return res
+
 def loc_sys_back(): #系统信息备份
+
+    # return make_file(payment_backup()+smtp_backup()+notice_backup()+system_backup(),'支付邮箱等系统信息')
     return payment_backup()+smtp_backup()+notice_backup()+system_backup()
 
+
 def loc_shop_back(): #商品卡密备份
+    # return make_file(cag_backup()+shop_backup()+card_backup(),'商品及卡密信息备份')
     return cag_backup()+shop_backup()+card_backup()
 
 def loc_order_back(): #订单备份
-    return order_backup()  
+    # return make_file(order_backup(),'订单导出')
+    return order_backup()
 
 def main_back():    # 服务器端备份
     #开始备份系统信息

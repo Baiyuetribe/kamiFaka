@@ -1,4 +1,5 @@
-from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for
+import types
+from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for,make_response
 from sqlalchemy.sql import func
 from service.database.models import AdminUser,AdminLog,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
 from service.api.db import db,limiter
@@ -389,6 +390,20 @@ def get_orders():
         return '数据库异常', 500      
     return jsonify([x.admin_json() for x in orders])   
 
+@admin.route('/remove_order', methods=['post']) #删除卡密
+@jwt_required
+def remove_order():
+    id = request.json.get('id', None)
+    if not id:
+        return 'Missing Data', 400
+    try:
+        Order.query.filter_by(id = id).delete()
+        db.session.commit()
+        return '删除成功', 200    
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500   
+
 @admin.route('/get_orders_pages', methods=['get']) #卡密查询
 @jwt_required
 def get_orders_pages():
@@ -517,11 +532,17 @@ def backups():
     main_back()
     return {"mgs": 'success'}, 200
 
-@admin.route('/local_backup',methods=['POST'])
+@admin.route('/local_backup',methods=['GET'])
 @jwt_required
 def local_backup():
-    types = request.json.get('types', None)   #备份类型；支付邮箱等系统配置；商品分类及卡密备份；历史订单备份
-    print(type(types))
+    # types = request.json.get('types', None)   #备份类型；支付邮箱等系统配置；商品分类及卡密备份；历史订单备份
+    # print(request.args)
+    types = request.args.get('types',None)
+    # print(type(types))
+    try:
+        types = int(types)
+    except:
+        return  '需要int参数', 400
     if not types or types not in [1,2,3]:
         return '参数丢失', 400
     try:
@@ -534,10 +555,13 @@ def local_backup():
         else:
             # 历史订单备份
             msg = loc_order_back()
-        return {"msg": msg}, 200
+        res = make_response(msg)
+        filename = '4545'   #失效
+        res.headers["Content-Disposition"] = f"p_w_upload; filename={filename}.txt"
+        return res
     except Exception as e:
         log(e)
-        return {"msg":'导出失败'}, 400
+        return '导出失败', 400
 
 
 

@@ -225,6 +225,7 @@ class Order(db.Model):
         }
     def admin_json(self):
         return {
+            'id': self.id,
             'out_order_id': self.out_order_id,
             'name': self.name,
             'payment': self.payment,
@@ -232,7 +233,7 @@ class Order(db.Model):
             'contact_txt': self.contact_txt,
             'num': self.num,
             'total_price': self.total_price,
-            'card': self.card,
+            # 'card': self.card,
             'updatetime': self.updatetime,
         }
     def only_card(self):

@@ -38,11 +38,15 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
             # 处理数量订单- 卡密查询，数量大于1，重复卡密：-重复发送；不重复卡密：给出结果或空白
             result = Card.query.filter_by(prod_name = name,isused = False).first()  #先查询一个，判定是否重复
             if result:
+                
                 if result.to_json()['reuse']: #判定是否重复使用
                     # 重复使用卡密情况下
                     pre_card = result.to_json()['card']
-                    card = str([pre_card for i in range(nums)])
+                    # card = str([pre_card for i in range(nums)])
+                    card = (pre_card+',')*nums  #解决5~10W卡密重复行问题0.011s;50w消耗47ms--前端轮询4s一次
                     # 其余相同
+                    
+                    
                 else:
                     # 不重复卡密情况 - 查询多个结果，给出卡密列表；更新这些卡密的使用状态
                     result = Card.query.filter_by(prod_name = name,isused = False).limit(nums).all()
@@ -53,8 +57,16 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
                         card = str(pre_card + [None for x in range(nums-len(pre_card))])
                         log(f'{name}已缺货')
                     # 更新已用卡密状态
+                    # 120单测试--55ms；
+                    # for y in result:
+                    #     Card.query.filter_by(id = y.to_json()['id']).update({'isused':False})      
+                    # 2. 
+                    # [Card.query.filter_by(id = y.to_json()['id']).update({'isused':False}) for y in result] #53ms
                     for y in result:
-                        Card.query.filter_by(id = y.to_json()['id']).update({'isused':True})      
+                        y.isused = True
+                    # db.session.commit() #1.9ms--9ms---此步骤在后续commmit时生效
+                    # [y.isused=False for y in result]
+                    
 
             else:
                 card = None
@@ -68,6 +80,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
             new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card)
             db.session.add(new_order)
             db.session.commit()
+            log('订单创建完毕')
         except Exception as e:
             log(e)
             return '订单创建失败', 500         
