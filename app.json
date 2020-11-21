@@ -1,8 +1,15 @@
 {
     "name": "佰阅发卡",
     "description": "基于VUE3.0+FLASK构建的全新卡密发卡系统",
-    "keywords": ["佰阅发卡"],
+    "keywords": [
+        "佰阅发卡"
+    ],
     "website": "https://github.com/Baiyuetribe/kamiFaka",
     "repository": "https://github.com/Baiyuetribe/kamiFaka",
-    "stack": "container"
+    "stack": "container",
+    "addons": [
+        {
+          "plan": "jawsdb:kitefin"
+        }
+    ]
 }
