@@ -105,7 +105,7 @@ def get_order():
     except Exception as e:
         log(e)
         return '数据库异常', 500          
-    return jsonify([x.admin_json() for x in orders])   
+    return jsonify([x.check_card() for x in orders])   
 
 
 @base.route('/get_pay_list', methods=['get'])

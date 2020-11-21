@@ -236,6 +236,14 @@ class Order(db.Model):
             # 'card': self.card,
             'updatetime': self.updatetime,
         }
+    def check_card(self):
+        return {
+            'out_order_id': self.out_order_id,
+            'name': self.name,
+            'contact': self.contact,
+            'card': self.card,
+            'updatetime': self.updatetime,
+        }        
     def only_card(self):
         return {
             'card': self.card,
