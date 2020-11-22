@@ -96,7 +96,7 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 
 [查看可参与的任务](查看可参与的任务.md)
 
-内测BUG反馈QQ群：853791822
+项目交流QQ群：853791822
 
 官方帮助文档：[https://kmfaka.baklib.com](https://kmfaka.baklib.com)
 
