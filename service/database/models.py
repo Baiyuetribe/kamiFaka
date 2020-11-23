@@ -134,6 +134,15 @@ class ProdInfo(db.Model):
             return '少量'
         else:
             return '少量' 
+    def __count_card_detail__(self,prod_name):
+        count = Card.query.filter_by(prod_name = prod_name,isused = False).count()
+        if count == 1:
+            #再次统计
+            if Card.query.filter_by(prod_name = prod_name,reuse = 1).count():
+                return '∞'
+            return count
+        else:
+            return count              
     def admin_json(self):
         return {
             'cag_name': self.cag_name,
@@ -143,7 +152,7 @@ class ProdInfo(db.Model):
             'price_wholesale': self.price_wholesale,
             'auto': self.auto,
             'tag': self.tag,
-            'stock': self.__count_card__(self.name),
+            'stock': self.__count_card_detail__(self.name),
             'sales': self.sales,
             'isactive': self.isactive,
         }

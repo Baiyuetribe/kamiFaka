@@ -122,14 +122,15 @@ def get_pay_list():
 
 @base.route('/get_pay_url', methods=['post'])
 def get_pay_url():
-    name = request.json.get('name',None).replace('=','_')  #防止k，v冲突
+    name = request.json.get('name',None)
     out_order_id = request.json.get('out_order_id',None)
     total_price = request.json.get('total_price',None)
     payment = request.json.get('payment',None)
     if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信']:
         return '暂无该支付接口', 404
     if not all([name,out_order_id,total_price]):
-        return '参数丢失', 404        
+        return '参数丢失', 404
+    name = name.replace('=','_')  #防止k，v冲突        
     if payment == '支付宝当面付':
         try:
             ali_order = AlipayF2F().create_order(name,out_order_id,total_price)
