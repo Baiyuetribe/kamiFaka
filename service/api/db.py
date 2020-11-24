@@ -30,10 +30,11 @@ SQL_PATH = os.path.join(os.path.dirname(__file__),'../../public/sql')
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'   #本地
 app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:///'+os.path.join(SQL_PATH,'kamifaka.db')   #默认数据库
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@127.0.0.1:336/KAFAKA?charset=utf8mb4'   #本地
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@127.0.0.1:336/KAFAKA?charset=utf8mb4'   #本地Docker
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://faka:xxxxx@154:3306/faka?charset=utf8mb4'   #远程
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://docker_db_1:root@127.0.0.1:3306/KAFAKA?charset=utf8mb4'   #本地
-
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://root:password@127.0.0.1:5432/KAFAKA'   #本地
+# docker run --name postgres -e POSTGRES_PASSWORD=password -e POSTGRES_USER=root -e POSTGRES_DB=KAFAKA -p 5432:5432 -d postgres
 
 # mysql mysql+pymysql://root:wujing0126@127.0.0.1:3306/gbs?charset=utf8
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

@@ -1,3 +1,4 @@
+from os import name
 import types
 from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for,make_response
 from sqlalchemy.sql import func
@@ -16,6 +17,9 @@ import os
 # 图片公共路径
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
 
+# 天、周、月、年、全部
+from datetime import datetime, timedelta
+NOW = datetime.now()
 
 #异步操作
 from concurrent.futures import ThreadPoolExecutor
@@ -122,7 +126,51 @@ def dashboard():
     info['total_income'] = round(Order.query.with_entities(func.sum(Order.total_price)).scalar(),2)    #总收入
     info['total_num'] = int(Order.query.with_entities(func.sum(Order.num)).scalar())   #总销售数量--mysql模式下<Decimal('6')
     # 历史数据获取
-    orders = Order.query.filter().all()
+    orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=7)).all()
+    info['history_date'] = [x.updatetime for x in orders]
+    info['history_price'] = [x.total_price for x in orders]
+    # info['top'] = [{}] #名称，销量，价格
+    return jsonify(info)
+
+@admin.route('/incom_count', methods=['get'])
+@jwt_required
+def incom_count():
+    id = request.args.get('id',None)
+    if not id:
+        return '参数丢失', 400 
+    # if name not in ['1','2','3','4','5']: # 天、周、月、年、全部
+    try:
+        id = int(id)
+        if id not in [1,2,3,4,5]: # 天、周、月、年、全部
+            return '参数丢失', 400 
+        info = {}
+
+        if id == 1:   #天
+            # orders = Order.query.filter_by((Order.updatetime <= NOW - timedelta(days=1))).all()
+            days = 1
+            # Scrapy.query.filter(Scrapy.date <= NOW - timedelta(days=1)).all()
+            pass
+        elif id ==2:  #周
+            days = 7
+            pass
+        elif id == 3: #月
+            days = 30
+            pass
+        elif id == 4: #年
+            days = 365
+            pass
+        elif id == 5: #全部
+            days = 0
+        else:
+            return '参数丢失', 400        
+        if days !=0:
+            orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=days)).all()
+        else:
+            orders = Order.query.filter(Order.updatetime >= NOW - timedelta(hours=0.5)).all()
+            # orders = Order.query.filter().all()  
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500    
     info['history_date'] = [x.updatetime for x in orders]
     info['history_price'] = [x.total_price for x in orders]
     # info['top'] = [{}] #名称，销量，价格
@@ -174,7 +222,52 @@ def test_smtp():
     except Exception as e:
         log(e)
         return '邮箱配置可能有错误', 400      
+@admin.route('/get_sms', methods=['get'])
+@jwt_required
+def get_sms():
+    try:
+        sms = Notice.query.filter_by(name = '短信通知').first()
+        return jsonify(sms.to_json())
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500    
+    
 
+@admin.route('/update_sms', methods=['post'])
+@jwt_required
+def update_sms():
+    data = request.json.get('data', None)
+    if not data:
+        return 'Missing data', 400
+    # 密码加密存储
+    try:
+        Notice.query.filter_by(name = '短信通知').update({'config':str(data['config'])})
+        db.session.commit()        
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500      
+    # 重定向登录界面
+    return '邮箱更新成功', 200
+
+@admin.route('/test_sms', methods=['post'])
+@jwt_required
+def test_sms():
+    # print(request.json)
+    mobile = request.json.get('email', None)
+    message = request.json.get('message', None)
+    data = request.json.get('data', None)
+    if not all([mobile,message,data]):
+        return 'Missing data', 400
+    # 调用smtp函数发送邮件
+    try:
+        from service.util.message.sms import sms_test
+        if sms_test(config=data['config'],message=message,mobile=mobile):
+            return '邮件已发送', 200
+        else:
+            return '邮件发送失败', 400
+    except Exception as e:
+        log(e)
+        return '邮箱配置可能有错误', 400    
 
 # 分类增删改查
 @admin.route('/update_class', methods=['post']) #增、删、改；查询的使用get方式

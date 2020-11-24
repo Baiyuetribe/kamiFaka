@@ -29,7 +29,7 @@ def theme_list():
     info= {}
     # 系统信息
     try:
-        prods = ProdInfo.query.filter_by(isactive = 1).all()
+        prods = ProdInfo.query.filter_by(isactive = True).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500    
@@ -178,6 +178,7 @@ def get_pay_url():
         # 参数错误情况下，会失效
         try:
             qr_url = CodePay().create_order(payment,total_price,out_order_id)
+            print(qr_url)
         except Exception as e:
             log(e)
             return '数据库异常', 500                        

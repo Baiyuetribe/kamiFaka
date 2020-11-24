@@ -43,23 +43,22 @@ def init_db(update=False):
     db.session.add(Config('web_name','KAMIFAKA','网站名称',True))
     db.session.add(Config('web_keyword','关键词、收录词汇','网站关键词',True))
     db.session.add(Config('description','网站描述信息。。。','网站描述',True))
-    db.session.add(Config('web_url','【当前未开发】','网站地址，同步回调时调用',True))
+    db.session.add(Config('web_url','【预留不填】','网站地址，同步回调时调用',True))
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
-    db.session.add(Config('web_logo','./logo.png【未开发】','logo',True))
     db.session.add(Config('contact_us','<p>Lorem ipsum dolor sit amet, <code>consectetur</code> adipisicing. Ut enim ad minim veniam, quis nostrud<code>exercitation</code> 示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
-    db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
+    # db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
     db.session.add(Config('top_notice','首页公告栏信息,请在管理后台网站设置里修改，支持HTML格式','首页公告',True))
     # db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
     db.session.add(Config('toast_notice','演示站随时更新，可优先体验新功能','首页滑动消息设置',True))
-    db.session.add(Config('theme','list_theme【未开发】','主题',True))
+    # db.session.add(Config('theme','list_theme【未开发】','主题',True))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.1','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.3','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
     db.session.add(Notice('微信通知',"{'token':'AT_nvlYDjev89gV96hBAvUX5HR3idWQwLlA'}",'xxxxxxxxxxxxxxxx',False,False))
     db.session.add(Notice('TG通知',"{'TG_TOKEN':'1290570937:AAHaXA2uOvDoGKbGeY4xVIi5kR7K55saXhs'}",'445545444',False,False))
-    db.session.add(Notice('短信通知',"{'appid':'XXXXXX','AppSecret':'YYYYY'}",'15347875415',False,False))
+    db.session.add(Notice('短信通知',"{'username':'XXXXXX','password':'YYYYY','tokenYZM':'必填','templateid':'必填'}",'15347875415',False,False))
 
     # 订单信息【测试环境】
     db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','1563254111','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
