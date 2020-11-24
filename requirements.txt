@@ -9,3 +9,4 @@ gunicorn
 gevent
 pymysql
 flask_limiter
+psycopg2
