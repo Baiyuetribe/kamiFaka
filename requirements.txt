@@ -9,4 +9,4 @@ gunicorn
 gevent
 pymysql
 flask_limiter
-psycopg2
+psycopg2-binary
