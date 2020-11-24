@@ -166,8 +166,8 @@ def incom_count():
         if days !=0:
             orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=days)).all()
         else:
-            orders = Order.query.filter(Order.updatetime >= NOW - timedelta(hours=0.5)).all()
-            # orders = Order.query.filter().all()  
+            # orders = Order.query.filter(Order.updatetime >= NOW - timedelta(hours=0.5)).all()
+            orders = Order.query.filter().all()  
     except Exception as e:
         log(e)
         return '数据库异常', 500    
