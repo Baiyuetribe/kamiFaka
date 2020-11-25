@@ -1,6 +1,6 @@
-import os
 from service.database.models import creat_table,drop_table,AdminUser
 from service.config.config import init_db
+from service.api.db import db
 # print(os.getenv('MYSQL_HOST'))
 # print(os.getenv('MYSQL_PORT'))
 # print(os.getenv('MYSQL_PASSWORD'))
@@ -17,9 +17,11 @@ def new_table():
 def init():
     try:
         # res = bool(AdminUser.query.filter_by(id = 1).first())
-        res = AdminUser.query.get(1)    #主键查询
-    except Exception as e:
-        print(e)
+        # res = AdminUser.query.get(1)    #主键查询
+        res = AdminUser.query.filter_by(id = 1).one_or_none()
+    except:
+        # print(e)
+        db.session.commit()
         res = False
     if res:
         print('检测到已存在数据库')
