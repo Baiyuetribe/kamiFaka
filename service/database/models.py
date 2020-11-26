@@ -9,7 +9,7 @@ class AdminUser(db.Model):
     __tablename__ = 'admin_user'  #此行可有可无
     id = Column(Integer, primary_key=True,autoincrement=True)
     email = Column(String(50), nullable=False)
-    hash = Column(String(100), nullable=False)   #存储密码
+    hash = Column(String(150), nullable=False)   #存储密码,pssql存储过长
     updatetime = Column(DateTime, nullable=True,default=datetime.now())   #存储变更时间
     
     def __init__(self, email, hash):

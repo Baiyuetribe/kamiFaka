@@ -80,10 +80,9 @@ def login():
 
 # @common.route('/demo')
 # def demo():
-#     content = 'xxxxxxxxxxxx'
-#     res = make_response(content)
-#     res.headers["Content-Disposition"] = "p_w_upload; filename=myfilename.txt"
-#     return res
+
+
+#     return str(~tg_switch)
 
 
 @common.route('/robots.txt')
