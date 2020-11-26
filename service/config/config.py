@@ -65,6 +65,10 @@ def init_db(update=False):
     db.session.add(Order('演示订单4455','普通商品演示','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None))    #卡密为None或‘’空都可以
     db.session.add(Order('演示订单4456','普通商品演示','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,''))
     db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','demo2@gmail.com','不错',9.99,1,1.9,''))
-    # 
+    
+    # 插件配置信息
+    db.session.add(Plugin('TG发卡',"{'TG_TOKEN':'xxxxxxxxxxxx'}",False)) 
+    db.session.add(Plugin('微信公众号',"{'PID':'xxxxxxxxxxxx'}",False)) 
+
     db.session.commit()
 

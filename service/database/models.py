@@ -306,23 +306,22 @@ class Config(db.Model):
         }        
 
 
-class Message(db.Model):
-    __tablename__ = 'message'  # 通知或文章存档
+class Plugin(db.Model):
+    __tablename__ = 'plugin'  # 通知或文章存档
     id = Column(Integer, primary_key=True,autoincrement=True)
-    option = Column(Boolean, nullable=False)  #开关0/1;true,false
-    info = Column(Text, nullable=False,default=False)  #消息
-    classfiy = Column(String(50), nullable=False,default=False)  #类似，顶部公告或弹窗公告
-    updatetime = Column(Text, nullable=True,default=datetime.now())  #
+    name = Column(String(50), nullable=False,unique=True)  #微信公众号+Tg发卡
+    config = Column(Text,nullable=False)  #配置参数{}json
+    switch = Column(Boolean, nullable=False)  #开关0/1;true,false
     
-    def __init__(self, option, info, classfiy):
-        self.option = option
-        self.info = info
-        self.classfiy = classfiy
+    def __init__(self, name, config, switch):
+        self.name = name
+        self.config = config
+        self.switch = switch
     def to_json(self):
         return {
-            'classfiy': self.classfiy,
-            'info': self.info,
-            'option': self.option,
+            'name': self.name,
+            'config': self.config,
+            'switch': self.switch,
         }
 
 class Notice(db.Model):
