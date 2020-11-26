@@ -5,12 +5,12 @@ services:
     image: baiyuetribe/kamifaka
     restart: always
     environment:
-      DATABASE_TYPE: Sqlite
-      MYSQL_HOST: 127.0.0.1
-      MYSQL_PORT: 3306
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: kamifaka
+      DB_TYPE: Sqlite
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_DATABASE: kamifaka
     # volumes:
     #   - /opt/kamifaka:/usr/src/app/public
     ports:
