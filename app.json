@@ -9,7 +9,7 @@
     "stack": "container",
     "addons": [
         {
-          "plan": "jawsdb:kitefin"
+          "plan": "heroku-postgresql:hobby-dev"
         }
     ]
 }
