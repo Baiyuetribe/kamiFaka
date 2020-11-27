@@ -56,7 +56,7 @@ def login_record():
     db.session.commit()  
 
 @admin.route('/login', methods=['POST'])
-# @limiter.limit("5 per minute", override_defaults=False)
+@limiter.limit("5 per minute", override_defaults=False)
 def login():
     try:
         # start_t = time.time()
