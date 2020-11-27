@@ -56,7 +56,7 @@ def login_record():
     db.session.commit()  
 
 @admin.route('/login', methods=['POST'])
-@limiter.limit("5 per minute", override_defaults=False)
+# @limiter.limit("5 per minute", override_defaults=False)
 def login():
     try:
         # start_t = time.time()
@@ -588,8 +588,7 @@ def update_admin_account():
     password = request.json.get('password', None) #传入卡密列表   
     if not all([email,password]):
         return '参数丢失', 400
-    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     AdminUser.query.filter_by(id = 1).update({'email':email,'hash':hashed})
     db.session.commit()
     return {"mgs": 'success'}, 200
