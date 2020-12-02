@@ -67,7 +67,7 @@ def init_db(update=False):
     db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','472835979','不错',9.99,1,1.9,'TG卡密DEMO'))
     
     # 插件配置信息
-    db.session.add(Plugin('TG发卡',"{'TG_TOKEN':'1488086653:AAHihuO0JuvmiDNZtsYcDBpUhL1rTDO6o1c'}",'### 示例 \n请在管理后台--》Telegram里设置，支持HTML格式',True)) 
+    db.session.add(Plugin('TG发卡',"{'TG_TOKEN':'1488086653:AAHihuO0JuvmiDNZtsYcDBpUhL1rTDO6o1C'}",'### 示例 \n请在管理后台--》Telegram里设置，支持HTML格式',False)) 
     db.session.add(Plugin('微信公众号',"{'PID':'xxxxxxxxxxxx'}",'<p>示例，请在管理后台>>Telegram里设置，支持HTML格式</p>',False)) 
 
     db.session.commit()
