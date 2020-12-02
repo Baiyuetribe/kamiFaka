@@ -136,8 +136,6 @@ def pay(update, context):
     context.user_data['contact_txt'] = query.effective_user.username #下单用户名
     context.user_data['out_order_id'] = 'TG_'+str(int(time.time()))+''.join(random.choice(string.ascii_letters + string.digits) for _ in range(14))  #len27
     
-
-
     # print(context.user_data)
     # 二维码输出
     #
@@ -442,44 +440,6 @@ def check_order(data):
         # 支付后的效果
         if check_pay(data):
             break 
-
-def trade_query(update, context):
-    # trade_id = update.message.text
-    # update.message.reply_text('请先设置TG用户名后再购买卡密')
-    # print(update.effective_user)    # {'id': 472835979, 'first_name': '😛 定制脚本|网站搭建|故障维护', 'is_bot': False, 'username': 'Latte_Coffe', 'language_code': 'zh-hans'}
-    
-    chat_id = update.effective_user.id
-    query = update.callback_query
-    query.answer()
-    print(query.data)
-    # update.message.reply_text('期待再次见到你～')
-    return ROUTE
-    # if trade_list is None:
-    #     update.message.reply_text('订单号有误，请确认后输入！')
-    #     return ConversationHandler.END
-    # elif trade_list[10] == 'locking':
-    #     goods_name, description, trade_id = trade_list[2], trade_list[3], trade_list[0]
-    #     update.message.reply_text(
-    #         '*订单查询成功*!\n'
-    #         '订单号：`{}`\n'
-    #         '订单状态：*已取消*\n'
-    #         '原因：*逾期未付*'.format(trade_id),
-    #         parse_mode='Markdown',
-    #     )
-    #     return ConversationHandler.END
-    # elif trade_list[10] == 'paid':
-    #     trade_id, goods_name, description, use_way, card_context = \
-    #         trade_list[0], trade_list[2], trade_list[3], trade_list[4], trade_list[6]
-    #     update.message.reply_text(
-    #         '*订单查询成功*!\n'
-    #         '订单号：`{}`\n'
-    #         '商品：*{}*\n'
-    #         '描述：*{}*\n'
-    #         '卡密内容：`{}`\n'
-    #         '使用方法：*{}*\n'.format(trade_id, goods_name, description, card_context, use_way),
-    #         parse_mode='Markdown',
-    #     )
-    #     return ConversationHandler.END
 
 def search_order(update, context):  #done
     query = update.callback_query
