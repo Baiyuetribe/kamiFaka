@@ -61,14 +61,14 @@ def init_db(update=False):
     db.session.add(Notice('短信通知',"{'username':'XXXXXX','password':'YYYYY','tokenYZM':'必填','templateid':'必填'}",'15347875415',False,False))
 
     # 订单信息【测试环境】
-    db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','1563254111','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
+    db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','472835979','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx'))
     db.session.add(Order('演示订单4455','普通商品演示','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None))    #卡密为None或‘’空都可以
     db.session.add(Order('演示订单4456','普通商品演示','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,''))
-    db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','demo2@gmail.com','不错',9.99,1,1.9,''))
+    db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','472835979','不错',9.99,1,1.9,'TG卡密DEMO'))
     
     # 插件配置信息
-    db.session.add(Plugin('TG发卡',"{'TG_TOKEN':'xxxxxxxxxxxx'}",False)) 
-    db.session.add(Plugin('微信公众号',"{'PID':'xxxxxxxxxxxx'}",False)) 
+    db.session.add(Plugin('TG发卡',"{'TG_TOKEN':'1488086653:AAHihuO0JuvmiDNZtsYcDBpUhL1rTDO6o1c'}",'### 示例 \n请在管理后台--》Telegram里设置，支持HTML格式',True)) 
+    db.session.add(Plugin('微信公众号',"{'PID':'xxxxxxxxxxxx'}",'<p>示例，请在管理后台>>Telegram里设置，支持HTML格式</p>',False)) 
 
     db.session.commit()
 

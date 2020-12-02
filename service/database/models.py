@@ -251,7 +251,7 @@ class Order(db.Model):
             'name': self.name,
             'contact': self.contact,
             'card': self.card,
-            'updatetime': self.updatetime,
+            'updatetime': self.updatetime.strftime("%Y-%m-%d %H:%M"),
         }        
     def only_card(self):
         return {
@@ -311,16 +311,19 @@ class Plugin(db.Model):
     id = Column(Integer, primary_key=True,autoincrement=True)
     name = Column(String(50), nullable=False,unique=True)  #微信公众号+Tg发卡
     config = Column(Text,nullable=False)  #配置参数{}json
+    about = Column(Text,nullable=False)  #关于或联系页面
     switch = Column(Boolean, nullable=False)  #开关0/1;true,false
     
-    def __init__(self, name, config, switch):
+    def __init__(self, name, config,about, switch):
         self.name = name
         self.config = config
+        self.about = about
         self.switch = switch
     def to_json(self):
         return {
             'name': self.name,
-            'config': self.config,
+            'config': eval(self.config),
+            'about': self.about,
             'switch': self.switch,
         }
 

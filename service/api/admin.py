@@ -2,7 +2,7 @@ from os import name
 import types
 from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for,make_response
 from sqlalchemy.sql import func
-from service.database.models import AdminUser,AdminLog,Config, Notice, Payment,ProdCag,ProdInfo,Card,Order
+from service.database.models import AdminUser,AdminLog,Config, Notice, Payment, Plugin,ProdCag,ProdInfo,Card,Order
 from service.api.db import db,limiter
 from service.util.backup.sql import main_back,loc_sys_back,loc_shop_back,loc_order_back   #备份操作
 
@@ -656,6 +656,19 @@ def local_backup():
         return '导出失败', 400
 
 
+@admin.route('/tg_info', methods=['GET','POST']) #
+@jwt_required
+def tg_info():
+    if request.method == 'GET':
+        res = Plugin.query.filter_by(name = 'TG发卡').first()
+        return jsonify(res.to_json())
+    elif request.method == 'POST':
+        data = request.json.get('data', None)
+        if not data:    # 传递TG_token,switc,about
+            return '参数丢失', 400
+        Plugin.query.filter_by(name = 'TG发卡').update({'config':str(data['config']),'about':data['about'],'switch':data['switch']})
+        db.session.commit()     
+        return '数据更新成功', 200 
 
 
 

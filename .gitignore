@@ -39,3 +39,6 @@ public/sql/*
 # # # backup
 # public/backups/*
 # public/sql/*
+
+ssl
+tg.py

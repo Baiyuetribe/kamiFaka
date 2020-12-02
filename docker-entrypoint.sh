@@ -30,6 +30,9 @@ fi
 # 然后初始化数据库
 python init_mysql.py
 
+# TG发卡后台任务
+python app_tg.py >/dev/null 2>&1 &
+
 echo '程序初始化完成'
 # ["gunicorn","-k", "gevent", "--bind", "0.0.0.0:8000", "--workers", "8", "app:app"]
 gunicorn -k gevent --bind 0.0.0.0:8000 --workers 8 app:app

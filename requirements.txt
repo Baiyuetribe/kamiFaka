@@ -10,3 +10,5 @@ gevent
 pymysql
 flask_limiter
 psycopg2-binary
+python-telegram-bot
+qrcode
