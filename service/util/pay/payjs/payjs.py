@@ -1,7 +1,4 @@
-from os import name
-from time import sleep
 import requests
-import time
 import hashlib
 from urllib.parse import urlencode,unquote
 

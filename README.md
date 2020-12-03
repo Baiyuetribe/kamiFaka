@@ -23,7 +23,6 @@
 </p>
 
 正式版DEMO演示： http://107.148.243.178:8000
-1.3稳定版CDN：https://kmfaka.herokuapp.com
 
 ## 适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
@@ -32,10 +31,10 @@
 
 - Stisla UI：web界面很漂亮
 - 前端使用VUE3.0,毫秒级响应
-- 已集成支付宝当面付、码支付、Payjs、虎皮椒支付宝、虎皮椒微信
+- 已集成支付宝当面付、微信官方、Payjs、虎皮椒支付宝、虎皮椒微信、微信官方、易支付、Mugglepay、码支付等十几种支付接口
 - 普通用户支持邮箱、短信接收消息
 - 管理员支持邮箱、短信、TG、微信通知
-- 支持批量导入卡密
+- 集成TG发卡系统
 - 支持2~4层批发模式
 - 长卡密可导出为txt文本
 - 支持自定义背景、标题、关键词等
@@ -52,6 +51,10 @@
 [如何使用宝塔面板Docker管理器一键部署佰阅发卡](https://baiyue.one/archives/1703.html)
 
 [佰阅发卡KAMIFAKA：一款全新的基于VUE3.0+FLASK的卡密发卡系统](https://baiyue.one/archives/1700.html)
+
+[视频安装教程：【从0开始一步步使用宝塔Docker管理器搭建佰阅发卡v1.3版【2020】](https://www.bilibili.com/video/BV1Ra4y1p7QS) 
+
+[付费一键脚本： 全程无代码秒级部署](https://mall.baiyue.one/#/2/detail)
 
 Github本地查看：[1.【宝塔+SQlite】](正式环境搭建教程.md#方法1宝塔nginxdocker数据库为sqlite)｜[2.【宝塔+Mysql】](正式环境搭建教程.md#方法2宝塔nginxdocker数据库为宝塔mysql)｜[3.【Heroku】](正式环境搭建教程.md#方法3heroku-无服务器部署)
 

@@ -7,6 +7,9 @@ from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
 from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
 from service.util.pay.codepay.codepay import CodePay    #码支付
 from service.util.pay.payjs.payjs import Payjs  #payjs接口
+from service.util.pay.wechat.weixin import Wechat   # 微信官方
+from service.util.pay.epay.common import Epay   # 易支付
+from service.util.pay.mugglepay.mugglepay import Mugglepay
 
 from service.util.order.handle import make_order
 #异步操作
@@ -126,7 +129,7 @@ def get_pay_url():
     out_order_id = request.json.get('out_order_id',None)
     total_price = request.json.get('total_price',None)
     payment = request.json.get('payment',None)
-    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信']:
+    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay']:
         return '暂无该支付接口', 404
     if not all([name,out_order_id,total_price]):
         return '参数丢失', 404
@@ -160,8 +163,6 @@ def get_pay_url():
             log(e)
             return '数据库异常', 500                
         # print(ali_order)
-
-        
     elif payment == '虎皮椒支付宝':
         
         try:
@@ -193,7 +194,33 @@ def get_pay_url():
         if r and r.json()['return_msg'] == 'SUCCESS':
             return jsonify({'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']})   
         return '调用支付接口失败', 400                    
-             
+    elif payment in ['微信官方接口']:
+        try:
+            r = Wechat().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'qr_code':r})      
+        return '调用支付接口失败', 400    
+    elif payment in ['易支付']:
+        try:
+            r = Epay().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'qr_code':r})      
+        return '调用支付接口失败', 400            
+    elif payment in ['Mugglepay']:
+        try:
+            r = Mugglepay().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'qr_code':r})      
+        return '调用支付接口失败', 400                    
     else:
         return '开发中', 400
 
@@ -287,7 +314,34 @@ def check_pay():
 
             return jsonify({'msg':'not paid'})  #支付状态校验        
         else:   #取消订单
-            return jsonify({'msg':'订单已取消'})                        
+            return jsonify({'msg':'订单已取消'})   
+    elif payment in ['微信官方接口']:
+        try:
+            r = Wechat().check(out_order_id)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'msg':'success'})     
+        return jsonify({'msg':'not paid'})   
+    elif payment in ['易支付']:
+        try:
+            r = Epay().check(out_order_id)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'msg':'success'})     
+        return jsonify({'msg':'not paid'})            
+    elif payment in ['Mugglepay']:
+        try:
+            r = Mugglepay().check(out_order_id)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'msg':'success'})     
+        return jsonify({'msg':'not paid'})          
     else:
         return '开发中', 400
 
