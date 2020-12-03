@@ -322,6 +322,7 @@ def check_pay():
             log(e)
             return '数据库异常', 500
         if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})   
     elif payment in ['易支付']:
@@ -331,6 +332,7 @@ def check_pay():
             log(e)
             return '数据库异常', 500
         if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})            
     elif payment in ['Mugglepay']:
@@ -340,6 +342,7 @@ def check_pay():
             log(e)
             return '数据库异常', 500
         if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})          
     else:
