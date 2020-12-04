@@ -14,11 +14,15 @@ from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
 from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
 from service.util.pay.codepay.codepay import CodePay    #码支付
 from service.util.pay.payjs.payjs import Payjs  #payjs接口
+from service.util.pay.wechat.weixin import Wechat   # 微信官方
+from service.util.pay.epay.common import Epay   # 易支付
+from service.util.pay.mugglepay.mugglepay import Mugglepay
 
 from service.util.message.smtp import mail_to_admin
 from service.util.message.sms import sms_to_admin
 from service.util.message.weixin import wxpush
 from service.util.message.tg import post_tg
+
 
 from concurrent.futures import ThreadPoolExecutor
 executor = ThreadPoolExecutor(2)
@@ -193,8 +197,6 @@ def get_pay_url(data):  # name,total_price,payment
             print(e)
             return None               
         # print(ali_order)
-
-        
     elif payment == '虎皮椒支付宝':
         
         try:
@@ -226,7 +228,33 @@ def get_pay_url(data):  # name,total_price,payment
         if r and r.json()['return_msg'] == 'SUCCESS':
             return r.json()['code_url'],r.json()['payjs_order_id']
         return None                    
-             
+    elif payment in ['微信官方接口']:
+        try:
+            r = Wechat().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            print(e)
+            return None
+        if r:
+            return r   
+        return None 
+    elif payment in ['易支付']:
+        try:
+            r = Epay().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            print(e)
+            return None
+        if r:
+            return r   
+        return None           
+    elif payment in ['Mugglepay']:
+        try:
+            r = Mugglepay().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            print(e)
+            return None
+        if r:
+            return r   
+        return None            
     else:
         return None 
 
@@ -240,6 +268,8 @@ def check_pay(data):
     contact = data['contact']
     contact_txt = data['contact_txt']
     total_price = data['price']
+    price = data['price']
+    num = 1
     # 支付渠道校验
     if payment == '支付宝当面付':
         try:
@@ -296,7 +326,37 @@ def check_pay(data):
             return None
 
         return None     
-                       
+    elif payment in ['微信官方接口']:
+        try:
+            r = Wechat().check(out_order_id)
+        except Exception as e:
+            print(e)
+            return None
+        if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            return True    
+        return None
+    elif payment in ['易支付']:
+        try:
+            r = Epay().check(out_order_id)
+        except Exception as e:
+            print(e)
+            return None
+        if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            return True   
+        return None        
+    elif payment in ['Mugglepay']:
+        try:
+            r = Mugglepay().check(out_order_id)
+        except Exception as e:
+            print(e)
+            return None
+        if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            return True  
+        return None            
+
     else:
         return None
 
