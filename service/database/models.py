@@ -2,7 +2,6 @@ from sqlalchemy.sql.sqltypes import Float
 from service.api.db import db
 from datetime import datetime
 from sqlalchemy import Column,Integer,String,Boolean,Text,DateTime
-
 # from service.database.count import count_card
 #管理员
 class AdminUser(db.Model):
@@ -243,7 +242,7 @@ class Order(db.Model):
             'num': self.num,
             'total_price': self.total_price,
             # 'card': self.card,
-            'updatetime': self.updatetime,
+            'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
         }
     def check_card(self):
         return {

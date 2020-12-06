@@ -127,7 +127,7 @@ def dashboard():
     info['total_num'] = int(Order.query.with_entities(func.sum(Order.num)).scalar())   #总销售数量--mysql模式下<Decimal('6')
     # 历史数据获取
     orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=7)).all()
-    info['history_date'] = [x.updatetime for x in orders]
+    info['history_date'] = [x.updatetime.strftime('%Y-%m-%d %H:%M:%S') for x in orders]
     info['history_price'] = [x.total_price for x in orders]
     # info['top'] = [{}] #名称，销量，价格
     return jsonify(info)
@@ -172,7 +172,7 @@ def incom_count():
     except Exception as e:
         log(e)
         return '数据库异常', 500    
-    info['history_date'] = [x.updatetime for x in orders]
+    info['history_date'] = [x.updatetime.strftime('%Y-%m-%d %H:%M:%S') for x in orders]
     info['history_price'] = [x.total_price for x in orders]
     # info['top'] = [{}] #名称，销量，价格
     return jsonify(info)
