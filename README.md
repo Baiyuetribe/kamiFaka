@@ -24,6 +24,8 @@
 
 正式版DEMO演示： http://107.148.243.178:8000
 
+默认管理员`admin@qq.com 123456`
+
 ## 适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
 
@@ -83,12 +85,9 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 管理员界面：
 ![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc后台端演示.gif)
 
-## 当前开发计划：
-撰写帮助文档
+## Github社区讨论
 
-当前任务：写文档
-
-
+项目已开通专属社区,主要集中开发者计划、BUG反馈、新功能建议等，欢迎积极参与讨论，[点此进入](https://github.com/Baiyuetribe/kamiFaka/discussions) 
 
 ### 项目依赖
 - 前端UI：Stisla --> https://github.com/stisla/stisla

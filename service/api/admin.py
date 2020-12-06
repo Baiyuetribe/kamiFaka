@@ -164,6 +164,7 @@ def incom_count():
         else:
             return '参数丢失', 400        
         if days !=0:
+            # print(id)
             orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=days)).all()
         else:
             # orders = Order.query.filter(Order.updatetime >= NOW - timedelta(hours=0.5)).all()
