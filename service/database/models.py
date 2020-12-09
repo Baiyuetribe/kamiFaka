@@ -1,6 +1,6 @@
 from sqlalchemy.sql.sqltypes import Float
 from service.api.db import db
-from datetime import datetime
+from datetime import datetime,timedelta
 from sqlalchemy import Column,Integer,String,Boolean,Text,DateTime
 # from service.database.count import count_card
 #管理员
@@ -9,7 +9,7 @@ class AdminUser(db.Model):
     id = Column(Integer, primary_key=True,autoincrement=True)
     email = Column(String(50), nullable=False)
     hash = Column(String(70), nullable=False)   #存储密码,pssql存储过长是由于byte字节导致的
-    updatetime = Column(DateTime, nullable=True,default=datetime.now())   #存储变更时间
+    updatetime = Column(DateTime, nullable=True,default=datetime.utcnow()+timedelta(hours=8))   #存储变更时间
     
     def __init__(self, email, hash):
         self.email = email
@@ -22,7 +22,7 @@ class AdminLog(db.Model):
     __tablename__ = 'admin_login_log'  # 登录日志
     id = Column(Integer, primary_key=True,autoincrement=True)
     ip = Column(String(100), nullable=False)
-    updatetime = Column(DateTime, nullable=True,default=datetime.now())   #存储变更时间
+    updatetime = Column(DateTime, nullable=True,default=datetime.utcnow()+timedelta(hours=8))   #存储变更时间
     def __init__(self, ip):
         self.ip = ip
 
@@ -204,7 +204,7 @@ class Order(db.Model):
     total_price = Column(Float, nullable=False) #总价
     card = Column(Text, nullable=True)    #卡密
     status = Column(Boolean, nullable=True,default=True)    #订单状态
-    updatetime = Column(DateTime, nullable=True,default=datetime.now())  #交易时间
+    updatetime = Column(DateTime, nullable=True,default=datetime.utcnow()+timedelta(hours=8))  #交易时间
 
     def __init__(self, out_order_id, name, payment, contact, contact_txt, price, num, total_price, card):
         self.out_order_id = out_order_id
@@ -287,7 +287,7 @@ class Config(db.Model):
     info = Column(Text, nullable=True)  #值
     description = Column(Text, nullable=False)  #描述
     isshow = Column(Boolean, nullable=False,default=False)  #描述
-    updatetime = Column(DateTime, nullable=True,default=datetime.now())  #交易时间
+    updatetime = Column(DateTime, nullable=True,default=datetime.utcnow()+timedelta(hours=8))  #交易时间
 
     
     def __init__(self, name, info,description,isshow):

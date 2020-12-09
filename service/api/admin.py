@@ -19,7 +19,7 @@ UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
 
 # 天、周、月、年、全部
 from datetime import datetime, timedelta
-NOW = datetime.now()
+NOW = datetime.utcnow()+timedelta(hours=8)
 
 #异步操作
 from concurrent.futures import ThreadPoolExecutor
