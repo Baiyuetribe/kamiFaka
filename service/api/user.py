@@ -249,13 +249,13 @@ def check_pay():
     if payment == '支付宝当面付':
         if methord == 'check':
             try:
-                res = AlipayF2F().check(out_order_id)
+                r = AlipayF2F().check(out_order_id)
             except Exception as e:
                 log(e)
                 return '支付宝请求错误', 500                
             # res = True  #临时测试
             # print(result)
-            if res:
+            if r:
                 # start = time()
                 # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
                 # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
