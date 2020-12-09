@@ -91,7 +91,7 @@ def login():
         return 'Provide an Email and Password in JSON format in the request body', 400
 
 # 图床参数
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','gif' }
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','gif','ico' }
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -102,11 +102,14 @@ def upload():
     # file = request.json.get('file', None)
     if not file:
         return '参数丢失', 400
-    
     if allowed_file(file.filename):
         #secure_filename可以使上传文件的文件名更加安全，但是对中文的支持不是很好，如果想要使用secure_file()可以在使用之前将filename转换成英文或时间戳
         # filename = secure_filename(file.filename)
-        filename = time.strftime('%Y-%m-%d_%H-%M-%S',time.localtime()) +'.' + file.filename.split('.')[-1]
+        if file.filename in ['logo.png','favicon.ico']:
+            print(type(file.filename))
+            filename = file.filename
+        else:
+            filename = time.strftime('%Y-%m-%d_%H-%M-%S',time.localtime()) +'.' + file.filename.split('.')[-1]
         file.save(os.path.join(UPLOAD_PATH,filename))
         # print('上传成功'+filename)
         return jsonify({'msg':'success','info':filename})
