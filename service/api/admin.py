@@ -126,8 +126,12 @@ def dashboard():
     info['shop_num'] = len(ProdInfo.query.filter().all())  #总商品
     info['card_num'] = len(Card.query.filter().all())  #总卡密
     info['order_num'] = len(Order.query.filter().all()) #总订单
-    info['total_income'] = round(Order.query.with_entities(func.sum(Order.total_price)).scalar(),2)    #总收入
-    info['total_num'] = int(Order.query.with_entities(func.sum(Order.num)).scalar())   #总销售数量--mysql模式下<Decimal('6')
+    try:
+        info['total_income'] = round(Order.query.with_entities(func.sum(Order.total_price)).scalar(),2)    #总收入
+        info['total_num'] = int(Order.query.with_entities(func.sum(Order.num)).scalar())   #总销售数量--mysql模式下<Decimal('6')
+    except:
+        info['total_income'] = '0.00'
+        info['total_num'] = 0
     # 历史数据获取
     orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=7)).all()
     info['history_date'] = [x.updatetime.strftime('%Y-%m-%d %H:%M:%S') for x in orders]

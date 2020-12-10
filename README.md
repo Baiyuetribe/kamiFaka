@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://baiyue.one/">
-    <img src="https://raw.githubusercontent.com/Baiyuetribe/baiyue_onekey/master/logo.png" alt="baiyue logo" width="90" height="90">
+  <a href="https://github.com/Baiyuetribe/kamiFaka">
+    <img src="https://cdn.jsdelivr.net/gh/Baiyuetribe/baiyue_onekey@master/logo.png" alt="baiyue logo" width="90" height="90">
   </a>
 </p>
 
@@ -15,11 +15,11 @@
     <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/baiyuetribe/kamifaka?style=for-the-badge">
 
   <br>
-  <a href="https://jq.qq.com/?_wv=1027&k=1NdPevjF">反馈 bug</a>
+  <a href="https://github.com/Baiyuetribe/kamiFaka/discussions">反馈 bug</a>
   ·
-  <a href="https://jq.qq.com/?_wv=1027&k=1NdPevjF">提交 功能</a>
+  <a href="https://kmfaka.baklib.com">教程 文档</a>
   ·
-  <a href="https://baiyue.one/">Blog</a>
+  <a href="https://baiyue.one/">Vlog</a>
 </p>
 
 正式版DEMO演示： http://107.148.243.178:8000
