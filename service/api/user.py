@@ -38,24 +38,16 @@ def theme_list():
         return '数据库异常', 500    
     prod_list =[x.to_json() for x in prods]
     tmp_cags = []
-    num_list = []
-    num = -1
     for x in prod_list:
-        if x['cag_name'] not in tmp_cags:
-            tmp_cags.append(x['cag_name'])
-            num +=1
-        num_list.append(num)    
-    shop_list = []
-    for x,i in enumerate(tmp_cags):
-        goods = {}
-        goods['cag_name'] = i    #大分类
-        shops = []
-        for y,n in enumerate(num_list): #y为位置，n为值
-            if x == n:
-                shops.append(prod_list[y])
-        goods['shops'] = shops
-        shop_list.append(goods)
-    info['shops'] = shop_list   
+        if {'cag_name':x['cag_name'],'shops':[]} not in tmp_cags:
+            tmp_cags.append({'cag_name':x['cag_name'],'shops':[]})
+    sub_num = {}
+    for index,i in enumerate(tmp_cags):
+        sub_num[i['cag_name']] = index
+    for i in prod_list:
+        tmp_cags[sub_num[i['cag_name']]]['shops'].append(i)        
+
+    info['shops'] = tmp_cags   
     return jsonify(info)
 
 @base.route('/detail/<int:shop_id>', methods=['get'])
