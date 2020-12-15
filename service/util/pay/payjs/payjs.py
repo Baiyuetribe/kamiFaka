@@ -44,9 +44,9 @@ class Payjs:
         }
   
         order['sign'] = self.sign(order)
-        r = requests.post(self.host_api+'/check',data=order,headers=self.headers)        
+        r = requests.post(self.host_api+'/check',data=order,headers=self.headers)    
         try:
-            if r.json()['status'] == '1':
+            if r.json()['status'] == 1:
                 return True            
         except:
             return False

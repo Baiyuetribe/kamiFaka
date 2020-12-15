@@ -22,7 +22,9 @@
   <a href="https://baiyue.one/">Vlog</a>
 </p>
 
-正式版DEMO演示： http://107.148.243.178:8000
+海外DEMO演示1： http://107.148.243.178:8000
+
+国内DEMO演示2： http://27.54.253.25:8000     [【该机器由茶猫云赞助,2天无理由全额退款】](https://zzzyun.com)             
 
 默认管理员`admin@qq.com 123456`
 
