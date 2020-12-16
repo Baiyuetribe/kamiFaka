@@ -86,21 +86,21 @@ def detail(shop_id):
         pass
     return jsonify(res)
 
-@base.route('/get_order', methods=['POST']) #已售订单信息
-@limiter.limit("5 per minute", override_defaults=False)
-def get_order():
-    # print(request.json)
-    # print(request.args)
-    contact = request.json.get('contact',None)
-    # contact = request.args.get('contact',None)
-    if not contact:
-        return '参数丢失', 404
-    try:
-        orders = Order.query.filter_by(contact = contact).all()
-    except Exception as e:
-        log(e)
-        return '数据库异常', 500          
-    return jsonify([x.check_card() for x in orders])   
+# @base.route('/get_order', methods=['POST']) #已售订单信息--废弃手机号或邮箱查询功能
+# @limiter.limit("5 per minute", override_defaults=False)
+# def get_order():
+#     # print(request.json)
+#     # print(request.args)
+#     contact = request.json.get('contact',None)
+#     # contact = request.args.get('contact',None)
+#     if not contact:
+#         return '参数丢失', 404
+#     try:
+#         orders = Order.query.filter_by(contact = contact).all()
+#     except Exception as e:
+#         log(e)
+#         return '数据库异常', 500          
+#     return jsonify([x.check_card() for x in orders])   
 
 
 @base.route('/get_pay_list', methods=['get'])

@@ -229,7 +229,7 @@ class Order(db.Model):
             'contact': self.contact,
             'total_price': self.total_price,
             'card': self.card,
-            'updatetime': self.updatetime,
+            'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S'),
         }
     def admin_json(self):
         return {
@@ -255,7 +255,7 @@ class Order(db.Model):
     def only_card(self):
         return {
             'card': self.card,
-            'updatetime': self.updatetime,
+            'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
         }                
 class Card(db.Model):
     __tablename__ = 'card'  # 卡密
