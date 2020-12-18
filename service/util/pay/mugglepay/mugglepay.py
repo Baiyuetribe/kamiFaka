@@ -9,7 +9,7 @@ class Mugglepay:
         self.Currency= config['Currency']  # mugglepay密钥
         self.RETURN_URL = 'you_return_url'    
 
-    def create_order(self,name, total_price, out_trade_no):
+    def create_order(self,out_trade_no,total_price, name):
         header = {
             "token": self.TOKEN
         }
