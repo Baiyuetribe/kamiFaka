@@ -181,6 +181,7 @@ class ProdInfo(db.Model):
             'auto': self.auto,
             'tag': self.tag,
             'discription': self.discription,
+            'stock': self.__count_card_detail__(self.name),
         }     
     # 批发价格设计
     # 9，10；9.9，8.8
