@@ -125,7 +125,10 @@ class ProdInfo(db.Model):
         if count > 10:
             return '充足'
         elif count == 0:
-            return '缺货'
+            if self.auto:
+                return '缺货'
+            else:
+                return '充足'
         elif count == 1:
             #再次统计
             if Card.query.filter_by(prod_name = prod_name,reuse = True).count():
@@ -140,6 +143,11 @@ class ProdInfo(db.Model):
             if Card.query.filter_by(prod_name = prod_name,reuse = True).count():
                 return '∞'
             return count
+        elif count == 0:
+            if self.auto:
+                return count
+            else:
+                return 9999      
         else:
             return count              
     def admin_json(self):

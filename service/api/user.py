@@ -231,6 +231,7 @@ def check_pay():
     price = request.json.get('price',None) #
     num = request.json.get('num',None) #
     total_price = request.json.get('total_price',None) #
+    auto = request.json.get('auto',None) #
     if methord not in ['check','cancel']:
         return '请求方法不正确', 400
     if not out_order_id:
@@ -251,7 +252,7 @@ def check_pay():
                 # start = time()
                 # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
                 # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
-                executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+                executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
                 # print('提交结果1')
                 # print(time()-start) 
                 return jsonify({'msg':'success'})
@@ -270,7 +271,7 @@ def check_pay():
             #失败订单
             try:
                 if result.json()['data']['status'] == "OD":  #OD(支付成功)，WP(待支付),CD(已取消)
-                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
                     return jsonify({'msg':'success'})                
             except :
                 return jsonify({'msg':'订单参数不正确'})
@@ -284,7 +285,7 @@ def check_pay():
             #失败订单
             try:
                 if result['msg'] == "success":  #OD(支付成功)，WP(待支付),CD(已取消)
-                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
                     return jsonify({'msg':'success'})                
             except :
                 return jsonify({'msg':'订单参数不正确'})
@@ -299,7 +300,7 @@ def check_pay():
             #失败订单
             try:
                 if result:
-                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
                     return jsonify({'msg':'success'})                
             except :
                 return jsonify({'msg':'订单参数不正确'})
@@ -314,7 +315,7 @@ def check_pay():
             log(e)
             return '数据库异常', 500
         if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})   
     elif payment in ['易支付']:
@@ -324,7 +325,7 @@ def check_pay():
             log(e)
             return '数据库异常', 500
         if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})            
     elif payment in ['Mugglepay']:
@@ -334,7 +335,7 @@ def check_pay():
             log(e)
             return '数据库异常', 500
         if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})          
     else:
