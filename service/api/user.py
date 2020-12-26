@@ -10,6 +10,7 @@ from service.util.pay.payjs.payjs import Payjs  #payjs接口
 from service.util.pay.wechat.weixin import Wechat   # 微信官方
 from service.util.pay.epay.common import Epay   # 易支付
 from service.util.pay.mugglepay.mugglepay import Mugglepay
+from service.util.pay.yungouos.yungou import YunGou 
 
 from service.util.order.handle import make_order
 #异步操作
@@ -121,7 +122,7 @@ def get_pay_url():
     out_order_id = request.json.get('out_order_id',None)
     total_price = request.json.get('total_price',None)
     payment = request.json.get('payment',None)
-    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay']:
+    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','yungouos','yungouos_wxpay']:
         return '暂无该支付接口', 404
     if not all([name,out_order_id,total_price]):
         return '参数丢失', 404
@@ -212,7 +213,25 @@ def get_pay_url():
             return '数据库异常', 500
         if r:
             return jsonify({'qr_code':r})      
-        return '调用支付接口失败', 400                    
+        return '调用支付接口失败', 400        
+    elif payment in ['YunGouOS']:   # 统一接口
+        try:
+            r = YunGou().create_order(name,out_order_id,total_price)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'qr_code':r})      
+        return '调用支付接口失败', 400      
+    elif payment in ['YunGouOS_WXPAY']:   # 微信接口
+        try:
+            r = YunGou().create_order_wxpay(name,out_order_id,total_price)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            return jsonify({'qr_code':r})      
+        return '调用支付接口失败', 400                           
     else:
         return '开发中', 400
 
@@ -338,6 +357,16 @@ def check_pay():
             executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
             return jsonify({'msg':'success'})     
         return jsonify({'msg':'not paid'})          
+    elif payment in ['YunGouOS','YunGouOS_WXPAY']:
+        try:
+            r = YunGou().check(out_order_id)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500
+        if r:
+            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+            return jsonify({'msg':'success'})     
+        return jsonify({'msg':'not paid'})              
     else:
         return '开发中', 400
 

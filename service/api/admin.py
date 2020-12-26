@@ -528,7 +528,7 @@ def get_pays():
     except Exception as e:
         log(e)
         return '数据库异常', 500      
-    return jsonify([x.enable_json() for x in pays])   
+    return jsonify([x.all_json() for x in pays])   
 
 @admin.route('/update_pays', methods=['get','post']) #支付接口get获取详细信息，post升级更新
 @jwt_required

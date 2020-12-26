@@ -13,4 +13,4 @@ bps = [base,admin,common]
 [app.register_blueprint(bp) for bp in bps]
 
 if __name__ == '__main__':
-    app.run(debug=True)    
+    app.run(debug=True,port=4545)    

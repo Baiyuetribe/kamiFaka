@@ -51,3 +51,14 @@ jobs:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.ALIYUN_USERNAME }}
           password: ${{ secrets.ALIYUN_PASSWORD }}
+
+      - name: SSH Remote deploy CN
+        uses: appleboy/ssh-action@master
+        with: 
+          host: 106.14.76.252
+          password: ${{ secrets.REMOTE_PASSWORD2 }}
+          script: |
+            docker rm -f kamifaka
+            rm -rf /opt/kamifaka
+            docker rmi -f baiyuetribe/kamifaka
+            docker run -d --name=kamifaka --restart=always -p 8000:8000 -v /opt/kamifaka:/usr/src/app/public baiyuetribe/kamifaka
