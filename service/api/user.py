@@ -1,3 +1,4 @@
+from service.tg.tg_faka import pay
 from time import time
 from flask import Blueprint, request, jsonify
 from service.database.models import Payment, ProdInfo,Config,Order,Config
@@ -216,7 +217,7 @@ def get_pay_url():
         return '调用支付接口失败', 400        
     elif payment in ['YunGouOS']:   # 统一接口
         try:
-            r = YunGou().create_order(name,out_order_id,total_price)
+            r = YunGou(payment='unity').create_order(name,out_order_id,total_price)
         except Exception as e:
             log(e)
             return '数据库异常', 500
@@ -282,7 +283,10 @@ def check_pay():
     elif payment in ['虎皮椒支付宝','虎皮椒微信']:
         if methord == 'check':
             try:
-                obj = Hupi()
+                if payment == '虎皮椒微信':
+                    obj = Hupi()
+                else:
+                    obj = Hupi(payment='alipay')
                 result = obj.Check(out_trade_order=out_order_id)
             except Exception as e:
                 log(e)            
@@ -359,7 +363,10 @@ def check_pay():
         return jsonify({'msg':'not paid'})          
     elif payment in ['YunGouOS','YunGouOS_WXPAY']:
         try:
-            r = YunGou().check(out_order_id)
+            if payment == 'YunGouOS_WXPAY':
+                r = YunGou().check(out_order_id)
+            else:
+                r = YunGou(payment='unity').check(out_order_id)
         except Exception as e:
             log(e)
             return '数据库异常', 500

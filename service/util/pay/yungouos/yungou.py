@@ -3,17 +3,18 @@ from collections import OrderedDict
 import requests
 
 class YunGou:
-    def __init__(self):
-        # from service.util.pay.pay_config import get_config    
-        # config = get_config('YunGouOS')
+    def __init__(self,payment='wechat'):
+        from service.util.pay.pay_config import get_config    
+        if payment == 'wechat':
+            config = get_config('YunGouOS_WXPAY')
+        else:
+            config = get_config('YunGouOS_WXPAY')
 
         self.API = 'https://api.pay.yungouos.com/api/pay/merge/nativePay'   # 统一接口
         self.CHECK_API = 'https://api.pay.yungouos.com/api/system/order/getPayOrderInfo'
         self.WEIXIN_API = 'https://api.pay.yungouos.com/api/pay/wxpay/nativePay'    # 微信
-        self.mch_id = '111111111'   # 商户号
-        self.pay_secret = '2222222222'  # 商户密钥
-
-
+        self.mch_id = config['mch_id']   # 商户号
+        self.pay_secret = config['pay_secret']  # 商户密钥
     def _gen_sign(self, dct):
         """
         :param dct: 所需发送的所有数据的字典集合

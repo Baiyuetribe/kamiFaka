@@ -9,8 +9,6 @@ from urllib.parse import urlencode, unquote_plus
 def ksort(d):
     return [(k, d[k]) for k in sorted(d.keys())]
 
-
-
 class Hupi(object):
     # def __init__(self):
     #     self.appid = "201906121518"  #在虎皮椒V3申请的appid
