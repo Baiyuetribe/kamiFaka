@@ -56,6 +56,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with: 
           host: 106.14.76.252
+          username: root
           password: ${{ secrets.REMOTE_PASSWORD2 }}
           script: |
             docker rm -f kamifaka

@@ -172,7 +172,7 @@ def send_admin(notice_name,config,admin_account,data):  #通知途径+管理员�
             log(e)  #通知失败              
     elif notice_name == '微信通知':
         try:
-            print('微信通知')
+            # print('微信通知')
             wxpush(config,admin_account,data)     
         except Exception as e:
             log('微信通知失败 ')  #          
