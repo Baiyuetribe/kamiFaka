@@ -27,6 +27,7 @@ class Hupi(object):
             config = get_config('虎皮椒支付宝')
         self.appid = config['appid'] #数据库返回微信的APPID和SECRET
         self.AppSecret = config['AppSecret'] #数据库返回微信的APPID和SECRET
+        self.API = 'https://'+config['API'] # 支持三种API模式：api.xunhupay.com和、api.vrmrgame.com，admin.xunhupay.com不支持
         self.payment = payment            
         self.notify_url = notify_url
         self.return_url = return_url
@@ -50,7 +51,7 @@ class Hupi(object):
         return sign
 
     def Pay(self,trade_order_id,total_fee,title):   #订单编号，支付方式，价格，标题
-        url = "https://api.xunhupay.com/payment/do.html"
+        url = self.API+'/payment/do.html'
         data = {
             "version":"1.1",
             "lang":"zh-cn",
@@ -71,7 +72,7 @@ class Hupi(object):
         return self.curl(data, url)
 
     def Check(self,out_trade_order):   #回调检测
-        url = "https://api.xunhupay.com/payment/query.html"
+        url = self.API+'/payment/query.html'
         data = {
             "appid":self.appid,
             "out_trade_order":out_trade_order,
