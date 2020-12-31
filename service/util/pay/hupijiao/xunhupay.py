@@ -27,7 +27,7 @@ class Hupi(object):
             config = get_config('虎皮椒支付宝')
         self.appid = config['appid'] #数据库返回微信的APPID和SECRET
         self.AppSecret = config['AppSecret'] #数据库返回微信的APPID和SECRET
-        self.API = 'https://'+config['API'] # 支持三种API模式：api.xunhupay.com和、api.vrmrgame.com，admin.xunhupay.com不支持
+        self.API = 'https://'+config['API'] # 支持两种API模式：api.xunhupay.com和、api.vrmrgame.com，admin.xunhupay.com不支持
         self.payment = payment            
         self.notify_url = notify_url
         self.return_url = return_url

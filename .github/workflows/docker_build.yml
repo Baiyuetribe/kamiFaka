@@ -58,6 +58,7 @@ jobs:
           host: 106.14.76.252
           username: root
           password: ${{ secrets.REMOTE_PASSWORD2 }}
+          port: 22
           script: |
             docker rm -f kamifaka
             rm -rf /opt/kamifaka
