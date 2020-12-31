@@ -2,6 +2,7 @@ from service.tg.tg_faka import pay
 from time import time
 from flask import Blueprint, request, jsonify
 from service.database.models import Payment, ProdInfo,Config,Order,Config
+from datetime import datetime,timedelta
 
 #调用支付接口
 from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
@@ -88,21 +89,29 @@ def detail(shop_id):
         pass
     return jsonify(res)
 
-# @base.route('/get_order', methods=['POST']) #已售订单信息--废弃手机号或邮箱查询功能
-# @limiter.limit("5 per minute", override_defaults=False)
-# def get_order():
-#     # print(request.json)
-#     # print(request.args)
-#     contact = request.json.get('contact',None)
-#     # contact = request.args.get('contact',None)
-#     if not contact:
-#         return '参数丢失', 404
-#     try:
-#         orders = Order.query.filter_by(contact = contact).all()
-#     except Exception as e:
-#         log(e)
-#         return '数据库异常', 500          
-#     return jsonify([x.check_card() for x in orders])   
+@base.route('/get_order', methods=['POST']) #已售订单信息--废弃手机号或邮箱查询功能
+@limiter.limit("5 per minute", override_defaults=False)
+def get_order():
+    # print(request.json)
+    # print(request.args)
+    contact = request.json.get('contact',None)
+    # contact = request.args.get('contact',None)
+    if not contact:
+        return '参数丢失', 404
+    try:
+        orders = Order.query.filter_by(contact = contact).all()
+    except Exception as e:
+        log(e)
+        return '数据库异常', 404
+    if orders:
+        order = orders[-1].check_card() # {}
+        time_count = datetime.utcnow()+timedelta(hours=8)-datetime.strptime(order['updatetime'],'%Y-%m-%d %H:%M') 
+        if time_count.days:
+            return 'not found', 200
+        else:
+            if time_count.seconds < 7200:
+                return jsonify(order)
+    return 'not found', 200
 
 
 @base.route('/get_pay_list', methods=['get'])
