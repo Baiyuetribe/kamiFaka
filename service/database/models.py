@@ -213,7 +213,7 @@ class Order(db.Model):
     total_price = Column(Float, nullable=False) #总价
     card = Column(Text, nullable=True)    #卡密
     status = Column(Boolean, nullable=True,default=True)    #订单状态
-    updatetime = Column(DateTime, nullable=False,default=datetime.utcnow()+timedelta(hours=8))  #交易时间
+    updatetime = Column(DateTime, nullable=False)  #交易时间
 
     def __init__(self, out_order_id, name, payment, contact, contact_txt, price, num, total_price, card):
         self.out_order_id = out_order_id
@@ -226,6 +226,7 @@ class Order(db.Model):
         self.total_price = total_price
         self.card = card
         self.status = self.__check_card(self.card)
+        self.updatetime = datetime.utcnow()+timedelta(hours=8)
     def __check_card(self,card):
         if card:
             return True
