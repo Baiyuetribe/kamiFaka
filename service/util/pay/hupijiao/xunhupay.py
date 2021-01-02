@@ -18,7 +18,7 @@ class Hupi(object):
     #     self.callback_url = 'http://7053a6c10b98.ngrok.io'  #取消支付后的跳转地址
     def __init__(self,payment='wechat'):         #！！！通知、回调、callback都不能留空
         from service.util.pay.pay_config import get_config
-        notify_url='http://7053a6c10b98.ngrok.io/notify'
+        notify_url='no_need_notify'
         return_url='http://7053a6c10b98.ngrok.io/return'
         callback_url='http://7053a6c10b98.ngrok.io'
         if payment == 'wechat':
@@ -65,8 +65,8 @@ class Hupi(object):
             "description":"",
             "time":str(int(time.time())),
             "notify_url":self.notify_url, #回调URL（订单支付成功后，WP开放平台会把支付成功消息异步回调到这个地址上）
-            "return_url":self.return_url, #支付成功url(订单支付成功后，浏览器会跳转到这个地址上)
-            "callback_url":self.callback_url,#商品详情URL或支付页面的URL（移动端，商品支付失败时，会跳转到这个地址上）
+            # "return_url":self.return_url, #支付成功url(订单支付成功后，浏览器会跳转到这个地址上)
+            # "callback_url":self.callback_url,#商品详情URL或支付页面的URL（移动端，商品支付失败时，会跳转到这个地址上）
             "nonce_str":str(int(time.time())), #随机字符串(一定要每次都不一样，保证请求安全)
         }
         return self.curl(data, url)
