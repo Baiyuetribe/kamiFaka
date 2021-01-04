@@ -55,7 +55,7 @@ def init_db(update=False):
     db.session.add(Config('top_notice','首页公告栏信息,请在管理后台网站设置里修改，支持HTML格式','首页公告',True))
     # db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
     db.session.add(Config('toast_notice','演示站随时更新，可优先体验新功能','首页滑动消息设置',True))
-    # db.session.add(Config('theme','list_theme【未开发】','主题',True))
+    db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
     db.session.add(Config('kamiFaka_v','1.53','Github项目地址，用于手动检测新版',False))
 

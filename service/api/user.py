@@ -51,6 +51,10 @@ def theme_list():
         tmp_cags[sub_num[i['cag_name']]]['shops'].append(i)        
 
     info['shops'] = tmp_cags   
+    info['shops2'] = prod_list
+    # 主题
+    res = Config.query.filter_by(name = 'theme').first()
+    info['theme'] = res.to_json()['info']
     return jsonify(info)
 
 @base.route('/detail/<int:shop_id>', methods=['get'])

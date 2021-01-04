@@ -678,7 +678,21 @@ def tg_info():
         db.session.commit()     
         return '数据更新成功', 200 
 
-
+@admin.route('/theme',methods=['GET','POST'])
+@jwt_required
+def theme():
+    if request.method == 'GET':
+        res = Config.query.filter_by(name = 'theme').first()
+        return jsonify(res.to_json())   # {info:'list'}
+    elif request.method == 'POST':
+        data = request.json.get('data', None)
+        if not data:
+            return '参数丢失', 400
+        if data in ['list','taobao']:
+            Config.query.filter_by(name = 'theme').update({'info':data})
+            db.session.commit()
+            return '数据更新成功', 200
+        return '更新失败', 400
 
 # def login():
 #     username = request.form['username']
