@@ -7,6 +7,8 @@ import datetime
 import os
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import random
+import string
 
 #通用组件
 app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
@@ -40,7 +42,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:///'+os.path.join(SQL_PATH,'kam
 # mysql mysql+pymysql://root:wujing0126@127.0.0.1:3306/gbs?charset=utf8
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Setup the Flask-JWT-Extended extension. Read more: https://flask-jwt-extended.readthedocs.io/en/stable/options/
-app.config['JWT_SECRET_KEY'] = 'a44545de51d5e4deaswdedcecvrcrfr5f454fd1cec415r4f'  # Change this!
+app.config['JWT_SECRET_KEY'] = ''.join(random.sample(string.ascii_letters + string.digits, 46))  # Change this!
+# app.config['JWT_SECRET_KEY'] = 'a44545de51d5e4deaswdedcecvrcrfr5f454fd1cec415r4f'  # Change this!
 app.config['JWT_ACCESS_TOKEN EXPIRES'] = datetime.timedelta(days=2)
 jwt = JWTManager(app)
 

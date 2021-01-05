@@ -35,4 +35,4 @@ python app_tg.py >/dev/null 2>&1 &
 
 echo '程序初始化完成'
 # ["gunicorn","-k", "gevent", "--bind", "0.0.0.0:8000", "--workers", "8", "app:app"]
-gunicorn -k gevent --bind 0.0.0.0:8000 --workers 8 --log-level critical app:app
+gunicorn -k gevent --bind 0.0.0.0:8000 --workers $(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --log-level critical app:app
