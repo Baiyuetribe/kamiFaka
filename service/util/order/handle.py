@@ -84,7 +84,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
             new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card)
             db.session.add(new_order)
             db.session.commit()
-            log('订单创建完毕')
+            # log('订单创建完毕')
         except Exception as e:
             log(e)
             return '订单创建失败', 500         
