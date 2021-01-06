@@ -688,7 +688,7 @@ def theme():
         data = request.json.get('data', None)
         if not data:
             return '参数丢失', 400
-        if data in ['list','taobao']:
+        if data in ['list','taobao','gongge']:
             Config.query.filter_by(name = 'theme').update({'info':data})
             db.session.commit()
             return '数据更新成功', 200
