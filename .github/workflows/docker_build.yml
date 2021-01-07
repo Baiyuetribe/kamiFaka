@@ -33,7 +33,7 @@ jobs:
           script: |
             docker rm -f kamifaka
             rm -rf /opt/kamifaka
-            docker rmi -f baiyuetribe/kamifaka
+            docker pull baiyuetribe/kamifaka
             docker run -d --name=kamifaka --restart=always -p 8000:8000 -v /opt/kamifaka:/usr/src/app/public baiyuetribe/kamifaka
 
   push_to_aliyun:
