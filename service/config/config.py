@@ -50,14 +50,14 @@ def init_db(update=False):
     db.session.add(Config('description','网站描述信息。。。','网站描述',True))
     db.session.add(Config('web_url','【预留不填】','网站地址，同步回调时调用',True))
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
-    db.session.add(Config('contact_us','<p>Lorem ipsum dolor sit amet, <code>consectetur</code> adipisicing. Ut enim ad minim veniam, quis nostrud<code>exercitation</code> 示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
+    db.session.add(Config('contact_us','<p>示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
     # db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
-    db.session.add(Config('top_notice','首页公告栏信息,请在管理后台网站设置里修改，支持HTML格式','首页公告',True))
+    db.session.add(Config('top_notice','首页公告栏信息,请在管理后台,网站设置里修改，支持HTML格式','首页公告',True))
     # db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
     db.session.add(Config('toast_notice','演示站随时更新，可优先体验新功能','首页滑动消息设置',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.53','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.6','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
