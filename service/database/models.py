@@ -1,3 +1,4 @@
+from sqlalchemy.sql import elements
 from sqlalchemy.sql.sqltypes import Float
 from service.api.db import db
 from datetime import datetime,timedelta
@@ -215,7 +216,7 @@ class Order(db.Model):
     status = Column(Boolean, nullable=True,default=True)    #订单状态
     updatetime = Column(DateTime, nullable=False)  #交易时间
 
-    def __init__(self, out_order_id, name, payment, contact, contact_txt, price, num, total_price, card):
+    def __init__(self, out_order_id, name, payment, contact, contact_txt, price, num, total_price, card,status,updatetime):
         self.out_order_id = out_order_id
         self.name = name
         self.payment = payment
@@ -225,8 +226,14 @@ class Order(db.Model):
         self.num = num
         self.total_price = total_price
         self.card = card
-        self.status = self.__check_card(self.card)
-        self.updatetime = datetime.utcnow()+timedelta(hours=8)
+        if status:
+            self.status = status
+        else:
+             self.status = self.__check_card(self.card)
+        if updatetime:
+            self.updatetime = updatetime
+        else:
+            self.updatetime = datetime.utcnow()+timedelta(hours=8)
     def __check_card(self,card):
         if card:
             return True
@@ -254,6 +261,21 @@ class Order(db.Model):
             # 'card': self.card,
             'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
         }
+    def admin_json2(self):
+        return {
+            'id': self.id,
+            'out_order_id': self.out_order_id,
+            'name': self.name,
+            'payment': self.payment,
+            'contact': self.contact,
+            'contact_txt': self.contact_txt,
+            'price':self.price,
+            'num': self.num,
+            'total_price': self.total_price,
+            'status':self.status,
+            'card': self.card,
+            'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
+        }        
     def check_card(self):
         return {
             'out_order_id': self.out_order_id,
@@ -266,7 +288,50 @@ class Order(db.Model):
         return {
             'card': self.card,
             'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
-        }                
+        }   
+class Order2(db.Model):
+    __bind_key__ = 'order'  # 使用order数据库
+    __tablename__ = 'order2'  # 订单信息
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    out_order_id = Column(String(50), nullable=False)  #订单ID
+    name = Column(String(50), nullable=False)  #商品名
+    payment = Column(String(50), nullable=False)  #支付渠道
+    contact = Column(String(50)) #联系方式
+    contact_txt = Column(Text, nullable=True)  #附加信息
+    price = Column(Float, nullable=False)  #价格
+    num = Column(Integer, nullable=False) #数量
+    total_price = Column(Float, nullable=False) #总价
+    card = Column(Text, nullable=True)    #卡密
+    status = Column(Boolean, nullable=True,default=True)    #订单状态
+    updatetime = Column(DateTime, nullable=False)  #交易时间
+
+    def __init__(self, out_order_id, name, payment, contact, contact_txt, price, num, total_price, card,status,updatetime):
+        self.out_order_id = out_order_id
+        self.name = name
+        self.payment = payment
+        self.contact = contact
+        self.contact_txt = contact_txt
+        self.price = price
+        self.num = num
+        self.total_price = total_price
+        self.card = card
+        self.status = status
+        self.updatetime = updatetime      
+    def admin_json2(self):
+        return {
+            'id': self.id,
+            'out_order_id': self.out_order_id,
+            'name': self.name,
+            'payment': self.payment,
+            'contact': self.contact,
+            'contact_txt': self.contact_txt,
+            'price':self.price,
+            'num': self.num,
+            'total_price': self.total_price,
+            'status':self.status,
+            'card': self.card,
+            'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
+        }                       
 class Card(db.Model):
     __tablename__ = 'card'  # 卡密
     id = Column(Integer, primary_key=True,autoincrement=True)
@@ -383,4 +448,8 @@ def creat_table():
     db.create_all()
 
 
+def drop_order_table():
+    db.drop_all(bind='order')
 
+def creat_order_table():
+    db.create_all(bind='order')

@@ -81,7 +81,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
         #订单创建
         try:
             # print(f'卡密信息{card}')
-            new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card)
+            new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card,None,None)
             db.session.add(new_order)
             db.session.commit()
             # log('订单创建完毕')

@@ -4,7 +4,7 @@ from flask import Blueprint, Response, render_template, request, jsonify, redire
 from sqlalchemy.sql import func
 from service.database.models import AdminUser,AdminLog,Config, Notice, Payment, Plugin,ProdCag,ProdInfo,Card,Order
 from service.api.db import db,limiter
-from service.util.backup.sql import main_back,loc_sys_back,loc_shop_back,loc_order_back   #备份操作
+from service.util.backup.sql import main_back,loc_sys_back,loc_shop_back,loc_order_back,order_backup_sql,update_order   #备份操作
 
 import bcrypt
 # 添加jwt
@@ -643,7 +643,7 @@ def local_backup():
         types = int(types)
     except:
         return  '需要int参数', 400
-    if not types or types not in [1,2,3]:
+    if not types or types not in [1,2,3,4,5]:
         return '参数丢失', 400
     try:
         if types == 1:
@@ -652,13 +652,21 @@ def local_backup():
         elif types == 2:
             # 卡密备份
             msg = loc_shop_back()
-        else:
+        elif types == 3:
             # 历史订单备份
             msg = loc_order_back()
-        res = make_response(msg)
-        filename = '4545'   #失效
-        res.headers["Content-Disposition"] = f"p_w_upload; filename={filename}.txt"
-        return res
+        elif types == 4:
+            msg = order_backup_sql()
+        elif types == 5:
+            msg = update_order()
+        else:
+            msg = 'ok'
+        if msg != 'ok':
+            res = make_response(msg)
+            filename = '4545'   #失效
+            res.headers["Content-Disposition"] = f"p_w_upload; filename={filename}.txt"
+            return res
+        return 'ok',200
     except Exception as e:
         log(e)
         return '导出失败', 400

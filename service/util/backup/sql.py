@@ -1,5 +1,6 @@
 from flask import make_response
 from service.database.models import *
+from service.api.db import db
 import os
 from shutil import copy
 import time
@@ -118,12 +119,58 @@ def order_backup():
     try:
         txt = '<---  此部分导出后，升级不再支持导入 ---->'
         res = Order.query.filter().all()
-        tmps = [x.admin_json() for x in res]
+        tmps = [x.admin_json2() for x in res]
         for i in tmps:
             txt += '\n订单时间:'+str(i['updatetime'])+'订单ID：'+ i['out_order_id']+'---【'+i['name']+'】---支付渠道:'+i['payment']+'---联系方式:'+str(i['contact'])+'---购买数量:'+str(i['num'])+'---总价格:'+str(i['total_price'])+'---卡密:'+str(i['card'])
         return txt
     except:
-        return txt        
+        return txt     
+#路径设置
+SQL_PATH = os.path.join(os.path.dirname(__file__),'../../public/sql')           
+def order_backup_sql():
+# def order_backup():
+    from datetime import datetime
+    # 此部分不支持再次导入。
+    drop_order_table()  # 清空中间order表
+    creat_order_table()
+    # 初始化表
+    res = Order.query.filter().all()
+    orders = []
+    for i in res:
+        tmp = i.admin_json2()
+        orders.append(Order2(tmp['out_order_id'],tmp['name'],tmp['payment'],tmp['contact'],tmp['contact_txt'],tmp['price'],tmp['num'],tmp['total_price'],tmp['card'],tmp['status'],datetime.strptime(tmp['updatetime'], "%Y-%m-%d %H:%M:%S")))
+    try:
+        db.session.add_all(orders)
+        db.session.commit()
+        return 'ok'
+    except Exception as e:
+        print(e)
+    return 'ok'
+
+def update_order():
+    # 更新order订单列表
+    try:
+        db.session.query(Order).delete()
+        db.session.commit()
+    except Exception as e:
+        print(e)
+    # 清空后写入全新数据
+    new_orders = []
+    res = Order2.query.filter().all()
+    for i in res:
+        tmp = i.admin_json2()
+        try:
+            new_orders.append(Order(out_order_id=tmp['out_order_id'],name=tmp['name'],payment=tmp['payment'],contact=tmp['contact'],contact_txt=tmp['contact_txt'],price=tmp['price'],num=tmp['num'],total_price=tmp['total_price'],card=tmp['card'],status=tmp['status'],updatetime=datetime.strptime(tmp['updatetime'], "%Y-%m-%d %H:%M:%S")))
+        except Exception as e:
+            print(e)   
+    try:
+        db.session.add_all(new_orders)
+        db.session.commit()
+        return 'ok'
+    except Exception as e:
+        print(e)         
+    return 'ok'
+
 
 
 def get_time():

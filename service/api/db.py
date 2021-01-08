@@ -39,6 +39,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:///'+os.path.join(SQL_PATH,'kam
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres+psycopg2://cmmpjjkinayyhk:2428996ef24132a272c88374071448af13aa3169ac551492e7046b264876080a@ec2-52-2-82-109.compute-1.amazonaws.com:5432/deail3ojvojiia'   #远程
 # docker run --name postgres -e POSTGRES_PASSWORD=password -e POSTGRES_USER=root -e POSTGRES_DB=KAFAKA -p 5432:5432 -d postgres
 
+app.config['SQLALCHEMY_BINDS'] =  {'order':'sqlite:///'+os.path.join(SQL_PATH,'middle.db')}   #中间转移数据库
 # mysql mysql+pymysql://root:wujing0126@127.0.0.1:3306/gbs?charset=utf8
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Setup the Flask-JWT-Extended extension. Read more: https://flask-jwt-extended.readthedocs.io/en/stable/options/
