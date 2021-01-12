@@ -1,4 +1,5 @@
 
+from werkzeug.utils import redirect
 from service.api.db import app
 
 # app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = False
@@ -11,6 +12,10 @@ from service.api.common import common
 
 bps = [base,admin,common]
 [app.register_blueprint(bp) for bp in bps]
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=False,host='0.0.0.0')    
