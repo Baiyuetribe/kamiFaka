@@ -35,7 +35,7 @@ def theme_list():
     info= {}
     # 系统信息
     try:
-        prods = ProdInfo.query.filter_by(isactive = True).all()
+        prods = ProdInfo.query.filter_by(isactive = True).order_by(ProdInfo.sort).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500    
