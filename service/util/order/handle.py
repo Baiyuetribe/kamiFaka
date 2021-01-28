@@ -6,6 +6,7 @@ from service.util.message.smtp import mail_to_user,mail_to_admin
 from service.util.message.sms import sms_to_user,sms_to_admin
 from service.util.message.weixin import wxpush
 from service.util.message.tg import post_tg
+from service.util.message.qq import qqpush
 
 from concurrent.futures import ThreadPoolExecutor
 executor = ThreadPoolExecutor(2)
@@ -184,6 +185,12 @@ def send_admin(notice_name,config,admin_account,data):  #通知途径+管理员�
         except Exception as e:
             log('TG通知失败 ')  #          
             log(e)  #通知失败             
+    elif notice_name == 'QQ通知':
+        try:
+            qqpush(config,admin_account,data)    
+        except Exception as e:
+            log('QQ通知失败 ')  #          
+            log(e)  #通知失败                 
     else:
         print('接口参数错误')
         log('接口参数错误')  #通知失败 

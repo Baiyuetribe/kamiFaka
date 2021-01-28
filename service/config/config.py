@@ -64,6 +64,7 @@ def init_db(update=False):
     db.session.add(Notice('微信通知',"{'token':'AT_nvlYDjev89gV96hBAvUX5HR3idWQwLlA'}",'xxxxxxxxxxxxxxxx',False,False))
     db.session.add(Notice('TG通知',"{'TG_TOKEN':'1290570937:AAHaXA2uOvDoGKbGeY4xVIi5kR7K55saXhs'}",'445545444',False,False))
     db.session.add(Notice('短信通知',"{'username':'XXXXXX','password':'YYYYY','tokenYZM':'必填','templateid':'必填'}",'15347875415',False,False))
+    db.session.add(Notice('QQ通知',"{'Key':'null'}",'格式：您的KEY@已添加的QQ号,示例：abc@123',False,False))
 
     # 订单信息【测试环境】
     db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','472835979','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx',None,None))

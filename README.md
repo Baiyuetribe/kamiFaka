@@ -37,7 +37,7 @@
 - 前端使用VUE3.0,毫秒级响应
 - 已集成支付宝当面付、微信官方、Payjs、虎皮椒、YunGouOS、易支付、Mugglepay、码支付等十几种支付接口
 - 普通用户支持邮箱、短信接收消息
-- 管理员支持邮箱、短信、TG、微信通知
+- 管理员支持邮箱、短信、TG、微信、QQ通知
 - 集成TG发卡系统
 - 支持2~4层批发模式
 - 长卡密可导出为txt文本
@@ -59,7 +59,7 @@
 
 [视频安装教程：【从0开始一步步使用宝塔Docker管理器搭建佰阅发卡v1.3版【2020】](https://www.bilibili.com/video/BV1Ra4y1p7QS) 
 
-[付费一键脚本： 全程无代码秒级部署](https://mall.baiyue.one/#/2/detail)
+[付费一键脚本： 全程无代码秒级部署](https://mall.baiyue.one/#/1/detail)
 
 Github本地查看：[1.【宝塔+SQlite】](正式环境搭建教程.md#方法1宝塔nginxdocker数据库为sqlite)｜[2.【宝塔+Mysql】](正式环境搭建教程.md#方法2宝塔nginxdocker数据库为宝塔mysql)｜[3.【Heroku】](正式环境搭建教程.md#方法3heroku-无服务器部署)
 
