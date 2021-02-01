@@ -1,7 +1,7 @@
 from service.tg.tg_faka import pay
 from time import time
 from flask import Blueprint, request, jsonify
-from service.database.models import Payment, ProdInfo,Config,Order,Config
+from service.database.models import Payment, ProdInfo,Config,Order,Config,ProdCag
 from datetime import datetime,timedelta
 
 #调用支付接口
@@ -36,10 +36,12 @@ def theme_list():
     # 系统信息
     try:
         prods = ProdInfo.query.filter_by(isactive = True).order_by(ProdInfo.sort).all()
+        cags = ProdCag.query.filter().order_by(ProdCag.sort).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500    
     prod_list =[x.to_json() for x in prods]
+    cag_list = [x.to_json()['name'] for x in cags]
     tmp_cags = []
     for x in prod_list:
         if {'cag_name':x['cag_name'],'shops':[]} not in tmp_cags:
@@ -49,8 +51,12 @@ def theme_list():
         sub_num[i['cag_name']] = index
     for i in prod_list:
         tmp_cags[sub_num[i['cag_name']]]['shops'].append(i)        
-
-    info['shops'] = tmp_cags   
+    new_cags = []
+    for i in cag_list:
+        for x in tmp_cags:
+            if x['cag_name'] == i:
+                new_cags.append(x)
+    info['shops'] = new_cags   
     info['shops2'] = prod_list
     # 主题
     res = Config.query.filter_by(name = 'theme').first()
