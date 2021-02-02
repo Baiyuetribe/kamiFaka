@@ -68,7 +68,8 @@ def mail_to_user(config,data):
         #定义邮件样式：
         mail.send(to_user=data['contact'],subject=subject,content=content,subtype='html')
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 def mail_to_admin(config,admin_account,data):
@@ -90,7 +91,8 @@ def mail_test(config,message,email):
         content = message
         mail.send(to_user=email,subject=subject,content=content,subtype='html')
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
     
 

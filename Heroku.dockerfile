@@ -12,6 +12,7 @@ COPY service/system/logo.png /usr/src/app/service/system/logo.png
 
 RUN sed -i 's|postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}|$DATABASE_URL|g' docker-entrypoint.sh && \
     sed -i 's|8000|$PORT|g' docker-entrypoint.sh && \
+    sed -i "s|gunicorn -k gevent --bind 0.0.0.0:8000 --workers \$(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --log-level critical app:app|gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app|g" docker-entrypoint.sh && \
     chmod +x docker-entrypoint.sh
 
 EXPOSE $PORT
