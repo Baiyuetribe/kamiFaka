@@ -14,6 +14,7 @@ RUN sed -i 's|postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PO
     sed -i '$d' docker-entrypoint.sh && \
     echo "gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app" >> docker-entrypoint.sh && \
     sed -i 's|8000|$PORT|g' docker-entrypoint.sh && \
+    sed -i 's|log(e)|print(e)|g' /usr/src/app/service/api/user.py && \
     chmod +x docker-entrypoint.sh
 
 EXPOSE $PORT
