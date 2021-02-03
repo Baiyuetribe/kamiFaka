@@ -39,7 +39,7 @@ def theme_list():
         cags = ProdCag.query.filter().order_by(ProdCag.sort).all()
     except Exception as e:
         log(e)
-        return '数据库异常', 500    
+        return '数据库异常', 503    
     prod_list =[x.to_json() for x in prods]
     cag_list = [x.to_json()['name'] for x in cags]
     tmp_cags = []
@@ -69,7 +69,7 @@ def detail(shop_id):
         prod = ProdInfo.query.filter_by(id = shop_id).first_or_404('Product not exist')
     except Exception as e:
         log(e)
-        return '数据库异常', 500
+        return '数据库异常', 503   
     res = prod.detail_json()
     try:
         if len(res['price_wholesale']) >5:
@@ -112,7 +112,7 @@ def get_order():
         orders = Order.query.filter_by(contact = contact).all()
     except Exception as e:
         log(e)
-        return '数据库异常', 404
+        return '数据库异常', 503   
     if orders:
         order = orders[-1].check_card() # {}
         time_count = datetime.utcnow()+timedelta(hours=8)-datetime.strptime(order['updatetime'],'%Y-%m-%d %H:%M') 
@@ -442,10 +442,12 @@ def get_card():
 
 @base.route('/get_system', methods=['get'])
 def get_system():
-    res = Config.query.filter().all()
-    info = {}
-    for i in [x.to_json() for x in res]:
-        info[i['name']] = i
-    return jsonify(info)
-
+    try:
+        res = Config.query.filter().all()
+        info = {}
+        for i in [x.to_json() for x in res]:
+            info[i['name']] = i
+        return jsonify(info)
+    except:
+        return '数据库异常', 503
     

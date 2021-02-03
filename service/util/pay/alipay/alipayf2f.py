@@ -9,7 +9,7 @@ class AlipayF2F:
     def __init__(self):
         from service.util.pay.pay_config import get_config
         config = get_config('支付宝当面付')
-        self.APPID = config['APPID']
+        self.APPID = str(config['APPID'])
         self.app_private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'+config['app_private_key']+'\n-----END RSA PRIVATE KEY-----'
         self.alipay_public_key_string = '-----BEGIN PUBLIC KEY-----\n'+config['alipay_public_key']+'\n-----END PUBLIC KEY-----'   
         self.alipay = AliPay(
