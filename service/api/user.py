@@ -152,6 +152,7 @@ def get_pay_url():
             ali_order = AlipayF2F().create_order(name,out_order_id,total_price)
         except Exception as e:
             log(e)
+            print(e)
             return '支付宝处理失败', 504                
         if ali_order['code'] == '10000' and ali_order['msg'] == 'Success':
             return jsonify(ali_order)   #默认自带qrcode

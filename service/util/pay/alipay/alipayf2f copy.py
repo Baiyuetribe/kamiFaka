@@ -9,7 +9,7 @@ class AlipayF2F:
     def __init__(self):
         from service.util.pay.pay_config import get_config
         config = get_config('支付宝当面付')
-        self.APPID = config['APPID']
+        self.APPID = str(config['APPID'])
         self.app_private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'+config['app_private_key']+'\n-----END RSA PRIVATE KEY-----'
         self.alipay_public_key_string = '-----BEGIN PUBLIC KEY-----\n'+config['alipay_public_key']+'\n-----END PUBLIC KEY-----'   
         self.alipay = AliPay(
@@ -21,6 +21,7 @@ class AlipayF2F:
             debug=False,  # True后为开发环境，所有走dev接口，正式环境用False
             config=AliPayConfig(timeout=15)  # 可选, 请求超时时间
         )
+
     def create_order(self,name,out_order_id,total_price):
         # 注意加上开头结尾
         ali_order = self.alipay.api_alipay_trade_precreate(
@@ -37,8 +38,7 @@ class AlipayF2F:
             # print(res)
             if res.get("trade_status", "") == "TRADE_SUCCESS":
                 return True
-        except Exception as e:
-            print(e)
+        except:
             return False
         return False
     
