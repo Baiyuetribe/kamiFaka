@@ -11,10 +11,12 @@ RUN echo "<!DOCTYPE html><html lang='zh-cn'><head><meta charset='utf-8'><meta ht
 COPY service/system/logo.png /usr/src/app/service/system/logo.png
 
 RUN sed -i 's|postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}|$DATABASE_URL|g' docker-entrypoint.sh && \
-    sed -i '$d' docker-entrypoint.sh && \
-    echo "gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app" >> docker-entrypoint.sh && \
     sed -i 's|8000|$PORT|g' docker-entrypoint.sh && \
+<<<<<<< HEAD
     sed -i 's|log(e)|print(e)|g' /usr/src/app/service/api/user.py && \
+=======
+    sed -i "s|gunicorn -k gevent --bind 0.0.0.0:8000 --workers \$(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --log-level critical app:app|gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app|g" docker-entrypoint.sh && \
+>>>>>>> parent of 84bcb2b... heroku内存溢出问题解决
     chmod +x docker-entrypoint.sh
 
 EXPOSE $PORT
