@@ -555,7 +555,7 @@ def update_pays():
 @jwt_required
 def get_notice():
     try:
-        notices = Notice.query.filter().all()
+        notices = Notice.query.filter().order_by(Notice.id).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500          

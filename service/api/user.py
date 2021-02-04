@@ -152,7 +152,6 @@ def get_pay_url():
             ali_order = AlipayF2F().create_order(name,out_order_id,total_price)
         except Exception as e:
             log(e)
-            print(e)
             return '支付宝处理失败', 504                
         if ali_order['code'] == '10000' and ali_order['msg'] == 'Success':
             return jsonify(ali_order)   #默认自带qrcode
@@ -278,125 +277,126 @@ def check_pay():
         return '参数丢失', 404
     if not all([name,contact,price,num,total_price]):
         return '参数丢失2',400
-    # 支付渠道校验
-    if payment == '支付宝当面付':
-        if methord == 'check':
+    if int(num) >0:
+        # 支付渠道校验
+        if payment == '支付宝当面付':
+            if methord == 'check':
+                try:
+                    r = AlipayF2F().check(out_order_id)
+                except Exception as e:
+                    log(e)
+                    return '支付宝请求错误', 500                
+                # res = True  #临时测试
+                # print(result)
+                if r:
+                    # start = time()
+                    # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
+                    # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
+                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                    # print('提交结果1')
+                    # print(time()-start) 
+                    return jsonify({'msg':'success'})
+                return jsonify({'msg':'not paid'})  #支付状态校验        
+            else:   #取消订单
+                AlipayF2F().cancle(out_order_id)
+                return jsonify({'msg':'订单已取消'})
+        elif payment in ['虎皮椒支付宝','虎皮椒微信']:
+            if methord == 'check':
+                try:
+                    if payment == '虎皮椒微信':
+                        obj = Hupi()
+                    else:
+                        obj = Hupi(payment='alipay')
+                    result = obj.Check(out_trade_order=out_order_id)
+                except Exception as e:
+                    log(e)            
+                    return '虎皮椒请求错误', 502
+                #失败订单
+                try:
+                    if result.json()['data']['status'] == "OD":  #OD(支付成功)，WP(待支付),CD(已取消)
+                        executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                        return jsonify({'msg':'success'})                
+                except :
+                    return jsonify({'msg':'订单参数不正确'})
+
+                return jsonify({'msg':'not paid'})  #支付状态校验        
+            else:   #取消订单
+                return jsonify({'msg':'订单已取消'})
+        elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
+            if methord == 'check':
+                result = CodePay().check(out_order_id)
+                #失败订单
+                try:
+                    if result['msg'] == "success":  #OD(支付成功)，WP(待支付),CD(已取消)
+                        executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                        return jsonify({'msg':'success'})                
+                except :
+                    return jsonify({'msg':'订单参数不正确'})
+
+                return jsonify({'msg':'not paid'})  #支付状态校验        
+            else:   #取消订单
+                return jsonify({'msg':'订单已取消'})     
+        elif payment in ['PAYJS支付宝','PAYJS微信']:
+            if methord == 'check':
+                payjs_order_id = request.json.get('payjs_order_id',None)
+                result = Payjs().check(payjs_order_id)
+                #失败订单
+                try:
+                    if result:
+                        executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                        return jsonify({'msg':'success'})                
+                except :
+                    return jsonify({'msg':'订单参数不正确'})
+
+                return jsonify({'msg':'not paid'})  #支付状态校验        
+            else:   #取消订单
+                return jsonify({'msg':'订单已取消'})   
+        elif payment in ['微信官方接口']:
             try:
-                r = AlipayF2F().check(out_order_id)
+                r = Wechat().check(out_order_id)
             except Exception as e:
                 log(e)
-                return '支付宝请求错误', 500                
-            # res = True  #临时测试
-            # print(result)
+                return '数据库异常', 500
             if r:
-                # start = time()
-                # print('支付成功1')  #默认1.38s后台执行时间；重复订单执行时间0.01秒；异步后，时间为0.001秒
-                # make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price)
                 executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-                # print('提交结果1')
-                # print(time()-start) 
-                return jsonify({'msg':'success'})
-            return jsonify({'msg':'not paid'})  #支付状态校验        
-        else:   #取消订单
-            AlipayF2F().cancle(out_order_id)
-            return jsonify({'msg':'订单已取消'})
-    elif payment in ['虎皮椒支付宝','虎皮椒微信']:
-        if methord == 'check':
+                return jsonify({'msg':'success'})     
+            return jsonify({'msg':'not paid'})   
+        elif payment in ['易支付']:
             try:
-                if payment == '虎皮椒微信':
-                    obj = Hupi()
-                else:
-                    obj = Hupi(payment='alipay')
-                result = obj.Check(out_trade_order=out_order_id)
+                r = Epay().check(out_order_id)
             except Exception as e:
-                log(e)            
-                return '虎皮椒请求错误', 502
-            #失败订单
+                log(e)
+                return '数据库异常', 500
+            if r:
+                executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                return jsonify({'msg':'success'})     
+            return jsonify({'msg':'not paid'})            
+        elif payment in ['Mugglepay']:
             try:
-                if result.json()['data']['status'] == "OD":  #OD(支付成功)，WP(待支付),CD(已取消)
-                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-                    return jsonify({'msg':'success'})                
-            except :
-                return jsonify({'msg':'订单参数不正确'})
-
-            return jsonify({'msg':'not paid'})  #支付状态校验        
-        else:   #取消订单
-            return jsonify({'msg':'订单已取消'})
-    elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
-        if methord == 'check':
-            result = CodePay().check(out_order_id)
-            #失败订单
+                r = Mugglepay().check(out_order_id)
+            except Exception as e:
+                log(e)
+                return '数据库异常', 500
+            if r:
+                executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                return jsonify({'msg':'success'})     
+            return jsonify({'msg':'not paid'})          
+        elif payment in ['YunGouOS','YunGouOS_WXPAY']:
             try:
-                if result['msg'] == "success":  #OD(支付成功)，WP(待支付),CD(已取消)
-                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-                    return jsonify({'msg':'success'})                
-            except :
-                return jsonify({'msg':'订单参数不正确'})
-
-            return jsonify({'msg':'not paid'})  #支付状态校验        
-        else:   #取消订单
-            return jsonify({'msg':'订单已取消'})     
-    elif payment in ['PAYJS支付宝','PAYJS微信']:
-        if methord == 'check':
-            payjs_order_id = request.json.get('payjs_order_id',None)
-            result = Payjs().check(payjs_order_id)
-            #失败订单
-            try:
-                if result:
-                    executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-                    return jsonify({'msg':'success'})                
-            except :
-                return jsonify({'msg':'订单参数不正确'})
-
-            return jsonify({'msg':'not paid'})  #支付状态校验        
-        else:   #取消订单
-            return jsonify({'msg':'订单已取消'})   
-    elif payment in ['微信官方接口']:
-        try:
-            r = Wechat().check(out_order_id)
-        except Exception as e:
-            log(e)
-            return '数据库异常', 500
-        if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-            return jsonify({'msg':'success'})     
-        return jsonify({'msg':'not paid'})   
-    elif payment in ['易支付']:
-        try:
-            r = Epay().check(out_order_id)
-        except Exception as e:
-            log(e)
-            return '数据库异常', 500
-        if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-            return jsonify({'msg':'success'})     
-        return jsonify({'msg':'not paid'})            
-    elif payment in ['Mugglepay']:
-        try:
-            r = Mugglepay().check(out_order_id)
-        except Exception as e:
-            log(e)
-            return '数据库异常', 500
-        if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-            return jsonify({'msg':'success'})     
-        return jsonify({'msg':'not paid'})          
-    elif payment in ['YunGouOS','YunGouOS_WXPAY']:
-        try:
-            if payment == 'YunGouOS_WXPAY':
-                r = YunGou().check(out_order_id)
-            else:
-                r = YunGou(payment='unity').check(out_order_id)
-        except Exception as e:
-            log(e)
-            return '数据库异常', 500
-        if r:
-            executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-            return jsonify({'msg':'success'})     
-        return jsonify({'msg':'not paid'})              
-    else:
-        return '开发中', 400
-
+                if payment == 'YunGouOS_WXPAY':
+                    r = YunGou().check(out_order_id)
+                else:
+                    r = YunGou(payment='unity').check(out_order_id)
+            except Exception as e:
+                log(e)
+                return '数据库异常', 500
+            if r:
+                executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                return jsonify({'msg':'success'})     
+            return jsonify({'msg':'not paid'})              
+        else:
+            return '开发中', 400
+    return 'erro', 404
 
 
 
