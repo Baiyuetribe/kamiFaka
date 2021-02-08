@@ -104,7 +104,7 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 
 项目交流QQ群：853791822
 
-官方帮助文档：[https://kmfaka.baklib.com](https://kmfaka.baklib.com)
+官方帮助文档：[https://kmfaka.baklib-free.com](https://kmfaka.baklib-free.com)
 
 ## License
 

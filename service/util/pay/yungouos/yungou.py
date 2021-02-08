@@ -8,7 +8,7 @@ class YunGou:
         if payment == 'wechat':
             config = get_config('YunGouOS_WXPAY')
         else:
-            config = get_config('YunGouOS_WXPAY')
+            config = get_config('YunGouOS')
 
         self.API = 'https://api.pay.yungouos.com/api/pay/merge/nativePay'   # 统一接口
         self.CHECK_API = 'https://api.pay.yungouos.com/api/system/order/getPayOrderInfo'
@@ -26,7 +26,7 @@ class YunGou:
         for key, value in params.items():
             stringA += str(key) + '=' + str(value) + '&'
         stringSignTemp = stringA + 'key=' + self.pay_secret
-        print(stringSignTemp)
+        # print(stringSignTemp)
         # stringSignTemp = stringA + 'key=7b3515d618d2f0ae70f6ac453983ea7e'  # send box
         return hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()    
 
@@ -64,24 +64,7 @@ class YunGou:
         r = requests.post(self.WEIXIN_API,data)
         if r.json()['code'] == 0:
             return r.json()['data'] #用于生成二维码付款
-        return None
-    def create_order_wxpay(self,name,out_trade_no,total_fee): # total_fee为str，需要转换
-        # print(type(total_fee))
-        data = {
-            'out_trade_no': out_trade_no,
-            'total_fee': total_fee,
-            'body': name,
-            'mch_id': self.mch_id,
-            # 'type': 2,  # 返回二维码
-        }
-        
-        data.update({
-            'sign': self._gen_sign(data)
-        })        
-        r = requests.post(self.WEIXIN_API,data)
-        if r.json()['code'] == 0:
-            return r.json()['data'] #用于生成二维码付款
-        return None        
+        return None    
     
     def check(self,out_trade_no):
         # 查询订单
@@ -92,9 +75,12 @@ class YunGou:
         }     
         data.update({
             'sign': self._gen_sign(data)
-        })             
-        r = requests.post(self.CHECK_API,data)
-        if r.json()['code'] == 0:
-            return True
-        return None
+        })          
+        try:   
+            r = requests.get(self.CHECK_API,data)
+            if r.json()['data']['payStatus'] == 1:
+                return True
+            return None
+        except:
+            return None
   
