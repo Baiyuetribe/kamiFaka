@@ -148,6 +148,7 @@ def get_pay_url():
         return '参数丢失', 404
     name = name.replace('=','_')  #防止k，v冲突        
     if payment == '支付宝当面付':
+        # return jsonify({'qr_code':'455555555454deffffffff'})
         try:
             ali_order = AlipayF2F().create_order(name,out_order_id,total_price)
         except Exception as e:
@@ -156,7 +157,7 @@ def get_pay_url():
         if ali_order['code'] == '10000' and ali_order['msg'] == 'Success':
             return jsonify(ali_order)   #默认自带qrcode
         return '调用支付接口失败', 400
-        # return jsonify({'qr_code':'455555555454deffffffff'})
+        
     elif payment == '虎皮椒微信':
         try:
             obj = Hupi()
@@ -281,6 +282,8 @@ def check_pay():
         # 支付渠道校验
         if payment == '支付宝当面付':
             if methord == 'check':
+                # executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                # return jsonify({'msg':'success'})
                 try:
                     r = AlipayF2F().check(out_order_id)
                 except Exception as e:

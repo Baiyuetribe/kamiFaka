@@ -20,7 +20,7 @@ CORS(app, resources=r'/*')
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=["800 per day", "200 per hour"]
+    default_limits=["20000 per day", "2000 per hour"]
 )
 
 # #避免与vue冲突
@@ -45,7 +45,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Setup the Flask-JWT-Extended extension. Read more: https://flask-jwt-extended.readthedocs.io/en/stable/options/
 # app.config['JWT_SECRET_KEY'] = ''.join(random.sample(string.ascii_letters + string.digits, 46))  # Change this!
 app.config['JWT_SECRET_KEY'] = 'a44545de51d5e4deaswdedcecvrcrfr5f454fd1cec415r4f'  # Change this!
-app.config['JWT_ACCESS_TOKEN EXPIRES'] = datetime.timedelta(days=2)
+app.config['JWT_ACCESS_TOKEN EXPIRES'] = datetime.timedelta(days=1)
+
 jwt = JWTManager(app)
 
 db = SQLAlchemy(app)
