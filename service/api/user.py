@@ -13,6 +13,7 @@ from service.util.pay.wechat.weixin import Wechat   # 微信官方
 from service.util.pay.epay.common import Epay   # 易支付
 from service.util.pay.mugglepay.mugglepay import Mugglepay
 from service.util.pay.yungouos.yungou import YunGou 
+from service.util.pay.vmq.vmpay import VMQ  # V免签 
 
 from service.util.order.handle import make_order
 #异步操作
@@ -142,7 +143,7 @@ def get_pay_url():
     out_order_id = request.json.get('out_order_id',None)
     total_price = request.json.get('total_price',None)
     payment = request.json.get('payment',None)
-    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY']:
+    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝']:
         return '暂无该支付接口', 404
     if not all([name,out_order_id,total_price]):
         return '参数丢失', 404
@@ -207,7 +208,20 @@ def get_pay_url():
             return '数据库异常', 500  
         if r and r.json()['return_msg'] == 'SUCCESS':
             return jsonify({'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']})   
-        return '调用支付接口失败', 400                    
+        return '调用支付接口失败', 400     
+    elif payment in ['V免签支付宝','V免签微信']:
+        # 参数错误情况下，会失效
+        try:
+            if payment == 'V免签微信':
+                r = VMQ().create_order(name,out_order_id,total_price)
+            else:
+                r = VMQ(payment='alipay').create_order(name,out_order_id,total_price)
+        except Exception as e:
+            log(e)
+            return '数据库异常', 500  
+        if r:
+            return jsonify({'qr_code':r['payUrl'],'payjs_order_id':r['orderId'],'reallyPrice':r['reallyPrice']})   
+        return '调用支付失败，疑似安卓端掉线', 400                          
     elif payment in ['微信官方接口']:
         try:
             r = Wechat().create_order(name,out_order_id,total_price)
@@ -354,6 +368,21 @@ def check_pay():
                 return jsonify({'msg':'not paid'})  #支付状态校验        
             else:   #取消订单
                 return jsonify({'msg':'订单已取消'})   
+        elif payment in ['V免签支付宝','V免签微信']:
+            if methord == 'check':
+                orderId = request.json.get('payjs_order_id',None)
+                result = VMQ().check(orderId)
+                #失败订单
+                try:
+                    if result:
+                        executor.submit(make_order,out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+                        return jsonify({'msg':'success'})                
+                except :
+                    return jsonify({'msg':'订单参数不正确'})
+
+                return jsonify({'msg':'not paid'})  #支付状态校验        
+            else:   #取消订单
+                return jsonify({'msg':'订单已取消'})                   
         elif payment in ['微信官方接口']:
             try:
                 r = Wechat().check(out_order_id)
