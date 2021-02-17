@@ -1,4 +1,4 @@
-from service.tg.tg_faka import run_bot
+# from service.tg.tg_faka import run_bot
 # import logging
 
 
@@ -9,4 +9,5 @@ from service.tg.tg_faka import run_bot
 # logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
-    run_bot()
+    #run_bot()
+    pass

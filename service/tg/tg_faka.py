@@ -1,3 +1,4 @@
+from logging import warning
 import time
 import io
 import random
@@ -564,7 +565,8 @@ start_handler = ConversationHandler(
             ],                                
             ConversationHandler.TIMEOUT: [MessageHandler(Filters.all, timeout)],
         },
-        fallbacks=[CommandHandler('cancel', cancel)]
+        fallbacks=[CommandHandler('cancel', cancel)],
+        # per_message=True,
     )
 
 
