@@ -502,7 +502,7 @@ def get_tmp_orders():
     except Exception as e:
         log(e)
         return '数据库异常', 500      
-    return jsonify([x.to_json() for x in orders])   
+    return jsonify([x.to_json2() for x in orders])   
 
 @admin.route('/remove_order', methods=['post']) #删除卡密
 @jwt_required

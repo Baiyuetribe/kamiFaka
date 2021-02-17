@@ -14,3 +14,4 @@ python-telegram-bot
 qrcode
 weixin-python
 wechat-pay-sdk
+Flask-APScheduler

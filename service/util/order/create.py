@@ -128,14 +128,14 @@ def success_card(out_order_id):
         # 订单创建
         res = TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()
         if res:
-            name = res.to_json()['name']
-            payment = res.to_json()['payment']
-            contact = res.to_json()['contact']
-            contact_txt = res.to_json()['contact_txt']
-            price = res.to_json()['price']
-            num = res.to_json()['num']
-            total_price = res.to_json()['total_price']
-            auto = res.to_json()['auto']
+            name = res.to_json2()['name']
+            payment = res.to_json2()['payment']
+            contact = res.to_json2()['contact']
+            contact_txt = res.to_json2()['contact_txt']
+            price = res.to_json2()['price']
+            num = res.to_json2()['num']
+            total_price = res.to_json2()['total_price']
+            auto = res.to_json2()['auto']
             make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
         # 
         #     pass

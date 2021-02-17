@@ -357,7 +357,7 @@ class TempOrder(db.Model):
             'payment': self.payment,
             'total_price': self.total_price,
         } 
-    def to_json(self):
+    def to_json2(self):
         return {
             'name': self.name,
             'payment': self.payment,
@@ -370,7 +370,11 @@ class TempOrder(db.Model):
             'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S'),
             'status': self.status,
             'out_order_id': self.out_order_id,
-        }         
+        }    
+    def to_date(self):
+        return {
+            'updatetime': self.updatetime,
+        }              
 
 class Order2(db.Model):
     __bind_key__ = 'order'  # 使用order数据库
