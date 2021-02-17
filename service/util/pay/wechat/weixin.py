@@ -19,7 +19,7 @@ class Wechat:
         r = self.pay.unifiedorder(body=name,out_trade_no=out_trade_no,total_fee=int(float(total_fee)*100),spbill_create_ip='127.0.0.1')
         res = dict(r.result)
         if res['return_code'] == 'SUCCESS' and res['result_code'] == 'SUCCESS':
-            return res['code_url']  #用于生成二维码付款
+            return {'qr_code':res['code_url']}
         return None
         # {'return_code': 'SUCCESS',
         # 'return_msg': 'OK',

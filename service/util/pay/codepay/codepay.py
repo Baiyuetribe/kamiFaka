@@ -53,7 +53,7 @@ class CodePay:
         sign = md5((signs + config['codepay_key']).encode()).hexdigest()
         query = f"{urls}&sign={sign}"
         url = f"{self.api_host}creat_order/?{query}"
-        return url  #输出url地址
+        return {'qr_code':url}  #输出url地址
     #https://api.xiuxiu888.com/ispay?id=' + 用户ID + '&token=' + 随机token或MD5 + '&order_id=' + 订单唯一ID
     #http://api2.xiuxiu888.com/ispay?id=10041&order_id=17571427&token=888888&call=callback
 
@@ -63,6 +63,5 @@ class CodePay:
         r = requests.get(url)
         #{'status': -1, 'msg': 'no'}    #{"status":-6,"msg":"token error"}
         if r.json()['msg'] == 'ok':
-            return {'msg':'success'}
-        else:
-            return {'msg':'token错误或其他不明原因'} 
+            return True
+        return False

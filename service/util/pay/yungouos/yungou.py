@@ -45,7 +45,7 @@ class YunGou:
         })        
         r = requests.post(self.API,data)
         if r.json()['code'] == 0:
-            return r.json()['data'] #用于生成二维码付款
+            return {'qr_code':r.json()['data']}  #用于生成二维码付款
         return None
 
     def create_order_wxpay(self,name,out_trade_no,total_fee): # total_fee为str，需要转换
@@ -63,7 +63,7 @@ class YunGou:
         })        
         r = requests.post(self.WEIXIN_API,data)
         if r.json()['code'] == 0:
-            return r.json()['data'] #用于生成二维码付款
+            return {'qr_code':r.json()['data']} #用于生成二维码付款
         return None    
     
     def check(self,out_trade_no):

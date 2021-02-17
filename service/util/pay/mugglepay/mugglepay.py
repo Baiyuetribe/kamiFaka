@@ -21,7 +21,7 @@ class Mugglepay:
             rst_dict = json.loads(req.text)
             if rst_dict['status'] == 201:
                 pay_url = rst_dict['payment_url']
-                return pay_url
+                return {'qr_code':pay_url}
             return None
         except Exception as e:
             print(e)

@@ -31,8 +31,10 @@ def init_db(update=False):
     # 商品设置
     db.session.add(ProdInfo('账户ID','普通商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
                                 9.99,None, True,0,0,True))
+    # db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    #                             9.99,'9#9.9,8.8', True,0,0,True))
     db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,'9#9.9,8.8', True,0,0,True))
+                                9.99,'9,100#9.9,8.82,7.7', True,0,0,True))                                
     db.session.add(ProdInfo('账户ID','普通商品DD','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
                                 9.99,None, False,0,0,False))                                
     db.session.add(ProdInfo('激活码','重复卡密演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
@@ -50,16 +52,17 @@ def init_db(update=False):
     db.session.add(Config('web_name','KAMIFAKA','网站名称',True))
     db.session.add(Config('web_keyword','关键词、收录词汇','网站关键词',True))
     db.session.add(Config('description','网站描述信息。。。','网站描述',True))
-    db.session.add(Config('web_url','【预留不填】','网站地址，同步回调时调用',True))
+    db.session.add(Config('web_url','https://baidu.com','网站实际地址',True))
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
     db.session.add(Config('contact_us','<p>示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
     # db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
     db.session.add(Config('top_notice','首页公告栏信息,请在管理后台,网站设置里修改，支持HTML格式','首页公告',True))
     # db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
     db.session.add(Config('toast_notice','演示站随时更新，可优先体验新功能','首页滑动消息设置',True))
+    db.session.add(Config('contact_option','0','是否启用联系方式查询[0启用，1关闭]',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.6','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.7','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
@@ -69,8 +72,8 @@ def init_db(update=False):
     db.session.add(Notice('QQ通知',"{'Key':'null'}",'格式：您的KEY@已添加的QQ号,示例：abc@123',False,False))
 
     # 订单信息【测试环境】
-    db.session.add(Order('演示订单4454','普通商品演示','支付宝当面付','472835979','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx',None,None))
-    db.session.add(Order('演示订单4455','普通商品演示','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None,None,None))    #卡密为None或‘’空都可以
+    db.session.add(Order('演示订单可删除','普通商品演示','支付宝当面付','472835979','请求尽快发货',9.99,1,0.9,'账号：xxxxx；密码：xxxx',None,None))
+    db.session.add(Order('演示订单可删除2','普通商品演示','虎皮椒微信','458721@qq.com','非常感谢',9.99,3,1.97,None,None,None))    #卡密为None或‘’空都可以
     db.session.add(Order('Order_1608107857954q7kyldyg','普通商品演示','虎皮椒支付宝','demo@gmail.com','不错',9.99,1,0.9,'此处为卡密',None,None))
     db.session.add(Order('演示订单4457','普通商品演示','虎皮椒支付宝','472835979','不错',9.99,1,1.9,'TG卡密DEMO',None,None))
     
@@ -78,5 +81,8 @@ def init_db(update=False):
     db.session.add(Plugin('TG发卡',"{'TG_TOKEN':'1488086653:AAHihuO0JuvmiDNZtsYcDBpUhL1rTDO6o1C'}",'### 示例 \n请在管理后台--》Telegram里设置，支持HTML格式',False)) 
     db.session.add(Plugin('微信公众号',"{'PID':'xxxxxxxxxxxx'}",'<p>示例，请在管理后台>>Telegram里设置，支持HTML格式</p>',False)) 
 
+    # 临时订单
+    # db.session.add(TempOrder('id44454','重复卡密演示','alipay','154311','',10,False,None)) 
+    db.session.add(TempOrder('id44454','批发商品演示','alipay','154311','',22,False,None)) 
     db.session.commit()
 

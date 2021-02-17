@@ -22,14 +22,17 @@ class VMQ:
             'payId':out_trade_no,
             'type':self.v_type,
             'price':total_price,
+            'param':name
         }        
-        data['sign'] = hashlib.md5((data['payId']+str(data['type'])+str(data['price'])+self.key).encode('utf8')).hexdigest()
+        data['sign'] = hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+self.key).encode('utf8')).hexdigest()
 
         r = requests.post(self.host_api+'/createOrder',json=data)
-        print(r.json())
+        # print(r.json())
         if r.status_code == 200:
             if r.json()['code'] == 1:
-                return r.json()['data']     # 包含payUrl,orderId
+                # return r.json()['data']     # 包含payUrl,orderId
+                res = r.json()['data']
+                return {'qr_code':res['payUrl'],'payjs_order_id':res['orderId'],'reallyPrice':res['reallyPrice']}
         return False
 
     def check(self,orderId):     #这里是上一步主动生成的订单，单独调用

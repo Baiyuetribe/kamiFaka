@@ -2,7 +2,7 @@ from os import name
 import types
 from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for,make_response
 from sqlalchemy.sql import func
-from service.database.models import AdminUser,AdminLog,Config, Notice, Payment, Plugin,ProdCag,ProdInfo,Card,Order
+from service.database.models import AdminUser,AdminLog,Config, Notice, Payment, Plugin,ProdCag,ProdInfo,Card,Order, TempOrder
 from service.api.db import db,limiter
 from service.util.backup.sql import main_back,loc_sys_back,loc_shop_back,loc_order_back,order_backup_sql,update_order   #备份操作
 
@@ -491,6 +491,19 @@ def get_orders():
         return '数据库异常', 500      
     return jsonify([x.admin_json() for x in orders])   
 
+@admin.route('/get_tmp_orders', methods=['post']) #已售订单信息
+@jwt_required
+def get_tmp_orders():
+    page = request.json.get('page',None)
+    if not page:
+        return 'Missing data1', 400
+    try:
+        orders = TempOrder.query.filter().offset((int(page)-1)*20).limit(20).all()
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500      
+    return jsonify([x.to_json() for x in orders])   
+
 @admin.route('/remove_order', methods=['post']) #删除卡密
 @jwt_required
 def remove_order():
@@ -520,6 +533,20 @@ def get_orders_pages():
         return '数据库异常', 500    
     return str(pages), 200
 
+@admin.route('/get_tmp_orders_pages', methods=['get']) #卡密查询
+@jwt_required
+def get_tmp_orders_pages():
+    try:
+        nums = TempOrder.query.filter().count()
+        temp = nums//20
+        if nums%20:
+            pages = temp+1
+        else:
+            pages = temp    #整除
+    except Exception as e:
+        log(e)
+        return '数据库异常', 500    
+    return str(pages), 200
 @admin.route('/get_pays', methods=['get']) #支付接口
 @jwt_required
 def get_pays():

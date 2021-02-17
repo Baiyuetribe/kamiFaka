@@ -69,7 +69,10 @@ class Hupi(object):
             # "callback_url":self.callback_url,#商品详情URL或支付页面的URL（移动端，商品支付失败时，会跳转到这个地址上）
             "nonce_str":str(int(time.time())), #随机字符串(一定要每次都不一样，保证请求安全)
         }
-        return self.curl(data, url)
+        pay_order = self.curl(data, url)
+        if pay_order.json()['errmsg'] == 'success!':
+            return {'qr_code':pay_order.json()['url']}
+        return False
 
     def Check(self,out_trade_order):   #回调检测
         url = self.API+'/payment/query.html'
@@ -79,7 +82,10 @@ class Hupi(object):
             "time":str(int(time.time())),
             "nonce_str":str(int(time.time())), #随机字符串(一定要每次都不一样，保证请求安全)
         }
-        return self.curl(data, url)
+        result = self.curl(data, url)
+        if result.json()['data']['status'] == "OD":  #OD(支付成功)，WP(待支付),CD(已取消)
+            return True
+        return False
 
 def payment():
     pass

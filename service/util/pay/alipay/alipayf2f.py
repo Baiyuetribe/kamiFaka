@@ -29,7 +29,9 @@ class AlipayF2F:
             total_amount=total_price,
             notify_url=None
         )
-        return ali_order
+        if ali_order['code'] == '10000' and ali_order['msg'] == 'Success':        
+            return ali_order
+        return False
 
     def check(self,out_order_id):     #这里是上一步主动生成的订单，单独调用
         try:

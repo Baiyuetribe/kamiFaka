@@ -36,7 +36,7 @@ class Epay:
                 pay_url = re.search(r"href=\'(.*)\'", content).group(1)
             else:
                 pay_url = self.API + re.search(r"\.?\/(.*)\'", content).group(1)
-            return pay_url
+            return {'qr_code':pay_url}
         except Exception as e:
             # print('submit | API请求失败')
             print(e)

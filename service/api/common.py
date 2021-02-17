@@ -6,7 +6,9 @@ import os
 from flask.helpers import make_response
 
 common = Blueprint('common', __name__)
+# common = Blueprint('common', __name__,static_folder='../../dist/static',template_folder='../../dist/admin')
 
+# app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
 def Response_headers(content):  
     resp = Response(content)  
     resp.headers['Access-Control-Allow-Origin'] = '*'  
@@ -56,6 +58,7 @@ def index():
 @common.route('/admin')
 def admin():
     # return '恭喜，后端部署成功'
+    # return render_template('/admin/index.html')
     return redirect('/#/admin')
 
 @common.route('/login')

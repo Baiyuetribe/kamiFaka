@@ -289,6 +289,89 @@ class Order(db.Model):
             'card': self.card,
             'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S')
         }   
+class TempOrder(db.Model):
+    __tablename__ = 'temporder'  # 临时订单信息---商品名称或ID+订单号+数量+支付方式+联系方式+备注；时间信息---》推算价格---》支付状态---》付款【名称、订单号、数量、价格】
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    out_order_id = Column(String(50), nullable=False)  #订单ID
+    name = Column(String(50), nullable=False)  #商品名
+    payment = Column(String(50), nullable=False)  #支付渠道
+    contact = Column(String(50)) #联系方式
+    contact_txt = Column(Text, nullable=True)  #附加信息
+    price = Column(Float, nullable=True)  #价格--推算步骤
+    num = Column(Integer, nullable=False) #数量
+    total_price = Column(Float, nullable=False) #总价--推算步骤
+    status = Column(Boolean, nullable=True,default=True)    #订单状态---False
+    auto = Column(Boolean, nullable=False,default=False)  #手工或自动发货
+    updatetime = Column(DateTime, nullable=False,default=datetime.utcnow()+timedelta(hours=8))  #创建时间
+    endtime = Column(DateTime, nullable=True)  #最后时间
+
+    def __init__(self, out_order_id, name, payment, contact, contact_txt, num,status,endtime):
+        self.out_order_id = out_order_id
+        self.name = name
+        self.shop = ProdInfo.query.filter_by(name = self.name).first()
+        self.payment = payment
+        self.contact = contact
+        self.contact_txt = contact_txt
+        self.num = num
+        self.price = float(self.__cal_price__()) # 
+        self.total_price = round(self.num * self.price,2)
+        self.status = status
+        self.auto = self.shop.detail_json()['auto']
+        self.endtime = endtime
+        # print(f'价格{self.price} 总价格{self.total_price}')
+    
+    def __cal_price__(self):
+        # shop = ProdInfo.query.filter_by(name = self.name).first()
+        shop = self.shop
+        if shop:
+            res = shop.detail_json()
+            if res['price_wholesale']:
+                if len(res['price_wholesale']) > 4:
+                    len_pifa = len(res['price_wholesale'].split('#')[0].split(','))
+                    if len_pifa == 1:    #两层
+                        if self.num > int(res['price_wholesale'].split('#')[0]):
+                            return res['price_wholesale'].split('#')[1].split(',')[1]
+                        return res['price_wholesale'].split('#')[1].split(',')[0]
+                    elif len_pifa == 2: #三层
+                        if self.num <= int(res['price_wholesale'].split('#')[0].split(',')[0]):
+                            return res['price_wholesale'].split('#')[1].split(',')[0]
+                        elif self.num > int(res['price_wholesale'].split('#')[0].split(',')[1]):
+                            return res['price_wholesale'].split('#')[1].split(',')[2]      
+                        return res['price_wholesale'].split('#')[1].split(',')[1]      
+                    elif len_pifa == 3: #四次
+                        if self.num <= int(res['price_wholesale'].split('#')[0][0]):
+                            return res['price_wholesale'].split('#')[1].split(',')[0]
+                        elif self.num > int(res['price_wholesale'].split('#')[0][0]) and self.num <= int(res['price_wholesale'].split('#')[0][1]):
+                            return res['price_wholesale'].split('#')[1].split(',')[1]   
+                        elif self.num > int(res['price_wholesale'].split('#')[0][1]) and self.num <= int(res['price_wholesale'].split('#')[0][2]):
+                            return res['price_wholesale'].split('#')[1].split(',')[2]   
+                        return res['price_wholesale'].split('#')[1].split(',')[3]                                       
+                    else:
+                        return 9999
+            return res['price']
+        return 9999
+
+    def to_json(self):
+        return {
+            'name': self.name,
+            'payment': self.payment,
+            'total_price': self.total_price,
+        } 
+    def to_json(self):
+        return {
+            'name': self.name,
+            'payment': self.payment,
+            'contact': self.contact,
+            'contact_txt': self.contact_txt,
+            'price': self.price,
+            'num': self.num,
+            'total_price': self.total_price,
+            'auto': self.auto,
+            'updatetime': self.updatetime.strftime('%Y-%m-%d %H:%M:%S'),
+            'status': self.status,
+            'out_order_id': self.out_order_id,
+        }         
+
 class Order2(db.Model):
     __bind_key__ = 'order'  # 使用order数据库
     __tablename__ = 'order2'  # 订单信息
@@ -378,7 +461,13 @@ class Config(db.Model):
             'info': self.info,
             'description': self.description,
         }        
-
+    def to_json2(self):
+        return {
+            # 'id': self.id,
+            'name': self.name,
+            'info': self.info,
+            # 'description': self.description,
+        }   
 
 class Plugin(db.Model):
     __tablename__ = 'plugin'  # 通知或文章存档

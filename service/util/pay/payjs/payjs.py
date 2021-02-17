@@ -23,9 +23,8 @@ class Payjs:
         order['sign'] = self.sign(order)
 
         r = requests.post(self.host_api+'/native',data=order,headers=self.headers)
-        if r:
-            # print(r.json())
-            return r #或qrcode;payjs_order_id等
+        if r and r.json()['return_msg'] == 'SUCCESS':
+            return {'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']}
             """
             {'code_url': 'weixin://wxpay/bizpayurl?pr=c60Vl0W00', 'out_trade_no': 'Order_1605517714455ggqrw0ka', 'payjs_order_id': '2020111617083400522394864', 'qrcode': 'https://payjs.cn/qrcode/d2VpeGluOi8vd3hwYXkvYml6cGF5dXJsP3ByPWM2MFZsMFcwMA==', 'return_code': 1, 'return_msg': 'SUCCESS', 'total_fee': '999', 'sign': 'B23C6619DE28827835A8BB501E425583'}
             """
