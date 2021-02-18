@@ -1,8 +1,6 @@
-from os import name
-import types
 from flask import Blueprint, Response, render_template, request, jsonify, redirect, url_for,make_response
 from sqlalchemy.sql import func
-from service.database.models import AdminUser,AdminLog,Config, Notice, Payment, Plugin,ProdCag,ProdInfo,Card,Order, TempOrder
+from service.database.models import AdminUser,AdminLog,Config, Notice, Payment, Plugin,ProdCag,ProdInfo,Card,Order,TempOrder
 from service.api.db import db,limiter
 from service.util.backup.sql import main_back,loc_sys_back,loc_shop_back,loc_order_back,order_backup_sql,update_order   #备份操作
 
@@ -13,29 +11,28 @@ from flask_jwt_extended import (
 )
 import os
 # from werkzeug.utils import secure_filename  #主要作用，使文件上传更安全
+# 天、周、月、年、全部
+from datetime import datetime, timedelta
+#日志记录
+from service.util.log import log
+from service.util.message.smtp import mail_test
 
 # 图片公共路径
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
 
-# 天、周、月、年、全部
-from datetime import datetime, timedelta
+
 NOW = datetime.utcnow()+timedelta(hours=8)
 
 #异步操作
 from concurrent.futures import ThreadPoolExecutor
 executor = ThreadPoolExecutor(2)
 
-#日志记录
-from service.util.log import log
-
 admin = Blueprint('admin', __name__,url_prefix='/api/v4')
 
-
-@admin.route('/')
+@admin.route('/',endpoint='home')
 @limiter.limit("5 per minute", override_defaults=False)
 def index():
     return 'admin hello'
-
 
 import time
 from functools import wraps
@@ -132,12 +129,12 @@ def dashboard():
     except:
         info['total_income'] = '0.00'
         info['total_num'] = 0
-    # 历史数据获取
+    # # 历史数据获取
     orders = Order.query.filter(Order.updatetime >= NOW - timedelta(days=7)).all()
     info['history_date'] = [x.updatetime.strftime('%Y-%m-%d %H:%M:%S') for x in orders]
     info['history_price'] = [x.total_price for x in orders]
-    # info['top'] = [{}] #名称，销量，价格
-    return jsonify(info)
+    return jsonify(info)    
+
 
 @admin.route('/incom_count', methods=['get'])
 @jwt_required
@@ -222,7 +219,7 @@ def test_smtp():
         return 'Missing data', 400
     # 调用smtp函数发送邮件
     try:
-        from service.util.message.smtp import mail_test
+        
         if mail_test(config=data['config'],message=message,email=email):
             return '邮件已发送', 200
         else:
@@ -647,10 +644,6 @@ def update_system():
 
 
 
-@admin.route('/demo', methods=['get']) #临时测试
-@jwt_required
-def demo():
-    return jsonify(round(sum([float(x.total_price) for x in Order.query.filter().all()]),2))   
 
 
 @admin.route('/backups',methods=['POST'])
@@ -739,23 +732,3 @@ def theme():
 #     return jsonify(Msg(False, gettext('username or password wrong')))
 
 
-# @base_bp.route('/logout', methods=['GET', 'POST'])
-# def logout():
-#     session_util.logout()
-#     return redirect(url_for('base.index'))
-
-
-# @base_bp.route('/robots.txt')
-# def robots():
-#     return Response('User-agent: *\n' + 'Disallow: /', 200, headers={
-#         'Content-Type': 'text/plain'
-#     })
-
-
-# def init_user():
-#     if User.query.count() == 0:
-#         db.session.add(User('admin', 'admin'))
-#         db.session.commit()
-
-
-# init_user()

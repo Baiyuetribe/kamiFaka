@@ -35,4 +35,4 @@ python init_mysql.py
 
 echo '程序初始化完成'
 # ["gunicorn","-k", "gevent", "--bind", "0.0.0.0:8000", "--workers", "8", "app:app"]
-gunicorn –preload -k gevent --bind 0.0.0.0:8000 --workers $(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --log-level critical app:app
+gunicorn -k gevent --bind 0.0.0.0:8000 --workers $(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --log-level critical app:app

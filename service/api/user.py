@@ -1,21 +1,11 @@
 from operator import concat
-from service.tg.tg_faka import pay
 from time import time
 from flask import Blueprint, request, jsonify
 from service.database.models import Payment, ProdInfo,Config,Order,Config,ProdCag,TempOrder
 from datetime import datetime,timedelta
 
 from service.util.order.create import make_pay_url,make_tmp_order,check_pay_status
-#调用支付接口
-from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
-from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
-from service.util.pay.codepay.codepay import CodePay    #码支付
-from service.util.pay.payjs.payjs import Payjs  #payjs接口
-from service.util.pay.wechat.weixin import Wechat   # 微信官方
-from service.util.pay.epay.common import Epay   # 易支付
-from service.util.pay.mugglepay.mugglepay import Mugglepay
-from service.util.pay.yungouos.yungou import YunGou 
-from service.util.pay.vmq.vmpay import VMQ  # V免签 
+
 
 from service.util.order.handle import make_order
 #异步操作
@@ -128,6 +118,7 @@ def get_order():
 
 
 @base.route('/get_pay_url', methods=['post'])
+@limiter.limit("10 per minute", override_defaults=False)
 def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，联系方式---》推算价格
     out_order_id = request.json.get('out_order_id',None)
     name = request.json.get('name',None)
@@ -152,6 +143,7 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
 
 ## 本地检测--》尝试改为服务器检测，避免用户支付过程退出页面
 @base.route('/check_pay', methods=['post']) #检测状态或取消订单
+@limiter.limit("6 per minute", override_defaults=False)
 def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)

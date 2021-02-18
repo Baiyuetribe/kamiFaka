@@ -7,8 +7,7 @@ import datetime
 import os
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import random
-import string
+
 
 #通用组件
 app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
