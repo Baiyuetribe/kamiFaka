@@ -1,4 +1,4 @@
-# from service.tg.tg_faka import run_bot
+from service.tg.tg_faka import run_bot
 # import logging
 
 

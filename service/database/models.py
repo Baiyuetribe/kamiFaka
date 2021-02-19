@@ -317,6 +317,7 @@ class TempOrder(db.Model):
         self.total_price = round(self.num * self.price,2)
         self.status = status
         self.auto = self.shop.detail_json()['auto']
+        self.updatetime = datetime.utcnow()+timedelta(hours=8)
         self.endtime = endtime
         # print(f'价格{self.price} 总价格{self.total_price}')
     

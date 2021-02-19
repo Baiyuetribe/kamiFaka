@@ -29,7 +29,7 @@ executor = ThreadPoolExecutor(2)
 
 admin = Blueprint('admin', __name__,url_prefix='/api/v4')
 
-@admin.route('/',endpoint='home')
+@admin.route('/')
 @limiter.limit("5 per minute", override_defaults=False)
 def index():
     return 'admin hello'
@@ -53,7 +53,7 @@ def login_record():
     db.session.commit()  
 
 @admin.route('/login', methods=['POST'])
-@limiter.limit("5 per minute", override_defaults=False)
+@limiter.limit("10/minute;20/hour;40/day", override_defaults=False)
 def login():
     try:
         # start_t = time.time()

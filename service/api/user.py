@@ -118,7 +118,7 @@ def get_order():
 
 
 @base.route('/get_pay_url', methods=['post'])
-@limiter.limit("10 per minute", override_defaults=False)
+@limiter.limit("10/minute;20/hour;40/day", override_defaults=False)
 def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，联系方式---》推算价格
     out_order_id = request.json.get('out_order_id',None)
     name = request.json.get('name',None)
@@ -143,7 +143,7 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
 
 ## 本地检测--》尝试改为服务器检测，避免用户支付过程退出页面
 @base.route('/check_pay', methods=['post']) #检测状态或取消订单
-@limiter.limit("6 per minute", override_defaults=False)
+@limiter.limit("6/minute;20/hour;40/day", override_defaults=False)
 def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)

@@ -17,16 +17,16 @@
   <br>
   <a href="https://github.com/Baiyuetribe/kamiFaka/discussions">反馈 bug</a>
   ·
-  <a href="https://kmfaka.baklib.com">教程 文档</a>
+  <a href="https://kmfaka.baklib-free.com">教程 文档</a>
   ·
-  <a href="https://baiyue.one/">Vlog</a>
+  <a href="https://www.bilibili.com/video/BV1Ra4y1p7QS">Vlog</a>
 </p>
 
 海外DEMO演示1： http://107.148.243.178:8000
 
 国内DEMO演示2： http://27.54.253.25:8000     [【该机器由茶猫云赞助,2天无理由全额退款】](https://zzzyun.com)             
 
-默认管理员`admin@qq.com 123456`
+后台地址`/admin`,默认管理员`admin@qq.com 123456`
 
 ## 适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
