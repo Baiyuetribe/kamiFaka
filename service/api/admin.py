@@ -486,7 +486,7 @@ def get_orders():
     if not page:
         return 'Missing data1', 400
     try:
-        orders = Order.query.filter().offset((int(page)-1)*20).limit(20).all()
+        orders = Order.query.order_by(Order.id.desc()).offset((int(page)-1)*20).limit(20).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -499,7 +499,8 @@ def get_tmp_orders():
     if not page:
         return 'Missing data1', 400
     try:
-        orders = TempOrder.query.filter().offset((int(page)-1)*20).limit(20).all()
+        # orders = TempOrder.query.filter().offset((int(page)-1)*20).limit(20).all()
+        orders = TempOrder.query.order_by(TempOrder.id.desc()).offset((int(page)-1)*20).limit(20).all()
     except Exception as e:
         log(e)
         return '数据库异常', 500      
