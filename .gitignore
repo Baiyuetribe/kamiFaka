@@ -23,6 +23,7 @@ __pycache__/
 vue3
 v2
 v4
+dist0
 
 # My configurations:
 myconfig.py
@@ -42,3 +43,4 @@ public/sql/*
 
 ssl
 tg.py
+mv.py

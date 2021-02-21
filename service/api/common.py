@@ -59,11 +59,11 @@ def index():
 def admin():
     # return '恭喜，后端部署成功'
     # return render_template('/admin/index.html')
-    return redirect('/#/admin')
+    return render_template('admin.html')
 
 @common.route('/login')
 def login():
-    return redirect('/#/admin')
+    return render_template('admin.html')
 
 # @common.route('/notify',methods=['POST','GET'])    #支付回调测试
 # def notify():
