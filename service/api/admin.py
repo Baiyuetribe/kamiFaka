@@ -432,7 +432,7 @@ def update_card():
     isused = request.json.get('isused', None)
     reuse = request.json.get('reuse', None)
     methord = request.json.get('methord', None) #update,add,delete
-    if methord not in ['update','delete','add','add_all']:
+    if methord not in ['update','delete','add','add_all','delete_all']:
         return 'Missing methord', 400
     # 调用smtp函数发送邮件
     try:
@@ -445,6 +445,10 @@ def update_card():
                 return 'Missing data', 400
             Card.query.filter_by(id = id).delete()
         # elif methord == 'add':
+        elif methord == 'delete_all':
+            res = Card.query.filter_by(isused = True).all()
+            if res:
+                [db.session.delete(x) for x in res]
         else:
             if not all([prod_name,card]):
                 return 'Missing data', 400
