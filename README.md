@@ -31,6 +31,8 @@
 ## 适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
 
+![](Docs/佰阅发卡功能简介.png)
+
 ## 功能特色：
 
 - Stisla UI：web界面很漂亮
@@ -83,9 +85,9 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 开发环境：[开发环境安装教程](开发环境安装教程.md)
 
 
-访客页面：
+v0.5访客页面：
 ![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc端演示.gif)
-管理员界面：
+v0.5管理员界面：
 ![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc后台端演示.gif)
 
 ## Github社区讨论
