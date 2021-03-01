@@ -1,5 +1,5 @@
 from wechatpay import WeChatPay
-
+import time
 class Wechat:
 
     def __init__(self):
@@ -16,10 +16,13 @@ class Wechat:
 
     def create_order(self,name,out_trade_no,total_fee): # total_fee为str，需要转换
         # print(type(total_fee))
-        r = self.pay.unifiedorder(body=name,out_trade_no=out_trade_no,total_fee=int(float(total_fee)*100),spbill_create_ip='127.0.0.1')
+        r = self.pay.unifiedorder(body=name,out_trade_no=out_trade_no,total_fee=int(float(total_fee)*100),spbill_create_ip='127.0.0.1',trade_type='NATIVE')
+        # r = self.pay.unifiedorder(body=name,out_trade_no=out_trade_no,total_fee=int(float(total_fee)*100),spbill_create_ip='127.0.0.1',trade_type='MWEB',device_info='MWEB')    # H5尝试
         res = dict(r.result)
+        # print(res)
         if res['return_code'] == 'SUCCESS' and res['result_code'] == 'SUCCESS':
             return {'qr_code':res['code_url']}
+            # return {'qr_code':'https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id='+res['prepay_id']+'&package='+str(int(time.time()))}
         return None
         # {'return_code': 'SUCCESS',
         # 'return_msg': 'OK',
@@ -32,7 +35,7 @@ class Wechat:
         # 'prepay_id': 'wx03204624526199f39ea6310946fad10000',
         # 'trade_type': 'NATIVE',
         # 'code_url': 'weixin://wxpay/bizpayurl?pr=hBAbIv700'}            
-    
+        # https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=wx2016121516420242444321ca0631331346&package=1405458241
     def check(self,out_trade_no):
         # 查询订单
         r = self.pay.query_order(out_trade_no=out_trade_no)

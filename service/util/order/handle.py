@@ -56,9 +56,11 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
                         result = Card.query.filter_by(prod_name = name,isused = False).limit(nums).all()
                         pre_card = [i.to_json()['card'] for i in result]    #数量可能少于实际数量
                         if len(pre_card) == nums:
-                            card = str(pre_card)
+                            # card = str(pre_card)[1:-1]  # 移除双【】
+                            card = ','.join(pre_card)
                         else:
-                            card = str(pre_card + [None for x in range(nums-len(pre_card))])
+                            # card = str(pre_card + [None for x in range(nums-len(pre_card))])[1:-1]
+                            card = ','.join(pre_card + [None for x in range(nums-len(pre_card))])
                             log(f'{name}已缺货')
                         # 更新已用卡密状态
                         # 120单测试--55ms；
