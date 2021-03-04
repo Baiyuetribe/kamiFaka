@@ -140,8 +140,8 @@ def order_backup_sql():
         tmp = i.admin_json2()
         orders.append(Order2(tmp['out_order_id'],tmp['name'],tmp['payment'],tmp['contact'],tmp['contact_txt'],tmp['price'],tmp['num'],tmp['total_price'],tmp['card'],tmp['status'],datetime.strptime(tmp['updatetime'], "%Y-%m-%d %H:%M:%S")))
     try:
-        db.session.add_all(orders)
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            db.session.add_all(orders)
         return 'ok'
     except Exception as e:
         print(e)
@@ -150,8 +150,8 @@ def order_backup_sql():
 def update_order():
     # 更新order订单列表
     try:
-        db.session.query(Order).delete()
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            db.session.query(Order).delete()
     except Exception as e:
         print(e)
     # 清空后写入全新数据
@@ -164,8 +164,8 @@ def update_order():
         except Exception as e:
             print(e)   
     try:
-        db.session.add_all(new_orders)
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            db.session.add_all(new_orders)
         return 'ok'
     except Exception as e:
         print(e)         

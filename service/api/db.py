@@ -30,7 +30,7 @@ class SQLAlchemy(BaseSQLAlchemy):
     @contextmanager
     def auto_commit_db(self):
         try:
-            # yield
+            yield
             self.session.commit()
             self.session.close()
         except Exception as e:

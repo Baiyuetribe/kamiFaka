@@ -49,8 +49,8 @@ def timefn(fn):
     return measure_time
 
 def login_record():
-    db.session.add(AdminLog(ip=request.remote_addr))
-    db.auto_commit_db() 
+    with db.auto_commit_db():
+        db.session.add(AdminLog(ip=request.remote_addr))
     
 
 @admin.route('/login', methods=['POST'])
@@ -201,8 +201,8 @@ def update_smtp():
         return 'Missing data', 400
     # 密码加密存储
     try:
-        Notice.query.filter_by(id =1).update({'config':str(data['config'])})
-        db.auto_commit_db()       
+        with db.auto_commit_db():
+            Notice.query.filter_by(id =1).update({'config':str(data['config'])})
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -247,8 +247,8 @@ def update_sms():
         return 'Missing data', 400
     # 密码加密存储
     try:
-        Notice.query.filter_by(name = '短信通知').update({'config':str(data['config'])})
-        db.auto_commit_db()       
+        with db.auto_commit_db():
+            Notice.query.filter_by(name = '短信通知').update({'config':str(data['config'])})
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -290,20 +290,20 @@ def update_class():
         return 'Missing data 1', 400
     # 调用smtp函数发送邮件
     try:
-        if methord == 'update':
-            if not all([id,name,info,sort]):
-                return 'Missing data', 400
-            ProdCag.query.filter_by(id = id).update({'name':name,'info':info,'sort':sort})
-        elif methord == 'delete':
-            if not id:
-                return 'Missing data', 400
-            ProdCag.query.filter_by(id = id).delete()
-        else:
-            if not name or not info or not sort:
-                return 'Missing data 2', 400
-            new_cag = ProdCag(name,info,sort)
-            db.session.add(new_cag)
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            if methord == 'update':
+                if not all([id,name,info,sort]):
+                    return 'Missing data', 400
+                ProdCag.query.filter_by(id = id).update({'name':name,'info':info,'sort':sort})
+            elif methord == 'delete':
+                if not id:
+                    return 'Missing data', 400
+                ProdCag.query.filter_by(id = id).delete()
+            else:
+                if not name or not info or not sort:
+                    return 'Missing data 2', 400
+                new_cag = ProdCag(name,info,sort)
+                db.session.add(new_cag)
     except Exception as e:
         log(e)
         return '数据库异常', 500        
@@ -372,20 +372,20 @@ def update_shop():
         return 'Missing data1', 400
     # 调用smtp函数发送邮件
     try:
-        if methord == 'update':
-            if not all([id,cag_name,name,img_url,sort,discription,price,tag]):   #因修改时auto和isactive报错缺失，移除
-                return 'Missing data2', 400
-            ProdInfo.query.filter_by(id = id).update({'cag_name':cag_name,'name':name,'info':info,'img_url':img_url,'sort':sort,'discription':discription,'price':price,'price_wholesale':price_wholesale,'auto':auto,'tag':tag,'isactive':isactive})
-        elif methord == 'delete':
-            if not id:
-                return 'Missing data', 400
-            ProdInfo.query.filter_by(id = id).delete()
-        else:
-            if not all([name,info,sort]):
-                return 'Missing data', 400
-            new_prod = ProdInfo(cag_name,name,info,img_url,sort,discription,price,price_wholesale,auto,sales,tag,isactive)
-            db.session.add(new_prod)
-        db.auto_commit_db()       
+        with db.auto_commit_db():
+            if methord == 'update':
+                if not all([id,cag_name,name,img_url,sort,discription,price,tag]):   #因修改时auto和isactive报错缺失，移除
+                    return 'Missing data2', 400
+                ProdInfo.query.filter_by(id = id).update({'cag_name':cag_name,'name':name,'info':info,'img_url':img_url,'sort':sort,'discription':discription,'price':price,'price_wholesale':price_wholesale,'auto':auto,'tag':tag,'isactive':isactive})
+            elif methord == 'delete':
+                if not id:
+                    return 'Missing data', 400
+                ProdInfo.query.filter_by(id = id).delete()
+            else:
+                if not all([name,info,sort]):
+                    return 'Missing data', 400
+                new_prod = ProdInfo(cag_name,name,info,img_url,sort,discription,price,price_wholesale,auto,sales,tag,isactive)
+                db.session.add(new_prod)
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -437,28 +437,28 @@ def update_card():
         return 'Missing methord', 400
     # 调用smtp函数发送邮件
     try:
-        if methord == 'update':
-            if not all([id,prod_name,card]):
-                return 'Missing data 1', 400
-            Card.query.filter_by(id = id).update({'prod_name':prod_name,'card':card,'isused':isused,'reuse':reuse})
-        elif methord == 'delete':
-            if not id:
-                return 'Missing data', 400
-            Card.query.filter_by(id = id).delete()
-        # elif methord == 'add':
-        elif methord == 'delete_all':
-            res = Card.query.filter_by(isused = True).all()
-            if res:
-                [db.session.delete(x) for x in res]
-        else:
-            if not all([prod_name,card]):
-                return 'Missing data', 400
-            # print(card.split('\n'))
-            tmp_cards = list(set(list(filter(None,card.split('\n')))))
-            if len(tmp_cards) >1:
-                reuse = False
-            db.session.add_all([Card(prod_name,card=x,isused=0,reuse=reuse) for x in tmp_cards])
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            if methord == 'update':
+                if not all([id,prod_name,card]):
+                    return 'Missing data 1', 400
+                Card.query.filter_by(id = id).update({'prod_name':prod_name,'card':card,'isused':isused,'reuse':reuse})
+            elif methord == 'delete':
+                if not id:
+                    return 'Missing data', 400
+                Card.query.filter_by(id = id).delete()
+            # elif methord == 'add':
+            elif methord == 'delete_all':
+                res = Card.query.filter_by(isused = True).all()
+                if res:
+                    [db.session.delete(x) for x in res]
+            else:
+                if not all([prod_name,card]):
+                    return 'Missing data', 400
+                # print(card.split('\n'))
+                tmp_cards = list(set(list(filter(None,card.split('\n')))))
+                if len(tmp_cards) >1:
+                    reuse = False
+                db.session.add_all([Card(prod_name,card=x,isused=0,reuse=reuse) for x in tmp_cards])
         # 重定向登录界面
         return '修改成功', 200          
     except Exception as e:
@@ -475,8 +475,8 @@ def remove_cards():
     ids = request.json.get('ids', None)
     if not ids:
         return 'Missing Data', 400
-    [Card.query.filter_by(id = x).delete() for x in ids]    
-    db.auto_commit_db()
+    with db.auto_commit_db():        
+        [Card.query.filter_by(id = x).delete() for x in ids]    
     return '批量删除', 200    
 
 
@@ -514,8 +514,8 @@ def remove_order():
     if not id:
         return 'Missing Data', 400
     try:
-        Order.query.filter_by(id = id).delete()
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            Order.query.filter_by(id = id).delete()
         return '删除成功', 200    
     except Exception as e:
         log(e)
@@ -573,8 +573,8 @@ def update_pays():
             if not data:
                 return 'Missing Data', 400
             # print(type(data['config']))
-            Payment.query.filter_by(id = data['id']).update({'icon':data['icon'],'config':str(data['config']),'isactive':data['isactive']})
-            db.auto_commit_db()
+            with db.auto_commit_db():
+                Payment.query.filter_by(id = data['id']).update({'icon':data['icon'],'config':str(data['config']),'isactive':data['isactive']})
             return '修改成功', 200 
     except Exception as e:
         log(e)
@@ -599,13 +599,13 @@ def update_notice():
         return 'Missing Data', 400
     #数组数据更新--->两字典判断是否相等，不相等则更新
     try:
-        old_data = [x.to_json() for x in Notice.query.filter().all()]
-        for (i,index) in enumerate(data):
-            if old_data[i] == index:
-                pass    #数据未更新
-            else:
-                Notice.query.filter_by(id = index['id']).update({'config':str(index['config']),'admin_account':index['admin_account'],'admin_switch':index['admin_switch'],'user_switch':index['user_switch']})
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            old_data = [x.to_json() for x in Notice.query.filter().all()]
+            for (i,index) in enumerate(data):
+                if old_data[i] == index:
+                    pass    #数据未更新
+                else:
+                    Notice.query.filter_by(id = index['id']).update({'config':str(index['config']),'admin_account':index['admin_account'],'admin_switch':index['admin_switch'],'user_switch':index['user_switch']})
     except Exception as e:
         log(e)
         return '数据库异常', 500        
@@ -627,8 +627,8 @@ def update_admin_account():
     if not all([email,password]):
         return '参数丢失', 400
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-    AdminUser.query.filter_by(id = 1).update({'email':email,'hash':hashed})
-    db.auto_commit_db()
+    with db.auto_commit_db():
+        AdminUser.query.filter_by(id = 1).update({'email':email,'hash':hashed})
     return {"mgs": 'success'}, 200
 
 
@@ -644,8 +644,8 @@ def update_system():
     data = request.json.get('data', None)
     if not data:
         return '参数丢失', 400
-    Config.query.filter_by(id = data['id']).update({'info':data['info']})
-    db.auto_commit_db()
+    with db.auto_commit_db():
+        Config.query.filter_by(id = data['id']).update({'info':data['info']})
     return {"mgs": 'success'}, 200
 
 
@@ -708,8 +708,8 @@ def tg_info():
         data = request.json.get('data', None)
         if not data:    # 传递TG_token,switc,about
             return '参数丢失', 400
-        Plugin.query.filter_by(name = 'TG发卡').update({'config':str(data['config']),'about':data['about'],'switch':data['switch']})
-        db.auto_commit_db()    
+        with db.auto_commit_db():
+            Plugin.query.filter_by(name = 'TG发卡').update({'config':str(data['config']),'about':data['about'],'switch':data['switch']})
         return '数据更新成功', 200 
 
 @admin.route('/theme',methods=['GET','POST'])
@@ -723,8 +723,8 @@ def theme():
         if not data:
             return '参数丢失', 400
         if data in ['list','taobao','gongge']:
-            Config.query.filter_by(name = 'theme').update({'info':data})
-            db.auto_commit_db()
+            with db.auto_commit_db():
+                Config.query.filter_by(name = 'theme').update({'info':data})
             return '数据更新成功', 200
         return '更新失败', 400
 
