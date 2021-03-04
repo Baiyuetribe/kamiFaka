@@ -70,7 +70,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
                         # [Card.query.filter_by(id = y.to_json()['id']).update({'isused':False}) for y in result] #53ms
                         for y in result:
                             y.isused = True
-                        # db.session.commit() #1.9ms--9ms---此步骤在后续commmit时生效
+                        # db.auto_commit_db() #1.9ms--9ms---此步骤在后续commmit时生效
                         # [y.isused=False for y in result]
                         
 
@@ -86,7 +86,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
             # print(f'卡密信息{card}')
             new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card,None,None)
             db.session.add(new_order)
-            db.session.commit()
+            db.auto_commit_db()
             # log('订单创建完毕')
         except Exception as e:
             log(e)

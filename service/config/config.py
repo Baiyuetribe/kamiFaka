@@ -84,5 +84,5 @@ def init_db(update=False):
     # 临时订单
     # db.session.add(TempOrder('id44454','重复卡密演示','alipay','154311','',10,False,None)) 
     # db.session.add(TempOrder('id44454','批发商品演示','alipay','154311','',22,False,None)) 
-    db.session.commit()
+    db.auto_commit_db()
 

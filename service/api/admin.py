@@ -50,7 +50,8 @@ def timefn(fn):
 
 def login_record():
     db.session.add(AdminLog(ip=request.remote_addr))
-    db.session.commit()  
+    db.auto_commit_db() 
+    
 
 @admin.route('/login', methods=['POST'])
 @limiter.limit("10/minute;20/hour;40/day", override_defaults=False)
@@ -201,7 +202,7 @@ def update_smtp():
     # 密码加密存储
     try:
         Notice.query.filter_by(id =1).update({'config':str(data['config'])})
-        db.session.commit()        
+        db.auto_commit_db()       
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -247,7 +248,7 @@ def update_sms():
     # 密码加密存储
     try:
         Notice.query.filter_by(name = '短信通知').update({'config':str(data['config'])})
-        db.session.commit()        
+        db.auto_commit_db()       
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -302,7 +303,7 @@ def update_class():
                 return 'Missing data 2', 400
             new_cag = ProdCag(name,info,sort)
             db.session.add(new_cag)
-        db.session.commit()
+        db.auto_commit_db()
     except Exception as e:
         log(e)
         return '数据库异常', 500        
@@ -384,7 +385,7 @@ def update_shop():
                 return 'Missing data', 400
             new_prod = ProdInfo(cag_name,name,info,img_url,sort,discription,price,price_wholesale,auto,sales,tag,isactive)
             db.session.add(new_prod)
-        db.session.commit()        
+        db.auto_commit_db()       
     except Exception as e:
         log(e)
         return '数据库异常', 500      
@@ -453,11 +454,11 @@ def update_card():
             if not all([prod_name,card]):
                 return 'Missing data', 400
             # print(card.split('\n'))
-            tmp_cards = list(filter(None,card.split('\n')))
+            tmp_cards = list(set(list(filter(None,card.split('\n')))))
             if len(tmp_cards) >1:
                 reuse = False
             db.session.add_all([Card(prod_name,card=x,isused=0,reuse=reuse) for x in tmp_cards])
-        db.session.commit()
+        db.auto_commit_db()
         # 重定向登录界面
         return '修改成功', 200          
     except Exception as e:
@@ -475,7 +476,7 @@ def remove_cards():
     if not ids:
         return 'Missing Data', 400
     [Card.query.filter_by(id = x).delete() for x in ids]    
-    db.session.commit()
+    db.auto_commit_db()
     return '批量删除', 200    
 
 
@@ -514,7 +515,7 @@ def remove_order():
         return 'Missing Data', 400
     try:
         Order.query.filter_by(id = id).delete()
-        db.session.commit()
+        db.auto_commit_db()
         return '删除成功', 200    
     except Exception as e:
         log(e)
@@ -573,7 +574,7 @@ def update_pays():
                 return 'Missing Data', 400
             # print(type(data['config']))
             Payment.query.filter_by(id = data['id']).update({'icon':data['icon'],'config':str(data['config']),'isactive':data['isactive']})
-            db.session.commit()
+            db.auto_commit_db()
             return '修改成功', 200 
     except Exception as e:
         log(e)
@@ -604,7 +605,7 @@ def update_notice():
                 pass    #数据未更新
             else:
                 Notice.query.filter_by(id = index['id']).update({'config':str(index['config']),'admin_account':index['admin_account'],'admin_switch':index['admin_switch'],'user_switch':index['user_switch']})
-        db.session.commit()
+        db.auto_commit_db()
     except Exception as e:
         log(e)
         return '数据库异常', 500        
@@ -627,7 +628,7 @@ def update_admin_account():
         return '参数丢失', 400
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     AdminUser.query.filter_by(id = 1).update({'email':email,'hash':hashed})
-    db.session.commit()
+    db.auto_commit_db()
     return {"mgs": 'success'}, 200
 
 
@@ -644,7 +645,7 @@ def update_system():
     if not data:
         return '参数丢失', 400
     Config.query.filter_by(id = data['id']).update({'info':data['info']})
-    db.session.commit()
+    db.auto_commit_db()
     return {"mgs": 'success'}, 200
 
 
@@ -708,7 +709,7 @@ def tg_info():
         if not data:    # 传递TG_token,switc,about
             return '参数丢失', 400
         Plugin.query.filter_by(name = 'TG发卡').update({'config':str(data['config']),'about':data['about'],'switch':data['switch']})
-        db.session.commit()     
+        db.auto_commit_db()    
         return '数据更新成功', 200 
 
 @admin.route('/theme',methods=['GET','POST'])
@@ -723,7 +724,7 @@ def theme():
             return '参数丢失', 400
         if data in ['list','taobao','gongge']:
             Config.query.filter_by(name = 'theme').update({'info':data})
-            db.session.commit()
+            db.auto_commit_db()
             return '数据更新成功', 200
         return '更新失败', 400
 

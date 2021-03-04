@@ -25,7 +25,7 @@ from datetime import datetime,timedelta
 def make_tmp_order(out_order_id,name,payment,contact,contact_txt,num):
     try:
         db.session.add(TempOrder(out_order_id,name,payment,contact,contact_txt,num,status=False,endtime=None))
-        db.session.commit()
+        db.auto_commit_db()
         return make_pay_url(out_order_id)
     except Exception as e:
         log(e)
@@ -124,7 +124,7 @@ def check_pay_status(payment,out_order_id,payjs_order_id):  # 加入时间戳
 def success_card(out_order_id):
     if not TempOrder.query.filter_by(out_order_id = out_order_id,status = True).count():    #保证一次
         TempOrder.query.filter_by(out_order_id = out_order_id).update({'status':True,'endtime':datetime.utcnow()+timedelta(hours=8)})
-        db.session.commit()  
+        db.auto_commit_db()  
         # 订单创建
         res = TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()
         if res:
