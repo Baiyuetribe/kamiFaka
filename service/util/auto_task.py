@@ -8,9 +8,9 @@ def clean_tmp_order():
     c_now = datetime.utcnow()+timedelta(hours=8)
     # del_list = []
     if orders:
-        for i in orders:
-            if (c_now - i.to_date()['updatetime']).days > 5:
-                # del_list.append(i)
-                db.session.delete(i)
-        db.auto_commit_db()
+        with db.auto_commit_db():
+            for i in orders:
+                if (c_now - i.to_date()['updatetime']).days > 5:
+                    # del_list.append(i)
+                    db.session.delete(i)
         

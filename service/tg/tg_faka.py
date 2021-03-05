@@ -383,8 +383,8 @@ def make_order(data):   # 主要为订单创建，异步一个管理员通知
             card = result.to_json()['card']
             reuse = result.to_json()['reuse']   #返回True或False
             if not reuse: #卡密状态修改
-                Card.query.filter_by(id = result.to_json()['id']).update({'isused':True})
-                db.auto_commit_db()
+                with db.auto_commit_db():
+                    Card.query.filter_by(id = result.to_json()['id']).update({'isused':True})
         else:
             card = None
             status = False
@@ -397,8 +397,8 @@ def make_order(data):   # 主要为订单创建，异步一个管理员通知
         try:
             # print(f'卡密信息{card}')
             new_order= Order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,card,None,None)
-            db.session.add(new_order)
-            db.auto_commit_db()
+            with db.auto_commit_db():
+                db.session.add(new_order)
             # log('订单创建完毕')
         except Exception as e:
             print(e)
