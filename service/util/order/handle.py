@@ -19,7 +19,7 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
     #订单ID，商品名称，支付方式，联系方式、备注、单价、数量、总价
     ## 根据name查找对应的卡密信息。---卡密有重复
     # 为避免同一订单二次请求，判断是否重复
-    if not Order.query.filter_by(out_order_id = out_order_id).count():
+    if not (Order.query.filter_by(out_order_id = out_order_id).first()):
         status = True   #订单状态
         # 生成订单 --除了上述内容外，还需要卡密。
         if auto:    # 自动发货--获取卡密

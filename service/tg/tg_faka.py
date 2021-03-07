@@ -374,7 +374,7 @@ def make_order(data):   # 主要为订单创建，异步一个管理员通知
     price = data['price']
     num = 1
     total_price = price
-    if not Order.query.filter_by(out_order_id = out_order_id).count():
+    if not (Order.query.filter_by(out_order_id = out_order_id).first()):
         status = True   #订单状态
         # 生成订单 --除了上述内容外，还需要卡密。
         

@@ -122,7 +122,9 @@ def check_pay_status(payment,out_order_id,payjs_order_id):  # 加入时间戳
     return False   
 
 def success_card(out_order_id):
-    if not TempOrder.query.filter_by(out_order_id = out_order_id,status = True).count():    #保证一次
+    # print(not (tmps := TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()))
+    # print(TempOrder.query.filter_by(out_order_id = out_order_id,status = True).count())
+    if not (TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()):    #保证一次
         with db.auto_commit_db():
             TempOrder.query.filter_by(out_order_id = out_order_id).update({'status':True,'endtime':datetime.utcnow()+timedelta(hours=8)})
         # 订单创建
@@ -137,7 +139,7 @@ def success_card(out_order_id):
             total_price = res.to_json2()['total_price']
             auto = res.to_json2()['auto']
             make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
-        # 
+        
         #     pass
     return 'OK'
 

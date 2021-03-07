@@ -132,7 +132,7 @@ class ProdInfo(db.Model):
                 return '充足'
         elif count == 1:
             #再次统计
-            if Card.query.filter_by(prod_name = prod_name,reuse = True).count():
+            if Card.query.filter_by(prod_name = prod_name,reuse = True).first():
                 return '充足'
             return '少量'
         else:
@@ -141,7 +141,7 @@ class ProdInfo(db.Model):
         count = Card.query.filter_by(prod_name = prod_name,isused = False).count()
         if count == 1:
             #再次统计
-            if Card.query.filter_by(prod_name = prod_name,reuse = True).count():
+            if Card.query.filter_by(prod_name = prod_name,reuse = True).first():
                 return '∞'
             return count
         elif count == 0:

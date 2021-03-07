@@ -35,7 +35,8 @@ class SQLAlchemy(BaseSQLAlchemy):
         except Exception as e:
             # 加入数据库commit提交失败，必须回滚！！！
             self.session.rollback()
-            raise e
+            print(e)
+            # raise e
         finally:
             self.session.close()
 

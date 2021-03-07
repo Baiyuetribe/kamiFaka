@@ -135,7 +135,7 @@ class ProdInfo(db.Model):
             return '缺货'
         elif count == 1:
             #再次统计
-            if Card.query.filter_by(prod_name = prod_name,reuse = 1).count():
+            if Card.query.filter_by(prod_name = prod_name,reuse = 1).first():
                 return '充足'
             return '少量'
         else:
