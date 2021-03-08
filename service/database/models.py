@@ -60,6 +60,9 @@ class Payment(db.Model):
         }          
 class ProdCag(db.Model):
     __tablename__ = 'prod_cag'  # 分类设置
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }    
     id = Column(Integer, primary_key=True,autoincrement=True)
     name = Column(String(50), nullable=False,unique=True)  #名称
     info = Column(String(100), nullable=False,comment='描述')  #描述
@@ -80,6 +83,9 @@ class ProdCag(db.Model):
 
 class ProdInfo(db.Model):
     __tablename__ = 'prod_info'  # 产品信息
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }        
     id = Column(Integer, primary_key=True,autoincrement=True)
     # cag_name = Column(String(50),ForeignKey('prod_cag.name'))  #关联后，无法update或删除
     cag_name = Column(String(50))  #关联测试
@@ -203,6 +209,9 @@ class ProdInfo(db.Model):
 
 class Order(db.Model):
     __tablename__ = 'order'  # 订单信息
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }        
     id = Column(Integer, primary_key=True,autoincrement=True)
     out_order_id = Column(String(50), nullable=False)  #订单ID
     name = Column(String(50), nullable=False)  #商品名
@@ -291,6 +300,9 @@ class Order(db.Model):
         }   
 class TempOrder(db.Model):
     __tablename__ = 'temporder'  # 临时订单信息---商品名称或ID+订单号+数量+支付方式+联系方式+备注；时间信息---》推算价格---》支付状态---》付款【名称、订单号、数量、价格】
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }        
     id = Column(Integer, primary_key=True,autoincrement=True)
     out_order_id = Column(String(50), nullable=False)  #订单ID
     name = Column(String(50), nullable=False)  #商品名
@@ -380,6 +392,9 @@ class TempOrder(db.Model):
 class Order2(db.Model):
     __bind_key__ = 'order'  # 使用order数据库
     __tablename__ = 'order2'  # 订单信息
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }        
     id = Column(Integer, primary_key=True,autoincrement=True)
     out_order_id = Column(String(50), nullable=False)  #订单ID
     name = Column(String(50), nullable=False)  #商品名
@@ -422,6 +437,9 @@ class Order2(db.Model):
         }                       
 class Card(db.Model):
     __tablename__ = 'card'  # 卡密
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }        
     id = Column(Integer, primary_key=True,autoincrement=True)
     prod_name = Column(String(50), nullable=False)  #商品ID
     card = Column(Text, nullable=False)  #卡密
