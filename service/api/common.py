@@ -11,6 +11,7 @@ from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
 from service.util.pay.codepay.codepay import CodePay    #码支付
 from service.util.pay.payjs.payjs import Payjs  #payjs接口
 from service.util.pay.wechat.weixin import Wechat   # 微信官方
+from service.util.pay.qq.qqpay import QQpay   # 微信官方
 from service.util.pay.epay.common import Epay   # 易支付
 from service.util.pay.mugglepay.mugglepay import Mugglepay
 from service.util.pay.yungouos.yungou import YunGou 
@@ -156,7 +157,21 @@ def notify(name):
         if out_order_id and len(out_order_id) == 27:
             res = CodePay().verify(request.form.to_dict)
             if res:
-                executor.submit(notify_success,out_order_id)                                
+                executor.submit(notify_success,out_order_id)     
+    elif name == 'qqpay':
+        xml = request.data
+        array_data = {}
+        root = ET.fromstring(xml)
+        for child in root:
+            value = child.text
+            array_data[child.tag] = value
+        print(array_data)
+        trade_state = array_data['trade_state']
+        if trade_state == 'SUCCESS':
+            res = QQpay().verify(array_data)
+            if res:
+                out_order_id = array_data['out_trade_no']
+                executor.submit(notify_success,out_order_id)        
     else:
         pass
 

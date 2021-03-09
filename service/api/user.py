@@ -126,7 +126,7 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
     contact = request.json.get('contact',None)
     contact_txt = request.json.get('contact_txt',None)
     num = request.json.get('num',None)
-    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝']:
+    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝','QQ钱包']:
         return '暂无该支付接口', 404
     if not all([name,out_order_id,contact,num]):
         return '参数丢失', 404

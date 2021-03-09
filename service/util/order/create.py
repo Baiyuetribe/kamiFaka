@@ -9,6 +9,7 @@ from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
 from service.util.pay.codepay.codepay import CodePay    #码支付
 from service.util.pay.payjs.payjs import Payjs  #payjs接口
 from service.util.pay.wechat.weixin import Wechat   # 微信官方
+from service.util.pay.qq.qqpay import QQpay   # 微信官方
 from service.util.pay.epay.common import Epay   # 易支付
 from service.util.pay.mugglepay.mugglepay import Mugglepay
 from service.util.pay.yungouos.yungou import YunGou 
@@ -66,6 +67,8 @@ def pay_url(payment,name,out_order_id,total_price):
                 r = VMQ(payment='alipay').create_order(name,out_order_id,total_price)
         elif payment in ['微信官方接口']:
             r = Wechat().create_order(name,out_order_id,total_price)
+        elif payment in ['QQ钱包']:
+            r = QQpay().create_order(name,out_order_id,total_price)            
         elif payment in ['易支付']:
             r = Epay().create_order(name,out_order_id,total_price)
         elif payment in ['Mugglepay']:
