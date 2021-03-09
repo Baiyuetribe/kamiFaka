@@ -154,9 +154,12 @@ def check_pay():
     if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝']:
         return '暂无该支付接口', 404
     # 订单校验
-    if check_pay_status(payment,out_order_id,payjs_order_id):
+    if TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first():
         return jsonify({'msg':'success'})
-    return jsonify({'msg':'not paid'})  #支付状态校验    
+    return jsonify({'msg':'not paid'})  #支付状态校验            
+    # if check_pay_status(payment,out_order_id,payjs_order_id):
+    #     return jsonify({'msg':'success'})
+    # return jsonify({'msg':'not paid'})  #支付状态校验    
 
 @base.route('/get_card', methods=['post']) #已售订单信息--自动查询
 def get_card():

@@ -14,6 +14,8 @@ class CodePay:
         # self.codepay_key = 'fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn'   #码支付密钥
         # self.api_host = 'https://api.xiuxiu888.com/'
         self.api_host = 'http://api2.fateqq.com:52888/'
+        self.web_url = get_config('web_url')
+        self.notify_url = self.web_url + '/notify/codepay'
 
         # self.token = 'jljCGU3pRviAW64LqaHPjHIvdm05b1iq'     #网页自己设置的token
     #https://api.xiuxiu888.com/creat_order/?id=58427&token=fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn&price=1&order_id=admin&type=2&page=3&pay_id=5454545
@@ -56,6 +58,32 @@ class CodePay:
         return {'qr_code':url}  #输出url地址
     #https://api.xiuxiu888.com/ispay?id=' + 用户ID + '&token=' + 随机token或MD5 + '&order_id=' + 订单唯一ID
     #http://api2.xiuxiu888.com/ispay?id=10041&order_id=17571427&token=888888&call=callback
+
+
+    def sign(self,data):
+        signs = ""
+        urls = ""
+        for k in sorted(data.keys()):
+            v = data[k]
+            if not isinstance(v, str):
+                v = str(v)
+            if not v or k == "sign":
+                continue
+            if signs:
+                urls += "&"
+                signs += "&"
+            signs += f"{k}={v}"
+            urls += f"{k}={quote(v.encode())}"
+        return md5((signs + self.config['codepay_key']).encode()).hexdigest()        
+
+    def verify(self,data):     #异步通知    这里data=request.from
+        try:
+            signature = data['sign']
+            data.pop('sign')
+            return signature == self.sign(data)   # 结果为一个布尔值
+        except Exception as e:
+            print(e)
+            return False
 
     def check(self,out_order_id):
         config = get_config('码支付支付宝')

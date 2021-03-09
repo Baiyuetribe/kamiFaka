@@ -5,10 +5,12 @@ class Wechat:
     def __init__(self):
         from service.util.pay.pay_config import get_config    
         config = get_config('微信官方接口')
+        self.web_url = get_config('web_url')
         self.WECHAT_APPID = config['APPID']
         self.WECHAT_MCH_ID = config['MCH_ID']
         self.WECHAT_PAY_SECRET = config['APP_SECRET']
-        self.WECHAT_NOTIFY_URL = 'your_notify_url'
+        self.WECHAT_NOTIFY_URL = self.web_url + '/notify/wechat'
+        print(self.WECHAT_NOTIFY_URL)
         # self.WECHAT_CERT = 'path/to/your_cert.pem'
         # self.WECHAT_KEY = 'patch/to/your_key.pem'
         self.pay = WeChatPay(self.WECHAT_APPID, self.WECHAT_MCH_ID,self.WECHAT_NOTIFY_URL, self.WECHAT_PAY_SECRET)
@@ -56,7 +58,15 @@ class Wechat:
     #             ('total_fee', '900'),
     #             ('out_trade_no', '445545d4e54dfefef54e54f65'),
     #             ('trade_state', 'NOTPAY'),
-    #             ('trade_state_desc', '订单未支付')])        
+    #             ('trade_state_desc', '订单未支付')])      
+
+    def verify(self,data):     #异步通知    这里data=request.from
+        try:
+            return self.pay._verify_sign(data)   # 结果为一个布尔值
+        except Exception as e:
+            print(e)
+            return False
+
     def cancel(self,out_trade_no):
         # 关闭交易
         r = self.pay.close_order(out_trade_no=out_trade_no)

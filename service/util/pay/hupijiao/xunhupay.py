@@ -18,7 +18,8 @@ class Hupi(object):
     #     self.callback_url = 'http://7053a6c10b98.ngrok.io'  #取消支付后的跳转地址
     def __init__(self,payment='wechat'):         #！！！通知、回调、callback都不能留空
         from service.util.pay.pay_config import get_config
-        notify_url='no_need_notify'
+        self.web_url = get_config('web_url')
+        notify_url=self.web_url + '/notify/xunhupay'
         return_url='http://7053a6c10b98.ngrok.io/return'
         callback_url='http://7053a6c10b98.ngrok.io'
         if payment == 'wechat':
@@ -35,7 +36,7 @@ class Hupi(object):
     def curl(self, data, url):
         data['hash'] = self.sign(data)
         #print(data)
-        headers = {"Referer":"http://7053a6c10b98.ngrok.io/"}  #自己的网站地址
+        headers = {"Referer":self.web_url}  #自己的网站地址
         r = requests.post(url, data=data,headers=headers)
         return r
 
@@ -86,6 +87,15 @@ class Hupi(object):
         if result.json()['data']['status'] == "OD":  #OD(支付成功)，WP(待支付),CD(已取消)
             return True
         return False
+
+    def verify(self,data):     #异步通知    这里data=request.from
+        try:
+            signature = data['hash']
+            data.pop('hash')
+            return signature == self.sign(data)   # 结果为一个布尔值
+        except Exception as e:
+            print(e)
+            return False    
 
 def payment():
     pass

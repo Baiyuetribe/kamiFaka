@@ -7,6 +7,7 @@ class VMQ:
 
     def __init__(self,payment='wechat'):
         from service.util.pay.pay_config import get_config
+        self.web_url = get_config('web_url')
         if payment == 'wechat':
             config = get_config('V免签微信')
             self.v_type = 1
@@ -15,6 +16,7 @@ class VMQ:
             self.v_type = 2
         self.key = config['KEY']   #填写通信密钥
         self.host_api = config['API']
+        self.notify = self.web_url + '/notify/vmq'
 
     def create_order(self,name,out_trade_no,total_price):
 
@@ -22,7 +24,8 @@ class VMQ:
             'payId':out_trade_no,
             'type':self.v_type,
             'price':total_price,
-            'param':name
+            # 'param':name,
+            'notifyUrl':self.notify
         }        
         data['sign'] = hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+self.key).encode('utf8')).hexdigest()
 
@@ -45,4 +48,14 @@ class VMQ:
             if r.json()['code'] == 1:
                 return True
         return False
+
+    def verify(self,data):     #异步通知    这里data=request.from
+        try:
+            signature = data['sign']
+            data.pop('sign')
+            print(hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+str(data['reallyPrice'])+self.key).encode('utf8')).hexdigest())
+            return signature == hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+str(data['reallyPrice'])+self.key).encode('utf8')).hexdigest()   # 结果为一个布尔值
+        except Exception as e:
+            print(e)
+            return False    
         

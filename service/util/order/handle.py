@@ -1,4 +1,4 @@
-from service.database.models import Card, Notice,Order
+from service.database.models import Card, Notice,Order,TempOrder
 from service.api.db import db
 import re
 #接口调用
@@ -13,6 +13,26 @@ executor = ThreadPoolExecutor(2)
 
 #日志记录
 from service.util.log import log
+
+
+def notify_success(out_order_id):
+    # 更新状态
+    res = TempOrder.query.filter_by(out_order_id = out_order_id,status = False).first()
+    if res:
+        # 生成实际卡密
+        name = res.name
+        payment = res.payment
+        contact = res.contact
+        contact_txt = res.contact_txt
+        price = res.price
+        num = res.num
+        total_price = res.total_price
+        auto = res.auto        
+        with db.auto_commit_db():   # 更新卡密状态
+            TempOrder.query.filter_by(out_order_id = out_order_id).update({'status':True})
+
+        make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+
 #创建订单--走数据库
 def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto):
     # print('后台正在创建卡密')

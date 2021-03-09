@@ -4,7 +4,8 @@ import requests
 
 class YunGou:
     def __init__(self,payment='wechat'):
-        from service.util.pay.pay_config import get_config    
+        from service.util.pay.pay_config import get_config
+        self.web_url = get_config('web_url')    
         if payment == 'wechat':
             config = get_config('YunGouOS_WXPAY')
         else:
@@ -15,6 +16,7 @@ class YunGou:
         self.WEIXIN_API = 'https://api.pay.yungouos.com/api/pay/wxpay/nativePay'    # 微信
         self.mch_id = config['mch_id']   # 商户号
         self.pay_secret = config['pay_secret']  # 商户密钥
+        self.notify_url = self.web_url + '/notify/yungou'
     def _gen_sign(self, dct):
         """
         :param dct: 所需发送的所有数据的字典集合
@@ -37,6 +39,7 @@ class YunGou:
             'total_fee': total_fee,
             'body': name,
             'mch_id': self.mch_id,
+            'notify_url':self.notify_url
             # 'type': 2,  # 返回二维码
         }
         
@@ -55,6 +58,7 @@ class YunGou:
             'total_fee': total_fee,
             'body': name,
             'mch_id': self.mch_id,
+            'notify_url':self.notify_url+'wx'
             # 'type': 2,  # 返回二维码
         }
         
@@ -84,3 +88,11 @@ class YunGou:
         except:
             return None
   
+    def verify(self,data):     #异步通知    这里data=request.from
+        try:
+            signature = data['sign']
+            data.pop('sign')
+            return signature == self._gen_sign(data)   # 结果为一个布尔值
+        except Exception as e:
+            print(e)
+            return False  

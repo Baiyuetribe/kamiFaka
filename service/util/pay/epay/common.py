@@ -8,14 +8,15 @@ class Epay:
     def __init__(self):
         from service.util.pay.pay_config import get_config    
         config = get_config('易支付')
+        self.web_url = get_config('web_url')
         self.API = config['API']
         self.ID = config['ID']
         self.KEY = config['KEY']
-        self.JUMP_URL = 'you_return_url'
+        self.notify_url = self.web_url + '/notify/epay'
 
 
     def create_order(self,name, out_trade_no, total_fee):
-        data = {'notify_url': self.JUMP_URL, 'pid': self.ID, 'return_url': self.JUMP_URL, 'sitename': 'KAMIFAKA'}
+        data = {'notify_url': self.notify_url, 'pid': self.ID, 'type':'alipay',}
         data.update(money=total_fee, name=name, out_trade_no=out_trade_no)
         items = data.items()
         items = sorted(items)
@@ -42,6 +43,20 @@ class Epay:
             print(e)
             return None
 
+    def verify(self,data):     #异步通知    这里data=request.from
+        try:
+            signature = data['sign']
+            data.pop('sign')
+            items = data.items()
+            items = sorted(items)
+            wait_sign_str = ''
+            for i in items:
+                wait_sign_str += str(i[0]) + '=' + str(i[1]) + '&'
+            wait_for_sign_str = wait_sign_str[:-1] + self.KEY            
+            return signature == hashlib.md5(wait_for_sign_str.encode('utf-8')).hexdigest()
+        except Exception as e:
+            print(e)
+            return False
 
     def check(self,out_trade_no):
         try:

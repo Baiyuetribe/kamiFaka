@@ -3,7 +3,19 @@ from flask import render_template,redirect,send_from_directory
 import time
 import os
 
+from service.util.order.handle import notify_success
+
 from flask.helpers import make_response
+from service.util.pay.alipay.alipayf2f import   AlipayF2F
+from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
+from service.util.pay.codepay.codepay import CodePay    #码支付
+from service.util.pay.payjs.payjs import Payjs  #payjs接口
+from service.util.pay.wechat.weixin import Wechat   # 微信官方
+from service.util.pay.epay.common import Epay   # 易支付
+from service.util.pay.mugglepay.mugglepay import Mugglepay
+from service.util.pay.yungouos.yungou import YunGou 
+from service.util.pay.vmq.vmpay import VMQ  # V免签 
+from service.util.pay.codepay.codepay import CodePay
 
 common = Blueprint('common', __name__)
 # common = Blueprint('common', __name__,static_folder='../../dist/static',template_folder='../../dist/admin')
@@ -16,6 +28,8 @@ def Response_headers(content):
 
 import time
 from functools import wraps
+from concurrent.futures import ThreadPoolExecutor
+executor = ThreadPoolExecutor(10)
 
 def timefn(fn):
     """计算性能的修饰器"""
@@ -42,7 +56,8 @@ UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'../../public/images')
 def get_file(filename):
     return send_from_directory(UPLOAD_PATH,filename)
 
-
+# def notify_success(out_order_id):
+#     print(f'{out_order_id}订单处理完毕')
 
 #前端
 @common.route('/')
@@ -65,14 +80,87 @@ def admin():
 def login():
     return render_template('admin.html')
 
-# @common.route('/notify',methods=['POST','GET'])    #支付回调测试
-# def notify():
-#     print(request.form.to_dict()) #适用于post请求，但是回调时get请求
-#     content = str(request.form.to_dict())
-#     print(Response_headers(content))
-#     with open('note.log','a',encoding='utf=8') as f:
-#         f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(Response_headers(content)))
-#     return Response_headers(content)
+import xml.etree.ElementTree as ET
+
+
+@common.route('/notify/<name>',methods=['POST','GET'])    #支付回调测试
+def notify(name):
+    print('请求地址:'+ request.url)
+    # print(request.form.to_dict()) #适用于post请求，但是回调时get请求
+    # print(request.args)
+    if name == 'alipay':
+        trade_status = request.form.get('trade_status', None)
+        if trade_status == u'TRADE_SUCCESS':
+            res = AlipayF2F().verify(request.form.to_dict())
+            if res:
+                out_order_id = request.form.get('out_trade_no', None)
+                executor.submit(notify_success,out_order_id)                
+                print('验证成功')           
+        return 'success'
+    elif name == 'wechat':
+        xml = request.data
+        array_data = {}
+        root = ET.fromstring(xml)
+        for child in root:
+            value = child.text
+            array_data[child.tag] = value
+        return_code = array_data['return_code']
+        if return_code == 'SUCCESS':
+            res = Wechat.verify(array_data)
+            if res:
+                out_order_id = array_data['out_trade_no']
+                executor.submit(notify_success,out_order_id)
+    elif name == 'xunhupay':
+        trade_status = request.form.get('status',None)
+        if trade_status == 'OD':
+            res = Hupi(payment='wechat').verify(request.form.to_dict())
+            if res:
+                out_order_id = request.form.get('trade_order_id', None)
+                executor.submit(notify_success,out_order_id)
+    elif name == 'payjs':
+        trade_status = request.form.get('return_code',None)
+        if trade_status == '1':
+            res = Payjs().verify(request.form.to_dict())
+            if res:
+                out_order_id = request.form.get('out_trade_no', None)
+                executor.submit(notify_success,out_order_id)
+    elif name == 'vmq':
+        out_order_id = request.args.get('payId', None)
+        if out_order_id and len(out_order_id) == 27:
+            res = VMQ(payment='wechat').verify(request.args.to_dict())
+            if res:
+                executor.submit(notify_success,out_order_id)
+    elif name == 'epay':
+        trade_status = request.form.get('trade_status', None)
+        if trade_status == 'TRADE_SUCCESS':
+            res = Epay().verify(request.form.to_dict())
+            if res:
+                out_order_id = request.form.get('out_trade_no', None)
+                executor.submit(notify_success,out_order_id)                
+    elif name == 'yungou':
+        code = request.form.get('code', None)
+        if code == '1':
+            res = YunGou().verify(request.form.to_dict())
+            if res:
+                out_order_id = request.form.get('outTradeNo', None)
+                executor.submit(notify_success,out_order_id)    
+    elif name == 'yungouwx':
+        code = request.form.get('code', None)
+        if code == '1':
+            res = YunGou(payment = 'wechat').verify(request.form.to_dict())
+            if res:
+                out_order_id = request.form.get('outTradeNo', None)
+                executor.submit(notify_success,out_order_id)      
+    elif name == 'codepay':
+        out_order_id = request.form.get('pay_id', None)
+        if out_order_id and len(out_order_id) == 27:
+            res = CodePay().verify(request.form.to_dict)
+            if res:
+                executor.submit(notify_success,out_order_id)                                
+    else:
+        pass
+
+    return 'success'
 
 # @common.route('/return',methods=['POST','GET'])    #支付回调测试
 # def back():
@@ -86,6 +174,7 @@ def login():
 
 
 #     return str(~tg_switch)
+
 
 
 @common.route('/robots.txt')
