@@ -22,11 +22,11 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 # scheduler.add_job(func=change_price, id='change_price_job', trigger='interval', seconds=3, replace_existing=True)
 scheduler.add_job(func=clean_tmp_order, id='clean_tmp_order', trigger='cron', day_of_week ='0-6',hour = 4,minute = 27,second = 0, replace_existing=True)
+scheduler.start()
 
 @app.errorhandler(404)
 def page_not_found(e):
     return redirect('/')
 
 if __name__ == '__main__':
-    scheduler.start()
     app.run(debug=False,host='0.0.0.0')    
