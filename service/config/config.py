@@ -63,7 +63,7 @@ def init_db(update=False):
     db.session.add(Config('contact_option','0','是否启用联系方式查询[0启用，1关闭]',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.7','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.8','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
