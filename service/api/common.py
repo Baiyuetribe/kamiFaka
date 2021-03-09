@@ -172,6 +172,13 @@ def notify(name):
             if res:
                 out_order_id = array_data['out_trade_no']
                 executor.submit(notify_success,out_order_id)        
+    elif name == 'codepay':
+        status = request.form.get('status', None)
+        if status and status == 'PAID':
+            res = CodePay().verify(request.form.to_dict)
+            if res:
+                out_order_id = request.form.get('merchant_order_id')
+                executor.submit(notify_success,out_order_id)   
     else:
         pass
 
