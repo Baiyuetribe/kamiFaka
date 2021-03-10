@@ -309,7 +309,7 @@ class TempOrder(db.Model):
     payment = Column(String(50), nullable=False)  #支付渠道
     contact = Column(String(50)) #联系方式
     contact_txt = Column(Text, nullable=True)  #附加信息
-    price = Column(Float, nullable=True)  #价格--推算步骤
+    price = Column(Float, nullable=False)  #价格--推算步骤
     num = Column(Integer, nullable=False) #数量
     total_price = Column(Float, nullable=False) #总价--推算步骤
     status = Column(Boolean, nullable=True,default=True)    #订单状态---False

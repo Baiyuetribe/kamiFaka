@@ -86,7 +86,7 @@ import xml.etree.ElementTree as ET
 
 @common.route('/notify/<name>',methods=['POST','GET'])    #支付回调测试
 def notify(name):
-    print('请求地址:'+ request.url)
+    # print('请求地址:'+ request.url)
     # print(request.form.to_dict()) #适用于post请求，但是回调时get请求
     # print(request.args)
     if name == 'alipay':
@@ -165,7 +165,7 @@ def notify(name):
         for child in root:
             value = child.text
             array_data[child.tag] = value
-        print(array_data)
+        # print(array_data)
         trade_state = array_data['trade_state']
         if trade_state == 'SUCCESS':
             res = QQpay().verify(array_data)
