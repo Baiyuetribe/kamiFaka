@@ -30,7 +30,7 @@ class VMQ:
         data['sign'] = hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+self.key).encode('utf8')).hexdigest()
 
         r = requests.post(self.host_api+'/createOrder',json=data)
-        # print(r.json())
+        print(r.text)
         if r.status_code == 200:
             if r.json()['code'] == 1:
                 # return r.json()['data']     # 包含payUrl,orderId
