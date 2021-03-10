@@ -153,10 +153,17 @@ def notify(name):
                 out_order_id = request.form.get('outTradeNo', None)
                 executor.submit(notify_success,out_order_id)
     elif name == 'codepay':
-        out_order_id = request.form.get('pay_id', None)
-        if out_order_id and len(out_order_id) == 27:
-            res = CodePay().verify(request.form.to_dict)
+        pay_type = request.form.get('type', None)
+        if pay_type:
+            if pay_type == '3':
+                payment = 'wechat'
+            elif pay_type == '2':
+                payment = 'qqpay'
+            elif pay_type == '1':
+                payment = 'alipay'
+            res = CodePay(payment).verify(request.form.to_dict())
             if res:
+                out_order_id = request.form.get('pay_id', None)
                 executor.submit(notify_success,out_order_id)
     elif name == 'qqpay':
         xml = request.data
@@ -172,10 +179,10 @@ def notify(name):
             if res:
                 out_order_id = array_data['out_trade_no']
                 executor.submit(notify_success,out_order_id)
-    elif name == 'codepay':
+    elif name == 'mugglepay':
         status = request.form.get('status', None)
         if status and status == 'PAID':
-            res = CodePay().verify(request.form.to_dict)
+            res = Mugglepay().verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('merchant_order_id')
                 executor.submit(notify_success,out_order_id)

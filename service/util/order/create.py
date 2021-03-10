@@ -55,8 +55,13 @@ def pay_url(payment,name,out_order_id,total_price):
         elif payment == '虎皮椒支付宝':
             r = Hupi(payment='alipay').Pay(trade_order_id=out_order_id,total_fee=total_price,title=name)
         elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
-            # 参数错误情况下，会失效
-            r = CodePay().create_order(payment,total_price,out_order_id)
+            if payment == '码支付微信':
+                payname = 'wechat'
+            elif payment == '码支付支付宝':
+                payname = 'alipay'
+            else:
+                payname = 'qqpay'
+            r = CodePay(payment=payname).create_order(payment,out_order_id,total_price)
         elif payment in ['PAYJS支付宝','PAYJS微信']:
             r = Payjs().create_order(name,out_order_id,total_price)
         elif payment in ['V免签支付宝','V免签微信']:

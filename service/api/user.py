@@ -148,7 +148,7 @@ def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)
     payment = request.json.get('payment',None) #支付方式
-    payjs_order_id = request.json.get('payjs_order_id',None) #支付方式
+    # payjs_order_id = request.json.get('payjs_order_id',None) #支付方式
     if not out_order_id:
         return '参数丢失', 404
     if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝','QQ钱包','随便付']:
