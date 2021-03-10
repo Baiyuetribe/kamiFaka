@@ -24,7 +24,7 @@ class VMQ:
             'payId':out_trade_no,
             'type':self.v_type,
             'price':total_price,
-            # 'param':name,
+            'param':out_trade_no,
             'notifyUrl':self.notify
         }        
         data['sign'] = hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+self.key).encode('utf8')).hexdigest()
