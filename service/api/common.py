@@ -14,18 +14,18 @@ from service.util.pay.wechat.weixin import Wechat   # 微信官方
 from service.util.pay.qq.qqpay import QQpay   # 微信官方
 from service.util.pay.epay.common import Epay   # 易支付
 from service.util.pay.mugglepay.mugglepay import Mugglepay
-from service.util.pay.yungouos.yungou import YunGou 
-from service.util.pay.vmq.vmpay import VMQ  # V免签 
+from service.util.pay.yungouos.yungou import YunGou
+from service.util.pay.vmq.vmpay import VMQ  # V免签
 from service.util.pay.codepay.codepay import CodePay
 
 common = Blueprint('common', __name__)
 # common = Blueprint('common', __name__,static_folder='../../dist/static',template_folder='../../dist/admin')
 
 # app = Flask(__name__,static_folder='../../dist/static',template_folder='../../dist')
-def Response_headers(content):  
-    resp = Response(content)  
-    resp.headers['Access-Control-Allow-Origin'] = '*'  
-    return resp  
+def Response_headers(content):
+    resp = Response(content)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 import time
 from functools import wraps
@@ -65,11 +65,11 @@ def get_file(filename):
 def index():
     # return '恭喜，后端部署成功'
     return render_template('index.html')
-    # return """<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor: 
-    # pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: 
-    # "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal; 
-    # margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"><p> 
-    #  <br/><span style="font-size:30px">恭喜您,后端正常运行。</span></p></div> """   
+    # return """<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor:
+    # pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family:
+    # "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal;
+    # margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"><p>
+    #  <br/><span style="font-size:30px">恭喜您,后端正常运行。</span></p></div> """
 #管理员---当前访客与管理员共用一套系统；后期可尝试分割管理员部分，更小的缩减前端体积
 @common.route('/admin')
 def admin():
@@ -95,8 +95,8 @@ def notify(name):
             res = AlipayF2F().verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
-                executor.submit(notify_success,out_order_id)                
-                print('验证成功')           
+                executor.submit(notify_success,out_order_id)
+                print('验证成功')
         return 'success'
     elif name == 'wechat':
         xml = request.data
@@ -107,7 +107,7 @@ def notify(name):
             array_data[child.tag] = value
         return_code = array_data['return_code']
         if return_code == 'SUCCESS':
-            res = Wechat.verify(array_data)
+            res = Wechat().verify(array_data)
             if res:
                 out_order_id = array_data['out_trade_no']
                 executor.submit(notify_success,out_order_id)
@@ -137,27 +137,27 @@ def notify(name):
             res = Epay().verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
-                executor.submit(notify_success,out_order_id)                
+                executor.submit(notify_success,out_order_id)
     elif name == 'yungou':
         code = request.form.get('code', None)
         if code == '1':
             res = YunGou().verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('outTradeNo', None)
-                executor.submit(notify_success,out_order_id)    
+                executor.submit(notify_success,out_order_id)
     elif name == 'yungouwx':
         code = request.form.get('code', None)
         if code == '1':
             res = YunGou(payment = 'wechat').verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('outTradeNo', None)
-                executor.submit(notify_success,out_order_id)      
+                executor.submit(notify_success,out_order_id)
     elif name == 'codepay':
         out_order_id = request.form.get('pay_id', None)
         if out_order_id and len(out_order_id) == 27:
             res = CodePay().verify(request.form.to_dict)
             if res:
-                executor.submit(notify_success,out_order_id)     
+                executor.submit(notify_success,out_order_id)
     elif name == 'qqpay':
         xml = request.data
         array_data = {}
@@ -171,14 +171,14 @@ def notify(name):
             res = QQpay().verify(array_data)
             if res:
                 out_order_id = array_data['out_trade_no']
-                executor.submit(notify_success,out_order_id)        
+                executor.submit(notify_success,out_order_id)
     elif name == 'codepay':
         status = request.form.get('status', None)
         if status and status == 'PAID':
             res = CodePay().verify(request.form.to_dict)
             if res:
                 out_order_id = request.form.get('merchant_order_id')
-                executor.submit(notify_success,out_order_id)   
+                executor.submit(notify_success,out_order_id)
     else:
         pass
 

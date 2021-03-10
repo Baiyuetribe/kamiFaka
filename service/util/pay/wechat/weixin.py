@@ -10,7 +10,7 @@ class Wechat:
         self.WECHAT_MCH_ID = config['MCH_ID']
         self.WECHAT_PAY_SECRET = config['APP_SECRET']
         self.WECHAT_NOTIFY_URL = self.web_url + '/notify/wechat'
-        print(self.WECHAT_NOTIFY_URL)
+        # print(self.WECHAT_NOTIFY_URL)
         # self.WECHAT_CERT = 'path/to/your_cert.pem'
         # self.WECHAT_KEY = 'patch/to/your_key.pem'
         self.pay = WeChatPay(self.WECHAT_APPID, self.WECHAT_MCH_ID,self.WECHAT_NOTIFY_URL, self.WECHAT_PAY_SECRET)
