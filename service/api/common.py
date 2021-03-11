@@ -91,7 +91,7 @@ def notify(name):
     # print(request.args)
     if name == 'alipay':
         trade_status = request.form.get('trade_status', None)
-        if trade_status == u'TRADE_SUCCESS':
+        if trade_status == 'TRADE_SUCCESS':
             res = AlipayF2F().verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
