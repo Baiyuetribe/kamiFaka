@@ -96,7 +96,6 @@ def notify(name):
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
                 executor.submit(notify_success,out_order_id)
-                print('验证成功')
         return 'success'
     elif name == 'wechat':
         xml = request.data
