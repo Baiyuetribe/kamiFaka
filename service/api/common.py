@@ -98,18 +98,21 @@ def notify(name):
                 executor.submit(notify_success,out_order_id)
         return 'success'
     elif name == 'wechat':
-        xml = request.data
-        array_data = {}
-        root = ET.fromstring(xml)
-        for child in root:
-            value = child.text
-            array_data[child.tag] = value
-        return_code = array_data['return_code']
-        if return_code == 'SUCCESS':
-            res = Wechat().verify(array_data)
-            if res:
-                out_order_id = array_data['out_trade_no']
-                executor.submit(notify_success,out_order_id)
+        try:
+            xml = request.data
+            array_data = {}
+            root = ET.fromstring(xml)
+            for child in root:
+                value = child.text
+                array_data[child.tag] = value
+            return_code = array_data['return_code']
+            if return_code == 'SUCCESS':
+                res = Wechat().verify(array_data)
+                if res:
+                    out_order_id = array_data['out_trade_no']
+                    executor.submit(notify_success,out_order_id)
+        except:
+            pass
     elif name == 'xunhupay':
         trade_status = request.form.get('status',None)
         if trade_status == 'OD':
@@ -165,19 +168,22 @@ def notify(name):
                 out_order_id = request.form.get('pay_id', None)
                 executor.submit(notify_success,out_order_id)
     elif name == 'qqpay':
-        xml = request.data
-        array_data = {}
-        root = ET.fromstring(xml)
-        for child in root:
-            value = child.text
-            array_data[child.tag] = value
-        # print(array_data)
-        trade_state = array_data['trade_state']
-        if trade_state == 'SUCCESS':
-            res = QQpay().verify(array_data)
-            if res:
-                out_order_id = array_data['out_trade_no']
-                executor.submit(notify_success,out_order_id)
+        try:
+            xml = request.data
+            array_data = {}
+            root = ET.fromstring(xml)
+            for child in root:
+                value = child.text
+                array_data[child.tag] = value
+            # print(array_data)
+            trade_state = array_data['trade_state']
+            if trade_state == 'SUCCESS':
+                res = QQpay().verify(array_data)
+                if res:
+                    out_order_id = array_data['out_trade_no']
+                    executor.submit(notify_success,out_order_id)
+        except:
+            pass
     elif name == 'mugglepay':
         status = request.form.get('status', None)
         if status and status == 'PAID':

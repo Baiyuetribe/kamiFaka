@@ -19,7 +19,7 @@ class AlipayF2F:
             app_private_key_string=self.app_private_key_string,
             alipay_public_key_string=self.alipay_public_key_string,
             sign_type="RSA2", # RSA 或者 RSA2
-            debug=False,  # True后为开发环境，所有走dev接口，正式环境用False
+            debug=True,  # True后为开发环境，所有走dev接口，正式环境用False
             config=AliPayConfig(timeout=15)  # 可选, 请求超时时间
         )
     def create_order(self,name,out_order_id,total_price):
