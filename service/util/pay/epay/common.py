@@ -13,10 +13,11 @@ class Epay:
         self.ID = config['ID']
         self.KEY = config['KEY']
         self.notify_url = self.web_url + '/notify/epay'
+        self.return_url = self.web_url + '/#/search'
 
 
     def create_order(self,name, out_trade_no, total_fee):
-        data = {'notify_url': self.notify_url, 'pid': self.ID, 'type':'alipay',}
+        data = {'notify_url': self.notify_url,'return_url':self.return_url, 'pid': self.ID, 'type':'alipay',}
         data.update(money=total_fee, name=name, out_trade_no=out_trade_no)
         items = data.items()
         items = sorted(items)
