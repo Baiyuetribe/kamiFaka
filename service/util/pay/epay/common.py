@@ -17,7 +17,7 @@ class Epay(object):
             config = get_config('易支付支付宝')
             self.paytype = 'alipay'
         self.web_url = get_config('web_url')
-        self.API = config['API']
+        self.API = config['API']+'/'
         self.ID = config['ID']
         self.KEY = config['KEY']
         self.notify_url = self.web_url + '/notify/epay'
@@ -48,7 +48,7 @@ class Epay(object):
                 pay_url = self.API + re.search(r"\.?\/(.*)\'", content).group(1)
             return {'qr_code':pay_url}
         except Exception as e:
-            # print('submit | API请求失败')
+            print('submit | 易支付API请求失败')
             print(e)
             return None
 

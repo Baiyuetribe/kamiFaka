@@ -126,7 +126,7 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
     contact = request.json.get('contact',None)
     contact_txt = request.json.get('contact_txt',None)
     num = request.json.get('num',None)
-    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝','QQ钱包','随便付']:
+    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付QQ','易支付微信','易支付支付宝','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝','QQ钱包','随便付']:
         return '暂无该支付接口', 404
     if not all([name,out_order_id,contact,num]):
         return '参数丢失', 404
@@ -147,12 +147,9 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
 def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)
-    payment = request.json.get('payment',None) #支付方式
     # payjs_order_id = request.json.get('payjs_order_id',None) #支付方式
-    if not out_order_id:
+    if not out_order_id and len(out_order_id) !=27:
         return '参数丢失', 404
-    if payment not in ['支付宝当面付','虎皮椒微信','虎皮椒支付宝','码支付微信','码支付支付宝','码支付QQ','PAYJS支付宝','PAYJS微信','微信官方接口','易支付','Mugglepay','YunGouOS','YunGouOS_WXPAY','V免签微信','V免签支付宝','QQ钱包','随便付']:
-        return '暂无该支付接口', 404
     # 订单校验
     if TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first():
         return jsonify({'msg':'success'})

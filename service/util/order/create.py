@@ -63,7 +63,11 @@ def pay_url(payment,name,out_order_id,total_price):
                 payname = 'qqpay'
             r = CodePay(payment=payname).create_order(payment,out_order_id,total_price)
         elif payment in ['PAYJS支付宝','PAYJS微信']:
-            r = Payjs().create_order(name,out_order_id,total_price)
+            if payment == 'PAYJS支付':
+                payname = 'alipay'
+            else:
+                payname = 'wechat'
+            r = Payjs(payment=payname).create_order(name,out_order_id,total_price)
         elif payment in ['V免签支付宝','V免签微信']:
             # 参数错误情况下，会失效
             if payment == 'V免签微信':
@@ -74,8 +78,14 @@ def pay_url(payment,name,out_order_id,total_price):
             r = Wechat().create_order(name,out_order_id,total_price)
         elif payment in ['QQ钱包']:
             r = QQpay().create_order(name,out_order_id,total_price)            
-        elif payment in ['易支付']:
-            r = Epay().create_order(name,out_order_id,total_price)
+        elif payment in ['易支付支付宝','易支付QQ','易支付微信']:
+            if payment == '易支付支付宝':
+                payname = 'alipay'
+            elif payment == '易支付微信':
+                payname = 'wechat'
+            else:
+                payname = 'qqpay'
+            r = Epay(payment=payname).create_order(name,out_order_id,total_price)
         elif payment in ['Mugglepay']:
             r = Mugglepay().create_order(name,out_order_id,total_price)
         elif payment in ['YunGouOS']:   # 统一接口

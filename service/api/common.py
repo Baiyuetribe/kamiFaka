@@ -89,129 +89,131 @@ def notify(name):
     # print('请求地址:'+ request.url)
     # print(request.form.to_dict()) #适用于post请求，但是回调时get请求
     # print(request.args)
-    if name == 'alipay':
-        trade_status = request.form.get('trade_status', None)
-        if trade_status and trade_status == 'TRADE_SUCCESS':
-            res = AlipayF2F().verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('out_trade_no', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'wechat':
-        try:
-            xml = request.data
-            array_data = {}
-            root = ET.fromstring(xml)
-            for child in root:
-                value = child.text
-                array_data[child.tag] = value
-            return_code = array_data['return_code']
-            if return_code == 'SUCCESS':
-                res = Wechat().verify(array_data)
+    try:
+        if name == 'alipay':
+            trade_status = request.form.get('trade_status', None)
+            if trade_status and trade_status == 'TRADE_SUCCESS':
+                res = AlipayF2F().verify(request.form.to_dict())
                 if res:
-                    out_order_id = array_data['out_trade_no']
+                    out_order_id = request.form.get('out_trade_no', None)
                     executor.submit(notify_success,out_order_id)
-        except:
-            pass
-    elif name == 'xunhupay':
-        trade_status = request.form.get('status',None)
-        if trade_status and trade_status == 'OD':
-            plugins = request.form.get('plugins', None)
-            if plugins and plugins.find('wechat') !=-1:
-                res = Hupi(payment='wechat').verify(request.form.to_dict())
-            else:
-                res = Hupi(payment='alipay').verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('trade_order_id', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'payjs':
-        trade_status = request.form.get('return_code',None)
-        if trade_status and trade_status == '1':
-            attach = request.form.get('attach', None)
-            if attach and attach.find('wechat') !=-1:
-                res = Payjs(payment='wechat').verify(request.form.to_dict())
-            else:
-                res = Payjs(payment='alipay').verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('out_trade_no', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'vmq':
-        out_order_id = request.args.get('payId', None)
-        if out_order_id and len(out_order_id) == 27:
-            payUrl = request.args.get('payUrl', None)
-            if payUrl and payUrl.find('alipay') != -1:  # find找不着是返回-1
-                res = VMQ(payment='alipay').verify(request.args.to_dict())
-            else:
-                res = VMQ(payment='wechat').verify(request.args.to_dict())
-            if res:
-                executor.submit(notify_success,out_order_id)
-    elif name == 'epay':
-        trade_status = request.form.get('trade_status', None)
-        if trade_status and trade_status == 'TRADE_SUCCESS':
+        elif name == 'wechat':
+            try:
+                xml = request.data
+                array_data = {}
+                root = ET.fromstring(xml)
+                for child in root:
+                    value = child.text
+                    array_data[child.tag] = value
+                return_code = array_data['return_code']
+                if return_code == 'SUCCESS':
+                    res = Wechat().verify(array_data)
+                    if res:
+                        out_order_id = array_data['out_trade_no']
+                        executor.submit(notify_success,out_order_id)
+            except:
+                pass
+        elif name == 'xunhupay':
+            trade_status = request.form.get('status',None)
+            if trade_status and trade_status == 'OD':
+                plugins = request.form.get('plugins', None)
+                if plugins and plugins.find('wechat') !=-1:
+                    res = Hupi(payment='wechat').verify(request.form.to_dict())
+                else:
+                    res = Hupi(payment='alipay').verify(request.form.to_dict())
+                if res:
+                    out_order_id = request.form.get('trade_order_id', None)
+                    executor.submit(notify_success,out_order_id)
+        elif name == 'payjs':
+            trade_status = request.form.get('return_code',None)
+            if trade_status and trade_status == '1':
+                attach = request.form.get('attach', None)
+                if attach and attach.find('wechat') !=-1:
+                    res = Payjs(payment='wechat').verify(request.form.to_dict())
+                else:
+                    res = Payjs(payment='alipay').verify(request.form.to_dict())
+                if res:
+                    out_order_id = request.form.get('out_trade_no', None)
+                    executor.submit(notify_success,out_order_id)
+        elif name == 'vmq':
+            out_order_id = request.args.get('payId', None)
+            if out_order_id and len(out_order_id) == 27:
+                payUrl = request.args.get('payUrl', None)
+                if payUrl and payUrl.find('alipay') != -1:  # find找不着是返回-1
+                    res = VMQ(payment='alipay').verify(request.args.to_dict())
+                else:
+                    res = VMQ(payment='wechat').verify(request.args.to_dict())
+                if res:
+                    executor.submit(notify_success,out_order_id)
+        elif name == 'epay':
+            trade_status = request.form.get('trade_status', None)
+            if trade_status and trade_status == 'TRADE_SUCCESS':
+                pay_type = request.form.get('type', None)
+                if pay_type and pay_type == 'alipay':
+                    payment = 'alipay'
+                elif name == 'wxpay':
+                    payment = 'wechat'
+                else:
+                    payment = 'qqpay'
+                res = Epay(payment).verify(request.form.to_dict())
+                if res:
+                    out_order_id = request.form.get('out_trade_no', None)
+                    executor.submit(notify_success,out_order_id)
+        elif name == 'yungou':
+            code = request.form.get('code', None)
+            if code == '1':
+                res = YunGou().verify(request.form.to_dict())
+                if res:
+                    out_order_id = request.form.get('outTradeNo', None)
+                    executor.submit(notify_success,out_order_id)
+        elif name == 'yungouwx':
+            code = request.form.get('code', None)
+            if code == '1':
+                res = YunGou(payment = 'wechat').verify(request.form.to_dict())
+                if res:
+                    out_order_id = request.form.get('outTradeNo', None)
+                    executor.submit(notify_success,out_order_id)
+        elif name == 'codepay':
             pay_type = request.form.get('type', None)
-            if pay_type and pay_type == 'alipay':
-                payment = 'alipay'
-            elif name == 'wxpay':
-                payment = 'wechat'
-            else:
-                payment = 'qqpay'
-            res = Epay(payment).verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('out_trade_no', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'yungou':
-        code = request.form.get('code', None)
-        if code == '1':
-            res = YunGou().verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('outTradeNo', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'yungouwx':
-        code = request.form.get('code', None)
-        if code == '1':
-            res = YunGou(payment = 'wechat').verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('outTradeNo', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'codepay':
-        pay_type = request.form.get('type', None)
-        if pay_type:
-            if pay_type == '3':
-                payment = 'wechat'
-            elif pay_type == '2':
-                payment = 'qqpay'
-            elif pay_type == '1':
-                payment = 'alipay'
-            res = CodePay(payment).verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('pay_id', None)
-                executor.submit(notify_success,out_order_id)
-    elif name == 'qqpay':
-        try:
-            xml = request.data
-            array_data = {}
-            root = ET.fromstring(xml)
-            for child in root:
-                value = child.text
-                array_data[child.tag] = value
-            # print(array_data)
-            trade_state = array_data['trade_state']
-            if trade_state == 'SUCCESS':
-                res = QQpay().verify(array_data)
+            if pay_type:
+                if pay_type == '3':
+                    payment = 'wechat'
+                elif pay_type == '2':
+                    payment = 'qqpay'
+                elif pay_type == '1':
+                    payment = 'alipay'
+                res = CodePay(payment).verify(request.form.to_dict())
                 if res:
-                    out_order_id = array_data['out_trade_no']
+                    out_order_id = request.form.get('pay_id', None)
                     executor.submit(notify_success,out_order_id)
-        except:
+        elif name == 'qqpay':
+            try:
+                xml = request.data
+                array_data = {}
+                root = ET.fromstring(xml)
+                for child in root:
+                    value = child.text
+                    array_data[child.tag] = value
+                # print(array_data)
+                trade_state = array_data['trade_state']
+                if trade_state == 'SUCCESS':
+                    res = QQpay().verify(array_data)
+                    if res:
+                        out_order_id = array_data['out_trade_no']
+                        executor.submit(notify_success,out_order_id)
+            except:
+                pass
+        elif name == 'mugglepay':
+            status = request.form.get('status', None)
+            if status and status == 'PAID':
+                res = Mugglepay().verify(request.form.to_dict())
+                if res:
+                    out_order_id = request.form.get('merchant_order_id')
+                    executor.submit(notify_success,out_order_id)
+        else:
             pass
-    elif name == 'mugglepay':
-        status = request.form.get('status', None)
-        if status and status == 'PAID':
-            res = Mugglepay().verify(request.form.to_dict())
-            if res:
-                out_order_id = request.form.get('merchant_order_id')
-                executor.submit(notify_success,out_order_id)
-    else:
+    except:
         pass
-
     return 'success'
 
 # @common.route('/return',methods=['POST','GET'])    #支付回调测试
