@@ -24,7 +24,7 @@ class Mugglepay:
             # print(rst_dict)
             if rst_dict['status'] == 201:
                 pay_url = rst_dict['payment_url']
-                return {'qr_code':pay_url}
+                return {'qr_code':pay_url,'redirect':1} # 第三方状态1；本地2
             return None
         except Exception as e:
             print(e)

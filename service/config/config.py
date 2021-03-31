@@ -33,19 +33,19 @@ def init_db(update=False):
     db.session.add(ProdCag('第三分类','单独激活类商品','1000'))
     # 商品设置
     db.session.add(ProdInfo('账户ID','普通商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,None, True,0,0,True))
+                                9.99,None, True,0,'请填写邮箱',True))
     # db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
     #                             9.99,'9#9.9,8.8', True,0,0,True))
     db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,'9,100#9.9,8.82,7.7', True,0,0,True))                                
+                                9.99,'9,100#9.9,8.82,7.7', True,0,'请填写邮箱',True))                                
     db.session.add(ProdInfo('账户ID','普通商品DD','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,None, False,0,0,False))                                
+                                9.99,None, False,0,'请填写邮箱',False))                                
     db.session.add(ProdInfo('激活码','重复卡密演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,None, True,0,0,True))
+                                9.99,None, True,0,'请填写邮箱',True))
     db.session.add(ProdInfo('激活码','普通商品CC','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,None, True,0,0,True))
+                                9.99,None, True,0,'请填写邮箱',True))
     db.session.add(ProdInfo('激活码','普通商品BB','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
-                                9.99,None,True,0,0,False))        
+                                9.99,None,True,0,'请填写邮箱',False))        
     # 卡密设置
     db.session.add(Card('普通商品演示','454545454454545454',False,False))
     db.session.add(Card('批发商品演示','555555555555555555',False,False))
@@ -65,7 +65,7 @@ def init_db(update=False):
     db.session.add(Config('contact_option','0','是否启用联系方式查询[0启用，1关闭]',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.82','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.83','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
