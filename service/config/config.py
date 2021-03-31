@@ -20,7 +20,9 @@ def init_db(update=False):
     db.session.add(Payment('码支付QQ','QQ支付',"{'codepay_id':'58027','codepay_key':'fgl454542WSDJHEJHDJZpTRrmbn','token':'jljCGU3pRvXXXXXXXXXXXb1iq'}",'codepay.fateqq.com[不可用]',False))
     db.session.add(Payment('V免签支付宝','支付宝',"{'API':'http://google.com','KEY':'YYYYYYYY'}",'0费率实时到账',False))
     db.session.add(Payment('V免签微信','微信',"{'API':'http://google.com','KEY':'YYYYYYYY'}",'0费率实时到账',False))
-    db.session.add(Payment('易支付','易支付',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'支持订单查询接口的任意易支付 高费率不稳定',False))
+    db.session.add(Payment('易支付QQ','QQ支付',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付 高费率不稳定',False))
+    db.session.add(Payment('易支付支付宝','支付宝',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付高费率不稳定',False))
+    db.session.add(Payment('易支付微信','微信',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付 高费率不稳定',False))
     db.session.add(Payment('Mugglepay','Mugglepay',"{'TOKEN':'xxxxxx','Currency':'CNY'}",'mugglepay.com全球综合收款系统(已修复)',False))
     db.session.add(Payment('YunGouOS','微信或支付宝支付',"{'mch_id':'xxxxxx','pay_secret':'yyyyyyy'}",'yungouos.com 微信或支付宝个体1+0.38%',False))
     db.session.add(Payment('YunGouOS_WXPAY','微信支付',"{'mch_id':'xxxxxx','pay_secret':'yyyyyyy'}",'yungouos.com 微信个体1+0.38~0.6%',False))
@@ -63,7 +65,7 @@ def init_db(update=False):
     db.session.add(Config('contact_option','0','是否启用联系方式查询[0启用，1关闭]',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.8','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.82','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))

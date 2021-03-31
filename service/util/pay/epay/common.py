@@ -4,10 +4,18 @@ import json
 import re
 
 
-class Epay:
-    def __init__(self):
-        from service.util.pay.pay_config import get_config    
-        config = get_config('易支付')
+class Epay(object):
+    def __init__(self,payment='wechat'):
+        from service.util.pay.pay_config import get_config
+        if payment == 'wechat':
+            config = get_config('易支付微信')
+            self.paytype = 'wxpay'
+        elif payment == 'qqpay':
+            config = get_config('易支付QQ')
+            self.paytype = 'qqpay'
+        else:
+            config = get_config('易支付支付宝')
+            self.paytype = 'alipay'
         self.web_url = get_config('web_url')
         self.API = config['API']
         self.ID = config['ID']
@@ -17,7 +25,7 @@ class Epay:
 
 
     def create_order(self,name, out_trade_no, total_fee):
-        data = {'notify_url': self.notify_url,'return_url':self.return_url, 'pid': self.ID, 'type':'alipay',}
+        data = {'notify_url': self.notify_url,'return_url':self.return_url, 'pid': self.ID, 'type':self.paytype,}
         data.update(money=total_fee, name=name, out_trade_no=out_trade_no)
         items = data.items()
         items = sorted(items)

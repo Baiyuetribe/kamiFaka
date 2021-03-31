@@ -91,12 +91,11 @@ def notify(name):
     # print(request.args)
     if name == 'alipay':
         trade_status = request.form.get('trade_status', None)
-        if trade_status == 'TRADE_SUCCESS':
+        if trade_status and trade_status == 'TRADE_SUCCESS':
             res = AlipayF2F().verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
                 executor.submit(notify_success,out_order_id)
-        return 'success'
     elif name == 'wechat':
         try:
             xml = request.data
@@ -115,28 +114,47 @@ def notify(name):
             pass
     elif name == 'xunhupay':
         trade_status = request.form.get('status',None)
-        if trade_status == 'OD':
-            res = Hupi(payment='wechat').verify(request.form.to_dict())
+        if trade_status and trade_status == 'OD':
+            plugins = request.form.get('plugins', None)
+            if plugins and plugins.find('wechat') !=-1:
+                res = Hupi(payment='wechat').verify(request.form.to_dict())
+            else:
+                res = Hupi(payment='alipay').verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('trade_order_id', None)
                 executor.submit(notify_success,out_order_id)
     elif name == 'payjs':
         trade_status = request.form.get('return_code',None)
-        if trade_status == '1':
-            res = Payjs().verify(request.form.to_dict())
+        if trade_status and trade_status == '1':
+            attach = request.form.get('attach', None)
+            if attach and attach.find('wechat') !=-1:
+                res = Payjs(payment='wechat').verify(request.form.to_dict())
+            else:
+                res = Payjs(payment='alipay').verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
                 executor.submit(notify_success,out_order_id)
     elif name == 'vmq':
         out_order_id = request.args.get('payId', None)
         if out_order_id and len(out_order_id) == 27:
-            res = VMQ(payment='wechat').verify(request.args.to_dict())
+            payUrl = request.args.get('payUrl', None)
+            if payUrl and payUrl.find('alipay') != -1:  # find找不着是返回-1
+                res = VMQ(payment='alipay').verify(request.args.to_dict())
+            else:
+                res = VMQ(payment='wechat').verify(request.args.to_dict())
             if res:
                 executor.submit(notify_success,out_order_id)
     elif name == 'epay':
         trade_status = request.form.get('trade_status', None)
-        if trade_status == 'TRADE_SUCCESS':
-            res = Epay().verify(request.form.to_dict())
+        if trade_status and trade_status == 'TRADE_SUCCESS':
+            pay_type = request.form.get('type', None)
+            if pay_type and pay_type == 'alipay':
+                payment = 'alipay'
+            elif name == 'wxpay':
+                payment = 'wechat'
+            else:
+                payment = 'qqpay'
+            res = Epay(payment).verify(request.form.to_dict())
             if res:
                 out_order_id = request.form.get('out_trade_no', None)
                 executor.submit(notify_success,out_order_id)

@@ -49,13 +49,13 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
         if auto:    # 自动发货--获取卡密
             nums = int(num)
             if nums ==1:
-
                     result = Card.query.filter_by(prod_name = name,isused = False).first()  #此处可用用0，也可以用false
                     if result:
                         card = result.to_json()['card']
                         reuse = result.to_json()['reuse']   #返回True或False
                         if not reuse: #卡密状态修改
-                            Card.query.filter_by(id = result.to_json()['id']).update({'isused':True})
+                            with db.auto_commit_db():
+                                Card.query.filter_by(id = result.to_json()['id']).update({'isused':True})
                     else:
                         card = None
                         status = False
@@ -92,12 +92,11 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
                         #     Card.query.filter_by(id = y.to_json()['id']).update({'isused':False})      
                         # 2. 
                         # [Card.query.filter_by(id = y.to_json()['id']).update({'isused':False}) for y in result] #53ms
-                        for y in result:
-                            y.isused = True
+                        with db.auto_commit_db():
+                            for y in result:
+                                y.isused = True
                         # db.auto_commit_db() #1.9ms--9ms---此步骤在后续commmit时生效
                         # [y.isused=False for y in result]
-                        
-
                 else:
                     card = None
                     status = False

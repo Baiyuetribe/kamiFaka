@@ -44,15 +44,15 @@ class Hupi(object):
         url = self.API+'/payment/do.html'
         data = {
             "version":"1.1",
-            # "lang":"zh-cn",#
-            "plugins":"kmfaka_"+self.payment,
+            "lang":"zh-cn",
+            "plugins":"flask",
             "appid":self.appid,
             "trade_order_id":trade_order_id,
-            "payment":self.payment,#
-            # "is_app":"Y",#
+            "payment":self.payment,
+            "is_app":"Y",
             "total_fee":total_fee,
             "title":title,
-            # "description":"",#
+            "description":"",
             "time":str(int(time.time())),
             "notify_url":self.notify_url, #回调URL（订单支付成功后，WP开放平台会把支付成功消息异步回调到这个地址上）
             # "return_url":self.return_url, #支付成功url(订单支付成功后，浏览器会跳转到这个地址上)
@@ -60,11 +60,8 @@ class Hupi(object):
             "nonce_str":str(int(time.time())), #随机字符串(一定要每次都不一样，保证请求安全)
         }
         pay_order = self.curl(data, url)
-        try:
-            if pay_order.json()['errmsg'] == 'success!':
-                return {'qr_code':pay_order.json()['url']}
-        except:
-            pass
+        if pay_order.json()['errmsg'] == 'success!':
+            return {'qr_code':pay_order.json()['url']}
         return False
 
     def Check(self,out_trade_order):   #回调检测

@@ -3,11 +3,15 @@ import hashlib
 from urllib.parse import urlencode,unquote
 
 
-class Payjs:
+class Payjs(object):
 
-    def __init__(self):
+    def __init__(self,payment='wechat'):
+        self.payment = payment
         from service.util.pay.pay_config import get_config
-        config = get_config('PAYJS微信')
+        if payment == 'wechat':
+            config = get_config('PAYJS微信')
+        else:
+            config = get_config('PAYJS支付宝')
         self.web_url = get_config('web_url')
         self.payjs_key = config['payjs_key']   #填写通信密钥
         self.mchid = config['mchid'] #商户号
@@ -17,6 +21,7 @@ class Payjs:
     def create_order(self,name,out_trade_no,total_price):
         order = {
             'body'         : name,  # 订单标题
+            'attach':'kmfaka_'+self.payment,
             'out_trade_no' : out_trade_no,    # 订单号
             'total_fee'    : int(float(total_price)*100),     # 金额,单位:分
             'mchid' : self.mchid,
@@ -25,11 +30,14 @@ class Payjs:
         order['sign'] = self.sign(order)
 
         r = requests.post(self.host_api+'/native',data=order,headers=self.headers)
-        if r and r.json()['return_msg'] == 'SUCCESS':
-            return {'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']}
-            """
-            {'code_url': 'weixin://wxpay/bizpayurl?pr=c60Vl0W00', 'out_trade_no': 'Order_1605517714455ggqrw0ka', 'payjs_order_id': '2020111617083400522394864', 'qrcode': 'https://payjs.cn/qrcode/d2VpeGluOi8vd3hwYXkvYml6cGF5dXJsP3ByPWM2MFZsMFcwMA==', 'return_code': 1, 'return_msg': 'SUCCESS', 'total_fee': '999', 'sign': 'B23C6619DE28827835A8BB501E425583'}
-            """
+        try:
+            if r and r.json()['return_msg'] == 'SUCCESS':
+                return {'qr_code':r.json()['code_url'],'payjs_order_id':r.json()['payjs_order_id']}
+                """
+                {'code_url': 'weixin://wxpay/bizpayurl?pr=c60Vl0W00', 'out_trade_no': 'Order_1605517714455ggqrw0ka', 'payjs_order_id': '2020111617083400522394864', 'qrcode': 'https://payjs.cn/qrcode/d2VpeGluOi8vd3hwYXkvYml6cGF5dXJsP3ByPWM2MFZsMFcwMA==', 'return_code': 1, 'return_msg': 'SUCCESS', 'total_fee': '999', 'sign': 'B23C6619DE28827835A8BB501E425583'}
+                """
+        except:
+            pass
         return False
 
     # 构造签名函数

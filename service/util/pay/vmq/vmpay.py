@@ -3,7 +3,7 @@ import hashlib
 from urllib.parse import urlencode,unquote
 
 
-class VMQ:
+class VMQ(object):
 
     def __init__(self,payment='wechat'):
         from service.util.pay.pay_config import get_config
@@ -30,12 +30,19 @@ class VMQ:
         data['sign'] = hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+self.key).encode('utf8')).hexdigest()
 
         r = requests.post(self.host_api+'/createOrder',json=data)
-        print(r.text)
+        # print(r.text)
         if r.status_code == 200:
             if r.json()['code'] == 1:
                 # return r.json()['data']     # 包含payUrl,orderId
                 res = r.json()['data']
                 return {'qr_code':res['payUrl'],'payjs_order_id':res['orderId'],'reallyPrice':res['reallyPrice']}
+            elif r.json()['code'] == -1:
+                return {'qr_code':"手机监控端状态掉线，请检查后再重试"}
+            else:
+                print(str(r.json()))
+                return False
+        else:
+            print(r.text)
         return False
 
     def check(self,orderId):     #这里是上一步主动生成的订单，单独调用
@@ -53,7 +60,7 @@ class VMQ:
         try:
             signature = data['sign']
             data.pop('sign')
-            print(hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+str(data['reallyPrice'])+self.key).encode('utf8')).hexdigest())
+            # print(hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+str(data['reallyPrice'])+self.key).encode('utf8')).hexdigest())
             return signature == hashlib.md5((data['payId']+str(data['param'])+str(data['type'])+str(data['price'])+str(data['reallyPrice'])+self.key).encode('utf8')).hexdigest()   # 结果为一个布尔值
         except Exception as e:
             print(e)
