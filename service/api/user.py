@@ -148,7 +148,7 @@ def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)
     # payjs_order_id = request.json.get('payjs_order_id',None) #支付方式
-    if not out_order_id and len(out_order_id) !=27:
+    if not out_order_id or len(out_order_id) !=27:
         return '参数丢失', 404
     # 订单校验
     if TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first():
