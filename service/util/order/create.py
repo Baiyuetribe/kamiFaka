@@ -19,9 +19,8 @@ from service.util.pay.vmq.vmpay import VMQ  # V免签
 from service.util.log import log
 from service.util.order.handle import make_order
 from concurrent.futures import ThreadPoolExecutor
-executor = ThreadPoolExecutor(2)
+executor = ThreadPoolExecutor(8)
 
-from datetime import datetime,timedelta
 
 def make_tmp_order(out_order_id,name,payment,contact,contact_txt,num):
     try:
@@ -99,65 +98,65 @@ def pay_url(payment,name,out_order_id,total_price):
         log(e)
         return False    
 
-def check_pay_status(payment,out_order_id,payjs_order_id):  # 加入时间戳
-    try:
-        if payment == '支付宝当面付':
-            r = AlipayF2F().check(out_order_id)
-        elif payment in ['虎皮椒支付宝','虎皮椒微信']:
-            if payment == '虎皮椒微信':
-                obj = Hupi()
-            else:
-                obj = Hupi(payment='alipay')
-            r = obj.Check(out_trade_order=out_order_id)
-        elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
-            r = CodePay().check(out_order_id)
-        elif payment in ['PAYJS支付宝','PAYJS微信']:
-            if payjs_order_id:
-                r = Payjs().check(payjs_order_id)
-        elif payment in ['V免签支付宝','V免签微信']:
-            orderId = payjs_order_id
-            r = VMQ().check(orderId)
-        elif payment in ['微信官方接口']:
-            r = Wechat().check(out_order_id)
-        elif payment in ['易支付']:
-            r = Epay().check(out_order_id)
-        elif payment in ['Mugglepay']:
-            r = Mugglepay().check(out_order_id)
-        elif payment in ['YunGouOS','YunGouOS_WXPAY']:
-            if payment == 'YunGouOS_WXPAY':
-                r = YunGou().check(out_order_id)
-            else:
-                r = YunGou(payment='unity').check(out_order_id)
-        else:
-            return None
-    except Exception as e:
-        log(e)
-        return False     
-    if r:
-        # 状态更新--订单创建
-        executor.submit(success_card,out_order_id)   #success_card(out_order_id)
-        return True
-    return False   
+# def check_pay_status(payment,out_order_id,payjs_order_id):  # 加入时间戳--废弃主动查询接口
+#     try:
+#         if payment == '支付宝当面付':
+#             r = AlipayF2F().check(out_order_id)
+#         elif payment in ['虎皮椒支付宝','虎皮椒微信']:
+#             if payment == '虎皮椒微信':
+#                 obj = Hupi()
+#             else:
+#                 obj = Hupi(payment='alipay')
+#             r = obj.Check(out_trade_order=out_order_id)
+#         elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
+#             r = CodePay().check(out_order_id)
+#         elif payment in ['PAYJS支付宝','PAYJS微信']:
+#             if payjs_order_id:
+#                 r = Payjs().check(payjs_order_id)
+#         elif payment in ['V免签支付宝','V免签微信']:
+#             orderId = payjs_order_id
+#             r = VMQ().check(orderId)
+#         elif payment in ['微信官方接口']:
+#             r = Wechat().check(out_order_id)
+#         elif payment in ['易支付']:
+#             r = Epay().check(out_order_id)
+#         elif payment in ['Mugglepay']:
+#             r = Mugglepay().check(out_order_id)
+#         elif payment in ['YunGouOS','YunGouOS_WXPAY']:
+#             if payment == 'YunGouOS_WXPAY':
+#                 r = YunGou().check(out_order_id)
+#             else:
+#                 r = YunGou(payment='unity').check(out_order_id)
+#         else:
+#             return None
+#     except Exception as e:
+#         log(e)
+#         return False     
+#     if r:
+#         # 状态更新--订单创建
+#         executor.submit(success_card,out_order_id)   #success_card(out_order_id)
+#         return True
+#     return False   
 
-def success_card(out_order_id):
-    # print(not (tmps := TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()))
-    # print(TempOrder.query.filter_by(out_order_id = out_order_id,status = True).count())
-    if not (TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()):    #保证一次
-        with db.auto_commit_db():
-            TempOrder.query.filter_by(out_order_id = out_order_id).update({'status':True,'endtime':datetime.utcnow()+timedelta(hours=8)})
-        # 订单创建
-        res = TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()
-        if res:
-            name = res.to_json2()['name']
-            payment = res.to_json2()['payment']
-            contact = res.to_json2()['contact']
-            contact_txt = res.to_json2()['contact_txt']
-            price = res.to_json2()['price']
-            num = res.to_json2()['num']
-            total_price = res.to_json2()['total_price']
-            auto = res.to_json2()['auto']
-            make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
+# def success_card(out_order_id):
+#     # print(not (tmps := TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()))
+#     # print(TempOrder.query.filter_by(out_order_id = out_order_id,status = True).count())
+#     if not (TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()):    #保证一次
+#         with db.auto_commit_db():
+#             TempOrder.query.filter_by(out_order_id = out_order_id).update({'status':True,'endtime':datetime.utcnow()+timedelta(hours=8)})
+#         # 订单创建
+#         res = TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first()
+#         if res:
+#             name = res.to_json2()['name']
+#             payment = res.to_json2()['payment']
+#             contact = res.to_json2()['contact']
+#             contact_txt = res.to_json2()['contact_txt']
+#             price = res.to_json2()['price']
+#             num = res.to_json2()['num']
+#             total_price = res.to_json2()['total_price']
+#             auto = res.to_json2()['auto']
+#             make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_price,auto)
         
-        #     pass
-    return 'OK'
+#         #     pass
+#     return 'OK'
 

@@ -4,13 +4,13 @@ from flask import Blueprint, request, jsonify
 from service.database.models import Payment, ProdInfo,Config,Order,Config,ProdCag,TempOrder
 from datetime import datetime,timedelta
 
-from service.util.order.create import make_pay_url,make_tmp_order,check_pay_status
+from service.util.order.create import make_pay_url,make_tmp_order
 
 
 from service.util.order.handle import make_order
 #异步操作
 from concurrent.futures import ThreadPoolExecutor
-executor = ThreadPoolExecutor(2)
+executor = ThreadPoolExecutor(20)
 
 #日志记录
 from service.util.log import log

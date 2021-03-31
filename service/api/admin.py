@@ -104,7 +104,7 @@ def upload():
         #secure_filename可以使上传文件的文件名更加安全，但是对中文的支持不是很好，如果想要使用secure_file()可以在使用之前将filename转换成英文或时间戳
         # filename = secure_filename(file.filename)
         if file.filename in ['logo.png','favicon.ico']:
-            print(type(file.filename))
+            # print(type(file.filename))
             filename = file.filename
         else:
             filename = time.strftime('%Y-%m-%d_%H-%M-%S',time.localtime()) +'.' + file.filename.split('.')[-1]
@@ -285,7 +285,7 @@ def update_class():
     info = request.json.get('info', None)
     sort = request.json.get('sort', None)
     methord = request.json.get('methord', None) #update,add,delete
-    print(methord)
+    # print(methord)
     if methord not in ['update','delete','add']:
         return 'Missing data 1', 400
     # 调用smtp函数发送邮件

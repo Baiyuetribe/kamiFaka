@@ -59,7 +59,6 @@ class CodePay:
     #https://api.xiuxiu888.com/ispay?id=' + 用户ID + '&token=' + 随机token或MD5 + '&order_id=' + 订单唯一ID
     #http://api2.xiuxiu888.com/ispay?id=10041&order_id=17571427&token=888888&call=callback
 
-
     def sign(self,data):
         signs = ""
         urls = ""

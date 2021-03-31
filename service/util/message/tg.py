@@ -19,14 +19,15 @@ def post_tg(config,admin_account,data):
         ('disable_web_page_preview', "yes")
     )    
     telegram_url = "https://api.telegram.org/bot" + TG_TOKEN + "/sendMessage"
-    telegram_req = post(telegram_url, params=params)
-    telegram_status = telegram_req.status_code
-    if telegram_status == 200:
-        # print(f"INFO: Telegram Message sent")
-        return True
-    else:
-        # print("Telegram Error")
-        return False
+    try:
+        telegram_req = post(telegram_url, params=params)
+        telegram_status = telegram_req.status_code
+        if telegram_status == 200:
+            # print(f"INFO: Telegram Message sent")
+            return True
+    except:
+        pass
+    return False
         
 if __name__ == "__main__":
     post_tg('你好，佰阅！')    
