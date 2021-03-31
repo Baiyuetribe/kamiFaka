@@ -92,7 +92,7 @@ def detail(shop_id):
         pass
     return jsonify(res)
 
-@base.route('/get_order', methods=['POST']) #已售订单信息--废弃手机号或邮箱查询功能
+@base.route('/get_order', methods=['POST']) #联系方式查询
 @limiter.limit("5 per minute", override_defaults=False)
 def get_order():
     # print(request.json)
@@ -102,7 +102,7 @@ def get_order():
     if not contact:
         return '参数丢失', 404
     try:
-        orders = Order.query.filter_by(contact = contact).all()
+        orders = Order.query.filter_by(contact = contact).limit(2).all()
     except Exception as e:
         log(e)
         return '数据库异常', 503   
@@ -143,7 +143,7 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
 
 ## 本地检测--》尝试改为服务器检测，避免用户支付过程退出页面
 @base.route('/check_pay', methods=['post']) #检测状态或取消订单
-@limiter.limit("6/minute;20/hour;40/day", override_defaults=False)
+@limiter.limit("6/minute;40/hour;400/day", override_defaults=False)
 def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)
@@ -154,9 +154,6 @@ def check_pay():
     if TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first():
         return jsonify({'msg':'success'})
     return jsonify({'msg':'not paid'})  #支付状态校验            
-    # if check_pay_status(payment,out_order_id,payjs_order_id):
-    #     return jsonify({'msg':'success'})
-    # return jsonify({'msg':'not paid'})  #支付状态校验    
 
 @base.route('/get_card', methods=['post']) #已售订单信息--自动查询
 def get_card():
@@ -171,7 +168,7 @@ def get_card():
         log(e)
         # time.sleep()      
         return '订单创建失败', 400        
-    
+   
     return '订单丢失', 404
     
 
