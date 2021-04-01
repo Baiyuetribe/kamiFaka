@@ -4,13 +4,13 @@ from flask import Blueprint, request, jsonify
 from service.database.models import Payment, ProdInfo,Config,Order,Config,ProdCag,TempOrder
 from datetime import datetime,timedelta
 
-from service.util.order.create import make_pay_url,make_tmp_order
+from service.util.order.create import make_pay_url,make_tmp_order,alipay_check
 
 
 from service.util.order.handle import make_order
 #异步操作
 from concurrent.futures import ThreadPoolExecutor
-executor = ThreadPoolExecutor(20)
+executor = ThreadPoolExecutor(10)
 
 #日志记录
 from service.util.log import log
@@ -147,13 +147,16 @@ def get_pay_url():  # 传递名称、支付方式、订单号，购买数量，�
 def check_pay():
     # print(request.json)
     out_order_id = request.json.get('out_order_id',None)
-    # payjs_order_id = request.json.get('payjs_order_id',None) #支付方式
+    payment = request.json.get('payment',None) #支付方式
     if not out_order_id or len(out_order_id) !=27:
         return '参数丢失', 404
     # 订单校验
     if TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first():
         return jsonify({'msg':'success'})
+    if payment and payment == '支付宝当面付':   # 未知失败原因
+        executor.submit(alipay_check,out_order_id)  # 新增主动查询    
     return jsonify({'msg':'not paid'})  #支付状态校验            
+
 
 @base.route('/get_card', methods=['post']) #已售订单信息--自动查询
 def get_card():

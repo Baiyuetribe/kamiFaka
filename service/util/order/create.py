@@ -17,7 +17,7 @@ from service.util.pay.vmq.vmpay import VMQ  # V免签
 
 #日志记录
 from service.util.log import log
-from service.util.order.handle import make_order
+from service.util.order.handle import make_order, notify_success
 from concurrent.futures import ThreadPoolExecutor
 executor = ThreadPoolExecutor(8)
 
@@ -97,6 +97,13 @@ def pay_url(payment,name,out_order_id,total_price):
     except Exception as e:
         log(e)
         return False    
+
+def alipay_check(out_order_id):
+    r = AlipayF2F().check(out_order_id)
+    if r:
+        executor.submit(notify_success,out_order_id)
+        return True
+    return False
 
 # def check_pay_status(payment,out_order_id,payjs_order_id):  # 加入时间戳--废弃主动查询接口
 #     try:

@@ -15,7 +15,7 @@ class AlipayF2F:
         self.alipay_public_key_string = '-----BEGIN PUBLIC KEY-----\n'+config['alipay_public_key']+'\n-----END PUBLIC KEY-----'   
         self.alipay = AliPay(
             appid=self.APPID,
-            app_notify_url=None,  # 默认回调url
+            app_notify_url=self.web_url + '/notify/alipay',  # 默认回调url
             app_private_key_string=self.app_private_key_string,
             alipay_public_key_string=self.alipay_public_key_string,
             sign_type="RSA2", # RSA 或者 RSA2
