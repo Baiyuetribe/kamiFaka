@@ -259,7 +259,7 @@ def update_sms():
 @jwt_required
 def test_sms():
     # print(request.json)
-    mobile = request.json.get('email', None)
+    mobile = request.json.get('mobile', None)
     message = request.json.get('message', None)
     data = request.json.get('data', None)
     if not all([mobile,message,data]):
