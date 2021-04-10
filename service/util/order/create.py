@@ -14,6 +14,7 @@ from service.util.pay.epay.common import Epay   # 易支付
 from service.util.pay.mugglepay.mugglepay import Mugglepay
 from service.util.pay.yungouos.yungou import YunGou 
 from service.util.pay.vmq.vmpay import VMQ  # V免签 
+from service.util.pay.stripe.api import Stripe
 
 #日志记录
 from service.util.log import log
@@ -91,6 +92,15 @@ def pay_url(payment,name,out_order_id,total_price):
             r = YunGou(payment='unity').create_order(name,out_order_id,total_price)
         elif payment in ['YunGouOS_WXPAY']:   # 微信接口
             r = YunGou().create_order_wxpay(name,out_order_id,total_price)
+        elif payment in ['Stripe支付宝','Stripe微信']:   # 微信接口
+            if payment == 'Stripe微信':
+                r = Stripe(payment='wechat').create_order(name,out_order_id,total_price)
+            else:
+                r = Stripe(payment='alipay').create_order(name,out_order_id,total_price)    # 导入cource_id和clinent_key[]合并
+            if r:
+                with db.auto_commit_db():
+                    TempOrder.query.filter_by(out_order_id = out_order_id).update({'contact_txt':r['signs']})                             
+                r.pop('signs')
         else:
             return None 
         return r

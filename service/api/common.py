@@ -1,7 +1,9 @@
+import re
 from flask import Blueprint, Response,request,jsonify
 from flask import render_template,redirect,send_from_directory
 import time
 import os
+from service.database.models import TempOrder
 
 from service.util.order.handle import notify_success
 
@@ -86,9 +88,9 @@ import xml.etree.ElementTree as ET
 
 @common.route('/notify/<name>',methods=['POST','GET'])    #支付回调测试
 def notify(name):
-    # print('请求地址:'+ request.url)
+    print('请求地址:'+ request.url)
     # print(request.form.to_dict()) #适用于post请求，但是回调时get请求
-    # print(request.args)
+    print(request.args)
     try:
         if name == 'alipay':
             trade_status = request.form.get('trade_status', None)
@@ -210,24 +212,23 @@ def notify(name):
                 if res:
                     out_order_id = request.form.get('merchant_order_id')
                     executor.submit(notify_success,out_order_id)
-        else:
-            pass
+        elif name == 'stripe':
+            source = request.args.get('source', None)   #id
+            livemode = request.args.get('livemode', None)   #id
+            client_secret = request.args.get('client_secret', None)   #id
+            if livemode == 'true' and client_secret and livemode and len(client_secret) == 42 and len(source) == 28:
+                # 开始查询
+                executor.submit(stripe_check,source,client_secret)
     except:
         pass
     return 'success'
 
-# @common.route('/return',methods=['POST','GET'])    #支付回调测试
-# def back():
-#     print(request.json)
-#     with open('return.log','a',encoding='utf=8') as f:
-#         f.write('\n' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +' ' + str(request.json))
-#     return jsonify(request.json)
-
-# @common.route('/demo')
-# def demo():
 
 
-#     return str(~tg_switch)
+def stripe_check(source,client_secret):
+    res = TempOrder.query.filter_by(contact_txt = source+client_secret).first()
+    if res:
+        executor.submit(notify_success,res.out_order_id)  # 为true条件下执行
 
 
 

@@ -23,9 +23,12 @@ def init_db(update=False):
     db.session.add(Payment('易支付QQ','QQ支付',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付 高费率不稳定',False))
     db.session.add(Payment('易支付支付宝','支付宝',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付高费率不稳定',False))
     db.session.add(Payment('易支付微信','微信',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付 高费率不稳定',False))
-    db.session.add(Payment('Mugglepay','Mugglepay',"{'TOKEN':'xxxxxx','Currency':'CNY'}",'mugglepay.com全球综合收款系统(已修复)',False))
     db.session.add(Payment('YunGouOS','微信或支付宝支付',"{'mch_id':'xxxxxx','pay_secret':'yyyyyyy'}",'yungouos.com 微信或支付宝个体1+0.38%',False))
     db.session.add(Payment('YunGouOS_WXPAY','微信支付',"{'mch_id':'xxxxxx','pay_secret':'yyyyyyy'}",'yungouos.com 微信个体1+0.38~0.6%',False))
+    db.session.add(Payment('Mugglepay','Mugglepay',"{'TOKEN':'xxxxxx','Currency':'CNY'}",'mugglepay.com全球综合收款系统(已修复)',False))
+    db.session.add(Payment('Stripe支付宝','支付宝',"{'key':'sk_xxx','currency':'cny'}",'stripe.com综合收款系统(已完成逻辑，但未实测)',False))
+    db.session.add(Payment('Stripe微信','微信支付',"{'key':'sk_xxx','currency':'usd'}",'stripe.com综合收款系统(aud, cad, eur, gbp, hkd, jpy, sgd, usd)',False))
+
 
     # 商品分类
     db.session.add(ProdCag('账户ID','虚拟账号类商品','100'))

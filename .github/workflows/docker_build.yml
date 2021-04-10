@@ -3,8 +3,6 @@ name: 自动化构建Docker镜像
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   push_to_registry:
@@ -18,7 +16,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: baiyuetribe/kamifaka
-          tag: latest
+          tag: dev
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -31,26 +29,27 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
           script: |
-            docker rm -f kamifaka
-            rm -rf /opt/kamifaka
-            docker pull baiyuetribe/kamifaka
-            docker run -d --name=kamifaka --restart=always -p 8000:8000 -v /opt/kamifaka:/usr/src/app/public baiyuetribe/kamifaka
+            docker rm -f kamifaka_dev
+            rm -rf /opt/kamifaka2
+            docker pull baiyuetribe/kamifaka:dev
+            docker run -d --name=kamifaka_dev --restart=always -p 8002:8000 -v /opt/kamifaka2:/usr/src/app/public baiyuetribe/kamifaka:dev
 
-  push_to_aliyun:
-    name: Push Docker image to Aliyun Hub
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.2
-        name: Check out code
+  # DEV版暂停阿里云推送
+  # push_to_aliyun:
+  #   name: Push Docker image to Aliyun Hub
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2.3.2
+  #       name: Check out code
 
-      - uses: mr-smithers-excellent/docker-build-push@v4
-        name: Build & push Docker image
-        with:
-          image: baiyuetribe/kamifaka
-          tag: latest
-          registry: registry.cn-hangzhou.aliyuncs.com
-          username: ${{ secrets.ALIYUN_USERNAME }}
-          password: ${{ secrets.ALIYUN_PASSWORD }}
+  #     - uses: mr-smithers-excellent/docker-build-push@v4
+  #       name: Build & push Docker image
+  #       with:
+  #         image: baiyuetribe/kamifaka
+  #         tag: latest
+  #         registry: registry.cn-hangzhou.aliyuncs.com
+  #         username: ${{ secrets.ALIYUN_USERNAME }}
+  #         password: ${{ secrets.ALIYUN_PASSWORD }}
 
       # - name: SSH Remote deploy CN
       #   uses: appleboy/ssh-action@master
