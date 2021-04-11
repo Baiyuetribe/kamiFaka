@@ -11,8 +11,7 @@ WORKDIR /usr/src/app
 # COPY service/system/logo.png /usr/src/app/service/system/logo.png
 
 RUN sed -i 's|postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}|$DATABASE_URL|g' docker-entrypoint.sh && \
-    sed -i '$d' docker-entrypoint.sh && \
-    echo "gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app" >> docker-entrypoint.sh && \
+    # echo "gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app" >> docker-entrypoint.sh && \
     sed -i 's|8000|$PORT|g' docker-entrypoint.sh && \
     chmod +x docker-entrypoint.sh
 

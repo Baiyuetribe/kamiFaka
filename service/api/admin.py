@@ -515,7 +515,12 @@ def remove_order():
         return 'Missing Data', 400
     try:
         with db.auto_commit_db():
-            Order.query.filter_by(id = id).delete()
+            if id == "all":
+                orders = Order.query.all()
+                for x in orders:
+                    db.session.delete(x)
+            else:
+                Order.query.filter_by(id = id).delete()
         return '删除成功', 200    
     except Exception as e:
         log(e)

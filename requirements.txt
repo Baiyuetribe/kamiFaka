@@ -10,8 +10,8 @@ gevent
 pymysql
 flask_limiter
 psycopg2-binary
-python-telegram-bot
-qrcode
+# python-telegram-bot
+# qrcode
 weixin-python
 wechat-pay-sdk
 Flask-APScheduler
