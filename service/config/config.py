@@ -58,7 +58,7 @@ def init_db(update=False):
     db.session.add(Config('web_name','KAMIFAKA','网站名称',True))
     db.session.add(Config('web_keyword','关键词、收录词汇','网站关键词',True))
     db.session.add(Config('description','网站描述信息。。。','网站描述',True))
-    db.session.add(Config('web_url','https://baidu.com','网站实际地址',True))
+    db.session.add(Config('web_url','http://107.148.243.178:8002','必填，网站实际地址',True))
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
     db.session.add(Config('contact_us','<p>示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
     # db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
@@ -68,7 +68,7 @@ def init_db(update=False):
     db.session.add(Config('contact_option','0','是否启用联系方式查询[0启用，1关闭]',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.83','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.85','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.qq.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
