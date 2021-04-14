@@ -11,7 +11,8 @@ WORKDIR /usr/src/app
 # COPY service/system/logo.png /usr/src/app/service/system/logo.png
 
 RUN sed -i 's|postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}|$DATABASE_URL|g' docker-entrypoint.sh && \
-# RUN sed -i 's|${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}|$DATABASE_URL|g' docker-entrypoint.sh &&;数据库替换、删除最后一行并重写
+# postgres://hnuehiwbtndsos:65acb8ec61c2af55929b1a961e90689600a82a62284dc8efaf0bcf4fba9ff28@ec2-3-211-37-117.compute-1.amazonaws.com:5432/d9srofm64nnte0
+    sed -i 's|postgres|postgresql|g' docker-entrypoint.sh && \
     sed -i '$d' docker-entrypoint.sh && \
     echo "gunicorn -k gevent --bind 0.0.0.0:8000 --workers 4 app:app" >> docker-entrypoint.sh && \
     sed -i 's|8000|$PORT|g' docker-entrypoint.sh && \
