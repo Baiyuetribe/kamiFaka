@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy as BaseSQLAlchemy
+from sqlalchemy.orm import scoped_session, sessionmaker # 解决高并发
 from contextlib import contextmanager
 from flask import Flask
 from flask_cors import CORS
@@ -29,6 +30,8 @@ class SQLAlchemy(BaseSQLAlchemy):
     # 利用contextmanager管理器,对try/except语句封装，使用的时候必须和with结合！！！
     @contextmanager
     def auto_commit_db(self):
+        # 高并发下的数据库问题
+        self.session = scoped_session(sessionmaker(bind=self.engine))
         try:
             yield
             self.session.commit()
@@ -38,7 +41,7 @@ class SQLAlchemy(BaseSQLAlchemy):
             print(e)
             # raise e
         finally:
-            self.session.close()
+            self.session.close()        
 
 
 #路径设置
@@ -65,3 +68,4 @@ jwt = JWTManager(app)
 
 db = SQLAlchemy(app)
 
+# db = scoped_session(sessionmaker(bind=db2.engine))

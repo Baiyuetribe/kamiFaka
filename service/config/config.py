@@ -35,19 +35,19 @@ def init_db(update=False):
     db.session.add(ProdCag('激活码','单独激活类商品','1000'))
     db.session.add(ProdCag('第三分类','单独激活类商品','1000'))
     # 商品设置
-    db.session.add(ProdInfo('账户ID','普通商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    db.session.add(ProdInfo('账户ID','普通商品演示','商品简述信息演示XXXX','images/null.png','100','示例：卡密格式：账号------密码-----',\
                                 9.99,None, True,0,'请填写邮箱',True))
     # db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
     #                             9.99,'9#9.9,8.8', True,0,0,True))
-    db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    db.session.add(ProdInfo('账户ID','批发商品演示','商品简述信息演示XXXX','images/null.png','100','示例：卡密格式：账号------密码-----',\
                                 9.99,'9,100#9.9,8.82,7.7', True,0,'请填写邮箱',True))                                
-    db.session.add(ProdInfo('账户ID','普通商品DD','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    db.session.add(ProdInfo('账户ID','普通商品DD','商品简述信息演示XXXX','images/null.png','100','示例：卡密格式：账号------密码-----',\
                                 9.99,None, False,0,'请填写邮箱',False))                                
-    db.session.add(ProdInfo('激活码','重复卡密演示','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    db.session.add(ProdInfo('激活码','重复卡密演示','商品简述信息演示XXXX','images/null.png','100','示例：卡密格式：账号------密码-----',\
                                 9.99,None, True,0,'请填写邮箱',True))
-    db.session.add(ProdInfo('激活码','普通商品CC','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    db.session.add(ProdInfo('激活码','普通商品CC','商品简述信息演示XXXX','images/null.png','100','示例：卡密格式：账号------密码-----',\
                                 9.99,None, True,0,'请填写邮箱',True))
-    db.session.add(ProdInfo('激活码','普通商品BB','商品简述信息演示XXXX','images/null.png','100','演示：我是商品描述信息',\
+    db.session.add(ProdInfo('激活码','普通商品BB','商品简述信息演示XXXX','images/null.png','100','示例：卡密格式：账号------密码-----',\
                                 9.99,None,True,0,'请填写邮箱',False))        
     # 卡密设置
     db.session.add(Card('普通商品演示','454545454454545454',False,False))

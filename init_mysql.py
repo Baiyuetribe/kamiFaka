@@ -18,6 +18,7 @@ def new_table():
     init_db()    
 
 def init():
+    mod_key() # 熵增
     try:
         # res = bool(AdminUser.query.filter_by(id = 1).first())
         # res = AdminUser.query.get(1)    #主键查询
@@ -30,8 +31,6 @@ def init():
         print('检测到已存在数据库')
     else:
         try:
-            # 改key
-            mod_key()
             new_table()
             print('新数据库初始化完成')   
         except Exception as e:
