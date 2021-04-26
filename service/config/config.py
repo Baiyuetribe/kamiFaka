@@ -62,13 +62,14 @@ def init_db(update=False):
     db.session.add(Config('web_bg_url','https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/colorfull.jpg','网站背景图片',True))
     db.session.add(Config('contact_us','<p>示例，请在管理后台>>网站设置里修改，支持HTML格式</p>','首页-联系我们',True))
     # db.session.add(Config('web_footer','【未开发】','可填写备案信息',True))
-    db.session.add(Config('top_notice','如需正式使用，请使用稳定版；开发版适合尝鲜用户','首页公告',True))
+    db.session.add(Config('top_notice','稳定版演示站点，公告信息可在后台设置','首页公告',True))
     # db.session.add(Config('modal_notice','【计划中】','全局弹窗信息',True))
-    db.session.add(Config('toast_notice','这里是开发板，每天更新好几次那种','首页滑动消息设置',True))
+    db.session.add(Config('toast_notice','稳定版演示站点，公告信息可在后台设置','首页滑动消息设置',True))
+    # db.session.add(Config('toast_notice','这里是开发板，每天更新好几次那种','首页滑动消息设置',True))
     db.session.add(Config('contact_option','0','是否启用联系方式查询[0启用，1关闭]',True))
     db.session.add(Config('theme','list','主题',False))
     db.session.add(Config('kamiFaka','https://github.com/Baiyuetribe/kamiFaka','Github项目地址，用于手动检测新版',False))
-    db.session.add(Config('kamiFaka_v','1.86','Github项目地址，用于手动检测新版',False))
+    db.session.add(Config('kamiFaka_v','1.87','Github项目地址，用于手动检测新版',False))
 
     # 通知渠道 ：名称；对管理员开关；对用户开关；对管理员需要管理员账号；用户无；名称+config+管理员+admin_switch+user_switch
     db.session.add(Notice('邮箱通知',"{'sendname':'no_replay','sendmail':'demo@gmail.com','smtp_address':'smtp.163.com','smtp_port':'465','smtp_pwd':'ZZZZZZZ'}",'demo@qq.com',False,False))
