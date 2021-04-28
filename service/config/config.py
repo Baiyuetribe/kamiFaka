@@ -20,6 +20,8 @@ def init_db(update=False):
     db.session.add(Payment('码支付QQ','QQ支付',"{'codepay_id':'58027','codepay_key':'fgl454542WSDJHEJHDJZpTRrmbn','token':'jljCGU3pRvXXXXXXXXXXXb1iq'}",'codepay.fateqq.com[不可用]',False))
     db.session.add(Payment('V免签支付宝','支付宝',"{'API':'http://google.com','KEY':'YYYYYYYY'}",'0费率实时到账',False))
     db.session.add(Payment('V免签微信','微信',"{'API':'http://google.com','KEY':'YYYYYYYY'}",'0费率实时到账',False))
+    db.session.add(Payment('云免签支付宝','支付宝',"{'APP_ID':'XXXX','KEY':'YYYYYYYY'}",'云端监控yunmianqian.com',False))
+    db.session.add(Payment('云免签微信','微信',"{'APP_ID':'XXXX','KEY':'YYYYYYYY'}",'云端监控yunmianqian.com',False))
     db.session.add(Payment('易支付QQ','QQ支付',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付 高费率不稳定',False))
     db.session.add(Payment('易支付支付宝','支付宝',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付高费率不稳定',False))
     db.session.add(Payment('易支付微信','微信',"{'API':'http://google.com','ID':'XXXXX','KEY':'YYYYYYYY'}",'任意一家易支付 高费率不稳定',False))

@@ -19,6 +19,7 @@ from service.util.pay.mugglepay.mugglepay import Mugglepay
 from service.util.pay.yungouos.yungou import YunGou
 from service.util.pay.vmq.vmpay import VMQ  # V免签
 from service.util.pay.codepay.codepay import CodePay
+from service.util.pay.yunmq.ymq import Ymq  # 云免签
 
 common = Blueprint('common', __name__)
 # common = Blueprint('common', __name__,static_folder='../../dist/static',template_folder='../../dist/admin')
@@ -88,9 +89,9 @@ import xml.etree.ElementTree as ET
 
 @common.route('/notify/<name>',methods=['POST','GET'])    #支付回调测试
 def notify(name):
-    print('请求地址:'+ request.url)
+    # print('请求地址:'+ request.url)
     # print(request.form.to_dict()) #适用于post请求，但是回调时get请求
-    print(request.args)
+    # print(request.args)
     try:
         if name == 'alipay':
             trade_status = request.form.get('trade_status', None)
@@ -219,6 +220,19 @@ def notify(name):
             if livemode == 'true' and client_secret and livemode and len(client_secret) == 42 and len(source) == 28:
                 # 开始查询
                 executor.submit(stripe_check,source,client_secret)
+        elif name == 'ymq':
+            out_order_id = request.form.get('out_order_sn',None)
+            if out_order_id and len(out_order_id) == 27:
+                pay_way = request.form.get('pay_way', None)
+                if pay_way and pay_way == 'wechat':
+                    payment = 'wechat'
+                elif pay_way == 'alipay':
+                    payment = 'alipay'
+                else:
+                    pass
+                res = Ymq(payment=payment).verify(request.form.to_dict())
+                if res:
+                    executor.submit(notify_success,out_order_id)                                     
     except:
         pass
     return 'success'

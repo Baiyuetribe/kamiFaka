@@ -15,6 +15,7 @@ from service.util.pay.mugglepay.mugglepay import Mugglepay
 from service.util.pay.yungouos.yungou import YunGou 
 from service.util.pay.vmq.vmpay import VMQ  # V免签 
 from service.util.pay.stripe.api import Stripe
+from service.util.pay.yunmq.ymq import Ymq
 
 #日志记录
 from service.util.log import log
@@ -101,6 +102,8 @@ def pay_url(payment,name,out_order_id,total_price):
                 with db.auto_commit_db():
                     TempOrder.query.filter_by(out_order_id = out_order_id).update({'contact_txt':r['signs']})                             
                 r.pop('signs')
+        elif payment in ['云免签']:
+            r = Ymq(payment='wechat').create_order(name,out_order_id,total_price)                
         else:
             return None 
         return r
