@@ -14,7 +14,7 @@ class CodePay:
         # self.codepay_id = '58427'   #马支付ID
         # self.codepay_key = 'fgljhMdS34Sbo86Mn6Gk2mvmLpTRrmbn'   #码支付密钥
         # self.api_host = 'https://api.xiuxiu888.com/'
-        self.api_host = 'http://api2.fateqq.com:52888/'
+        self.api_host = 'https://api.xiuxiu888.com/'
         self.web_url = get_config('web_url')
         if payment == 'alipay':
             self.codepay_type = 1
