@@ -102,8 +102,11 @@ def pay_url(payment,name,out_order_id,total_price):
                 with db.auto_commit_db():
                     TempOrder.query.filter_by(out_order_id = out_order_id).update({'contact_txt':r['signs']})                             
                 r.pop('signs')
-        elif payment in ['云免签']:
-            r = Ymq(payment='wechat').create_order(name,out_order_id,total_price)                
+        elif payment in ['云免签微信','云免签支付宝']:
+            if payment == '云免签微信':
+                r = Ymq(payment='wechat').create_order(name,out_order_id,total_price)
+            else:
+                r = Ymq(payment='alipay').create_order(name,out_order_id,total_price)
         else:
             return None 
         return r

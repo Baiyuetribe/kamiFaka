@@ -32,7 +32,6 @@ class Ymq:
         data['sign'] = hashlib.md5((data['app_id']+str(data['out_order_sn'])+str(data['name'])+str(data['pay_way']+str(data['price'])+str(data['attach'])+str(data['notify_url'])+self.key)).encode('utf8')).hexdigest()
         # print(urlencode(order))
         r = requests.post(self.API+'pay',data=data,headers=self.headers)
-        # print(r.text)
         if r.status_code == 200:
             if r.json()['code'] == 200:
                 res = r.json()['data']
