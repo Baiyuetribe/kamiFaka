@@ -92,9 +92,12 @@ def make_order(out_order_id,name,payment,contact,contact_txt,price,num,total_pri
                         #     Card.query.filter_by(id = y.to_json()['id']).update({'isused':False})      
                         # 2. 
                         # [Card.query.filter_by(id = y.to_json()['id']).update({'isused':False}) for y in result] #53ms
+                        # with db.auto_commit_db():     -- 疑似多单时不生效
+                        #     for y in result:
+                        #         y.isused = True
                         with db.auto_commit_db():
                             for y in result:
-                                y.isused = True
+                                Card.query.filter_by(id = y.to_json()['id']).update({'isused':True})                      
                         # db.auto_commit_db() #1.9ms--9ms---此步骤在后续commmit时生效
                         # [y.isused=False for y in result]
                 else:
