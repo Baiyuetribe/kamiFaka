@@ -41,7 +41,7 @@ class QQpay:
                 return {'qr_code':array_data['code_url']}        
         return False
 
-    # 构造签名函数
+    # 构造签名函数--QQ钱包--来源：baiyuetribe/kamifaka
     def sign(self,attributes):
         attributes_new = {k: attributes[k] for k in sorted(attributes.keys())}
         return hashlib.md5((unquote(urlencode(attributes_new))+'&key='+self.key).encode(encoding='utf-8')).hexdigest().upper()
