@@ -19,7 +19,8 @@ class VMQ(object):
         self.notify = self.web_url + '/notify/vmq'
 
     def create_order(self,name,out_trade_no,total_price):
-
+        if total_price % 1 == 0:
+            total_price = int(total_price)
         data = {
             'payId':out_trade_no,
             'type':self.v_type,
@@ -37,6 +38,7 @@ class VMQ(object):
                 res = r.json()['data']
                 return {'qr_code':res['payUrl'],'payjs_order_id':res['orderId'],'reallyPrice':res['reallyPrice'],'redirect':2} # 第三方状态1；本地2
             elif r.json()['code'] == -1:
+                print(r.json())
                 return {'qr_code':"手机监控端状态掉线，请检查后再重试"}
             else:
                 print(str(r.json()))
@@ -50,7 +52,6 @@ class VMQ(object):
             'orderId': orderId
         }
         r = requests.post(self.host_api+'/checkOrder',json=data)
-        print(r.json())
         if r.status_code == 200:
             if r.json()['code'] == 1:
                 return True
