@@ -157,6 +157,22 @@ def check_pay():
         executor.submit(alipay_check,out_order_id)  # 新增主动查询    
     return jsonify({'msg':'not paid'})  #支付状态校验            
 
+## 自动校验
+@base.route('/check_pay_auto', methods=['post']) #检测状态或取消订单
+@limiter.limit("40/minute;600/hour;1000/day", override_defaults=False)
+def check_pay_auto():
+    # print(request.json)
+    out_order_id = request.json.get('out_order_id',None)
+    payment = request.json.get('payment',None) #支付方式
+    if not out_order_id or len(out_order_id) !=27:
+        return '参数丢失', 404
+    # 订单校验
+    if TempOrder.query.filter_by(out_order_id = out_order_id,status = True).first():
+        return jsonify({'msg':'success'})
+    if payment and payment == '支付宝当面付':   # 未知失败原因
+        executor.submit(alipay_check,out_order_id)  # 新增主动查询    
+    return jsonify({'msg':'not paid'})  #支付状态校验     
+
 
 @base.route('/get_card', methods=['post']) #已售订单信息--自动查询
 def get_card():

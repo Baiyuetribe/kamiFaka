@@ -39,9 +39,9 @@ class SQLAlchemy(BaseSQLAlchemy):
             # 加入数据库commit提交失败，必须回滚！！！
             self.session.rollback()
             print(e)
-            # raise e
-        finally:
-            self.session.close()        
+            raise e
+        # finally:
+        #     self.session.close()        
 
 
 #路径设置
