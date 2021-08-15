@@ -1,7 +1,9 @@
 import hashlib
 from collections import OrderedDict
 import requests
+# import urllib3
 
+# urllib3.disable_warnings()
 class YunGou:
     def __init__(self,payment='wechat'):
         from service.util.pay.pay_config import get_config
@@ -36,16 +38,18 @@ class YunGou:
         # print(type(total_fee))
         data = {
             'out_trade_no': out_trade_no,
-            'total_fee': total_fee,
+            'total_fee': str(total_fee),
             'body': name,
             'mch_id': self.mch_id,
-            'notify_url':self.notify_url
             # 'type': 2,  # 返回二维码
         }
         
         data.update({
             'sign': self._gen_sign(data)
-        })        
+        })   
+        data.update({
+            'notify_url':self.notify_url
+        })                
         r = requests.post(self.API,data)
         if r.json()['code'] == 0:
             return {'qr_code':r.json()['data']}  #用于生成二维码付款
@@ -55,17 +59,21 @@ class YunGou:
         # print(type(total_fee))
         data = {
             'out_trade_no': out_trade_no,
-            'total_fee': total_fee,
+            'total_fee': str(total_fee),
             'body': name,
             'mch_id': self.mch_id,
-            'notify_url':self.notify_url+'wx'
             # 'type': 2,  # 返回二维码
         }
-        
         data.update({
             'sign': self._gen_sign(data)
-        })        
-        r = requests.post(self.WEIXIN_API,data)
+        })    
+        data.update({
+            'notify_url':self.notify_url+'wx'
+        })    
+        try:
+            r = requests.post(self.WEIXIN_API,data)
+        except Exception as e:
+            print(e)
         if r.json()['code'] == 0:
             return {'qr_code':r.json()['data']} #用于生成二维码付款
         return None    
