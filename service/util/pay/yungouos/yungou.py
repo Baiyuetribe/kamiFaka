@@ -100,6 +100,9 @@ class YunGou:
         try:
             signature = data['sign']
             data.pop('sign')
+            data.pop('openId')
+            data.pop('payChannel')
+            data.pop('time')
             return signature == self._gen_sign(data)   # 结果为一个布尔值
         except Exception as e:
             print(e)

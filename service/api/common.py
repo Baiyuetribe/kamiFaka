@@ -169,6 +169,7 @@ def notify(name):
                 if res:
                     out_order_id = request.form.get('outTradeNo', None)
                     executor.submit(notify_success,out_order_id)
+                    return 'SUCCESS'    # 特有属性
         elif name == 'yungouwx':
             code = request.form.get('code', None)
             if code == '1':
@@ -176,6 +177,7 @@ def notify(name):
                 if res:
                     out_order_id = request.form.get('outTradeNo', None)
                     executor.submit(notify_success,out_order_id)
+                    return 'SUCCESS'    # 特有属性
         elif name == 'codepay':
             pay_type = request.form.get('type', None)
             if pay_type:
