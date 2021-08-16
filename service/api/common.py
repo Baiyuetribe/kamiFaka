@@ -149,18 +149,18 @@ def notify(name):
                 if res:
                     executor.submit(notify_success,out_order_id)
         elif name == 'epay':
-            trade_status = request.form.get('trade_status', None)
+            trade_status = request.args.get('trade_status', None)
             if trade_status and trade_status == 'TRADE_SUCCESS':
-                pay_type = request.form.get('type', None)
+                pay_type = request.args.get('type', None)
                 if pay_type and pay_type == 'alipay':
                     payment = 'alipay'
                 elif name == 'wxpay':
                     payment = 'wechat'
                 else:
                     payment = 'qqpay'
-                res = Epay(payment).verify(request.form.to_dict())
+                res = Epay(payment).verify(request.args.to_dict())
                 if res:
-                    out_order_id = request.form.get('out_trade_no', None)
+                    out_order_id = request.args.get('out_trade_no', None)
                     executor.submit(notify_success,out_order_id)
         elif name == 'yungou':
             code = request.form.get('code', None)

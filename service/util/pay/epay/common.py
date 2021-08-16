@@ -56,6 +56,7 @@ class Epay(object):
         try:
             signature = data['sign']
             data.pop('sign')
+            data.pop('sign_type')   # 移除一些易支付的智商检查
             items = data.items()
             items = sorted(items)
             wait_sign_str = ''
