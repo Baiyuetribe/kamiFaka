@@ -36,7 +36,6 @@
 ## 💒适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
 
-![](Docs/佰阅发卡功能简介.png)
 
 ## 🍭功能特色：
 
@@ -106,6 +105,20 @@ v0.5管理员界面：
 项目交流QQ群：853791822
 
 官方帮助文档：[https://kmfaka.baklib-free.com](https://kmfaka.baklib-free.com)
+
+## 🌱案例展示
+
+<p align="center">
+    <br>
+
+  <br>
+  <a href="https://mall.baiyue.one" target="_blank"><img alt="佰阅小店" src="https://mall.baiyue.one/images/logo.png" width="160"></a>  
+  <a href="https://faka.ludeqi.com/" target="_blank"><img alt="demo" src="https://faka.ludeqi.com/images/logo.png"></a>
+  <a href="http://40012307.com/" target="_blank"><img alt="小郎发卡" src="http://40012307.com/images/logo.png"></a>
+
+  
+</p>
+
 
 ## 🍰其他自研项目推荐
 - [Glink跨平台短视频去水印解析](https://baiyue.one/archives/1736.html)

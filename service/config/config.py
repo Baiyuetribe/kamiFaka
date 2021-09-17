@@ -15,6 +15,7 @@ def init_db(update=False):
     db.session.add(Payment('虎皮椒微信','微信支付',"{'API':'api.vrmrgame.com','appid':'XXXXXX','AppSecret':'YYYYY'}",'xunhupay.com 个人接口0.38~0.6%+1~2%',False))
     db.session.add(Payment('PAYJS支付宝','支付宝',"{'payjs_key':'XXXXXX','mchid':'YYYYY','mchid':'ZZZZZZZ'}",'payjs.cn 个人接口2.38%',False))
     db.session.add(Payment('PAYJS微信','微信支付',"{'payjs_key':'XXXXXX','mchid':'YYYYY','mchid':'ZZZZZZZ'}",'payjs.cn 个人接口2.38%',False))
+    # db.session.add(Payment('迅虎微信','微信支付',"{'ID':'XXXXXX','Key':'YYYYY',}",'pay.xunhuweb.com 个人接口0.38~0.6%+1~2%',False))   # https://admin.xunhuweb.com/pay/payment 返回系统异常错误
     db.session.add(Payment('码支付支付宝','支付宝',"{'codepay_id':'58027','codepay_key':'fgl454542WSDJHEJHDJZpTRrmbn','token':'jljCGU3pRvXXXXXXXXXXXb1iq'}",'codepay.fateqq.com[不可用]',False))
     db.session.add(Payment('码支付微信','微信支付',"{'codepay_id':'58027','codepay_key':'fgl454542WSDJHEJHDJZpTRrmbn','token':'jljCGU3pRvXXXXXXXXXXXb1iq'}",'codepay.fateqq.com[不可用]',False))
     db.session.add(Payment('码支付QQ','QQ支付',"{'codepay_id':'58027','codepay_key':'fgl454542WSDJHEJHDJZpTRrmbn','token':'jljCGU3pRvXXXXXXXXXXXb1iq'}",'codepay.fateqq.com[不可用]',False))

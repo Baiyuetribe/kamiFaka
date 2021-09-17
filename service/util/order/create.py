@@ -6,6 +6,7 @@ from service.api.db import db
 #调用支付接口
 from service.util.pay.alipay.alipayf2f import AlipayF2F    #支付宝接口
 from service.util.pay.hupijiao.xunhupay import Hupi     #虎皮椒支付接口
+from service.util.pay.xunhu.xunhupay import Xunhu     #迅虎支付
 from service.util.pay.codepay.codepay import CodePay    #码支付
 from service.util.pay.payjs.payjs import Payjs  #payjs接口
 from service.util.pay.wechat.weixin import Wechat   # 微信官方
@@ -55,6 +56,8 @@ def pay_url(payment,name,out_order_id,total_price):
             r = Hupi().Pay(trade_order_id=out_order_id,total_fee=total_price,title=name)
         elif payment == '虎皮椒支付宝':
             r = Hupi(payment='alipay').Pay(trade_order_id=out_order_id,total_fee=total_price,title=name)
+        elif payment == '迅虎微信':
+            r = Xunhu(payment='wechat').Pay(trade_order_id=out_order_id,total_fee=total_price,title=name)            
         elif payment in ['码支付微信','码支付支付宝','码支付QQ']:
             if payment == '码支付微信':
                 payname = 'wechat'
