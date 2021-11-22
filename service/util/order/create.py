@@ -40,11 +40,14 @@ def make_pay_url(out_order_id):
     order = TempOrder.query.filter_by(out_order_id=out_order_id).first()
     if order:
         res = order.to_json()
-        if res['status'] == False:
-            return False
+        # print(res)
+        # if res['status'] == False:
+        #     return False
         payment = res['payment']
         name = res['name']
         total_price = res['total_price']
+        if total_price == 0:
+            return False
         r = pay_url(payment, name, out_order_id, total_price)
         if r:
             return r

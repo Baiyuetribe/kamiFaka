@@ -217,6 +217,8 @@ class ProdInfo(db.Model):
             'tag': self.tag,
             'discription': self.discription,
             'stock': self.__count_card_detail__(self.name),
+            'isactive': self.isactive,
+
         }
     # 批发价格设计
     # 9，10；9.9，8.8
@@ -369,6 +371,8 @@ class TempOrder(db.Model):
         shop = self.shop
         if shop:
             res = shop.detail_json()
+            if not res['isactive']:
+                return 0
             if res['price_wholesale']:
                 if len(res['price_wholesale']) > 4:
                     len_pifa = len(
