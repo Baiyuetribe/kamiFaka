@@ -22,16 +22,20 @@
   <a href="https://www.bilibili.com/video/BV1Ra4y1p7QS">Vlog</a>
 </p>
 
-## 🎄稳定版v1.8演示地址
+## 🎄开源版v1.8演示地址
 海外演示1： http://107.148.243.178:8000
 
 国内演示2： http://103.40.247.22:8000    [【该机器由茶猫云赞助,2天无理由退款+新购9折优惠】](https://www.chamaoyun.com/?u=D50390)             
 
 后台地址`/admin`,默认管理员`admin@qq.com 123456`
-## 🧰开发版dev
-实时尝鲜地址：http://107.148.243.178:8002
+## 🧰专业版v2.0演示地址
+前台地址：http://119.29.25.39:3232/
 
-> 分离稳定版的目的：保证稳定版经得起考验；同时保证开发版的新功能快速迭代及Bug测试 
+后台地址：http://119.29.25.39:3232/admin
+
+科技站： https://tech.baiyue.one
+
+> 如果开源版不能满足你，可以尝试专业版，时隔一年多用新技术全部重写的一套专业自动售货系统。
 
 ## 💒适用场景：
 适用于各种电商、优惠卷、论坛邀请码、充值卡、激活码、注册码、腾讯爱奇艺积分CDK等，支持手工和全自动发货，还有类似1688的分层批发模式。
@@ -64,13 +68,10 @@
 
 - [视频安装教程：【从0开始一步步使用宝塔Docker管理器搭建佰阅发卡v1.3版【2020】](https://www.bilibili.com/video/BV1Ra4y1p7QS) 
 
-- [付费一键脚本： 全程无代码秒级部署](https://mall.baiyue.one/#/1/detail)
-
 Github本地查看：[1.【宝塔+SQlite】](正式环境搭建教程.md#方法1宝塔nginxdocker数据库为sqlite)｜[2.【宝塔+Mysql】](正式环境搭建教程.md#方法2宝塔nginxdocker数据库为宝塔mysql)｜[3.【Heroku】](正式环境搭建教程.md#方法3heroku-无服务器部署)
 
 ### 2. 线上快速体验
 Heroku 一键部署：[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2FBaiyuetribe%2FkamiFaka)
-
 
 个人服务器快速安装：
 ```bash
@@ -87,9 +88,9 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 开发环境：[开发环境安装教程(自定义修改样式等等)](开发环境安装教程.md)
 
 
-v0.5访客页面：
+开源版访客页面：
 ![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc端演示.gif)
-v0.5管理员界面：
+开源版管理员界面：
 ![](https://cdn.jsdelivr.net/gh/Baiyuetribe/yyycode@dev/img/20/yyycode_comPc后台端演示.gif)
 
 ## 🌱Github社区讨论
@@ -104,18 +105,17 @@ v0.5管理员界面：
 
 项目交流QQ群：853791822
 
-官方帮助文档：[https://kmfaka.baklib-free.com](https://kmfaka.baklib-free.com)
-
+- 官方帮助文档：[https://kmfaka.baklib-free.com](https://kmfaka.baklib-free.com)
+- 专业版帮助文档： [http://119.29.25.39:3200/byfaka/](http://119.29.25.39:3200/byfaka)
+- 专业版开发背景介绍： https://baiyue.one/archives/1785.html
 ## 🌱案例展示
 
 <p align="center">
     <br>
 
   <br>
-  <a href="https://mall.baiyue.one" target="_blank"><img alt="佰阅小店" src="https://mall.baiyue.one/images/logo.png" width="160"></a>  
   <a href="https://faka.ludeqi.com/" target="_blank"><img alt="demo" src="https://faka.ludeqi.com/images/logo.png"></a>
   <a href="http://40012307.com/" target="_blank"><img alt="小郎发卡" src="http://40012307.com/images/logo.png"></a>
-
   
 </p>
 
