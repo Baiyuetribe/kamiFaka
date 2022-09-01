@@ -115,12 +115,13 @@ docker rm -f kmfaka && docker rmi -f baiyuetribe/kamifaka:latest
 
   <br>
   <a href="https://faka.ludeqi.com/" target="_blank"><img alt="demo" src="https://faka.ludeqi.com/images/logo.png"></a>
-  <a href="http://40012307.com/" target="_blank"><img alt="小郎发卡" src="http://40012307.com/images/logo.png"></a>
+  <a href="http://400718.com/" target="_blank"><img alt="小郎发卡" src="http://400718.com/images/logo.png"></a>
   
 </p>
 
 
 ## 🍰其他自研项目推荐
+- [人工智能桌面APP](https://github.com/Baiyuetribe/paper2gui)
 - [Glink跨平台短视频去水印解析](https://baiyue.one/archives/1736.html)
 - [阿里云盘列表alist_fiber](https://baiyue.one/archives/1726.html)
 
